@@ -31,7 +31,6 @@ body {
 
 .container {
     width: 100%;
-    margin-top: 10px;
 }
 
 .header {
@@ -69,17 +68,38 @@ body {
     margin: 50px 35px 50px;
 }
 
+.films__wrapper {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
+    padding-bottom: 40px;
+}
+
+.films__operations {
+    padding-top: 10px;
+
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.films__search-input {
+    box-sizing: border-box;
+    padding: 10px;
+    height: 30px;
+
+    font: inherit;
+}
+
 .films__list {
     display: flex;
     justify-content: space-around;
     align-items: center;
 
     margin: 0;
-    padding: 0 100px;
+    padding: 50px 100px 50px;
 
     list-style: none;
-
-    box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
 }
 
 .film__item {
@@ -89,7 +109,6 @@ body {
     align-items: center;
 
     width: 400px;
-    margin: 100px 0 150px;
     padding: 10px 15px;
 
     box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.7);
@@ -170,4 +189,120 @@ body {
 
 .contacts__copy {
     font-size: 16px;
+}
+
+.pagination-list {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.pagination__item {
+    margin-left: 10px;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.pagination__link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    background: #97e8fb;
+    border: 2px solid #97e8fb;
+}
+
+.pagination__item--current a {
+    background: #fff;
+    color: #97e8fb;
+}
+
+.pagination__link:hover,
+.pagination__link:focus,
+.pagination__link:active {
+    background: #ffffff;
+    color: #97e8fb;
+}
+
+/* FOR SINGLE FILM PAGE */
+
+.contacts--inner {
+    margin-top: 70px;
+}
+
+.back-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 300px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    background: #97e8fb;
+    border: 2px solid #97e8fb;
+}
+
+.card {
+    padding-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 100px;
+}
+
+.card__main-content {
+    width: 500px;
+}
+
+.card__details {
+    border-collapse: collapse;
+    width: 500px;
+    text-align: left;
+    vertical-align: bottom;
+}
+
+.card__item {
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.card__item:nth-child(odd) {
+    background: #97e8fb;
+}
+
+.card__name {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.card__img {
+    width: 300px;
+    height: 300px;
+}
+
+.card__title {
+    margin-left: 15px;
+}
+
+.card__info {
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+.card__title, .card__info {
+    font-size: 20px;
 }

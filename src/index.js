@@ -1,14 +1,15 @@
-const searchBar = document.querySelector('.films__search-bar');
+const firebaseConfig = {
+  apiKey: 'AIzaSyAdR7-yH8fqF99cdKPRMVGJlT_xsdRM9xc',
+  authDomain: 'sw-app-b0cf1.firebaseapp.com',
+  projectId: 'sw-app-b0cf1',
+  storageBucket: 'sw-app-b0cf1.appspot.com',
+  messagingSenderId: '1045485475856',
+  appId: '1:1045485475856:web:315f18bfca09d688ad1295',
+};
 
-console.log(searchBar);
+firebase.initializeApp(firebaseConfig);
 
-searchBar.addEventListener('click', () => {
-  searchBar.classList.add('toggle');
-});
+const database = firebase.firestore();
 
-// window.addEventListener('mouseup', e =>{
-//
-//   if (e.target != searchBar && e.target.parentNode != searchBar ) {
-//     searchBar.classList.remove('toggleClass');
-//   }
-// });
+console.log(firebase);
+console.log(database.collection('films').get().then(data => console.log(data.data())));

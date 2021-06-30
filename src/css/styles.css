@@ -19,6 +19,8 @@ body {
 
     border: 1px solid #fff;
     background: transparent;
+
+    text-transform: uppercase;
 }
 
 .button:hover,
@@ -27,6 +29,11 @@ body {
 
     background: #fff;
     cursor: pointer;
+}
+
+.button--sign-in {
+    color: #000;
+    text-decoration: none;
 }
 
 .container {
@@ -61,11 +68,24 @@ body {
 }
 
 .header__item {
+    display: flex;
     margin-left: 10px;
 }
 
 .films {
     margin: 50px 35px 50px;
+}
+
+.films--login {
+    height: 100vh;
+    display: flex;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.films--login .films__wrapper {
+    padding-bottom: 0;
 }
 
 .films__wrapper {
@@ -147,6 +167,26 @@ body {
     display: -webkit-box;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
+}
+
+.button--auth {
+    padding: 10px 15px;
+    min-width: 500px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #000;
+    text-decoration: none;
+}
+
+
+
+.button__text {
+    text-transform: capitalize;
+    font-size: 36px;
+    margin-left: 30px;
 }
 
 .button--more {
@@ -304,5 +344,21 @@ body {
 }
 
 .card__title, .card__info {
+    font-size: 20px;
+}
+
+.header__user {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    font-weight: 700;
+}
+
+.header__user:hover {
+    color: #97e8fb;
+    cursor: pointer;
+}
+
+.header__username {
     font-size: 20px;
 }

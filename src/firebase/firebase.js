@@ -1,5 +1,9 @@
 import firebaseConfig from './firebase-config.js';
 
-firebase.initializeApp(firebaseConfig);
+const fb = firebase.initializeApp(firebaseConfig);
+const firestore = fb.firestore();
 
-export const firestore = firebase.firestore();
+export {
+  fb,
+  firestore,
+};

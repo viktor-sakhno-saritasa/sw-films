@@ -2,10 +2,11 @@
  *
  */
 export function createHeaderHTML(user = null) {
-  return user
+  const header = document.createElement('header');
+  header.classList.add('main-page__header', 'header');
+  header.innerHTML =  user
     ?
     `
-    <header class="main-page__header header">
       <h1 class="header__title">SW Films</h1>
       <ul class="header__list">
         <li class="header__item">
@@ -16,20 +17,19 @@ export function createHeaderHTML(user = null) {
           <a href="../main/main.html" id="logout-btn" class="button button--sign-in">Log out</a>
         </li>
       </ul>
-    </header>
     `
     :
     `
-    <header class="main-page__header header">
       <h1 class="header__title">SW Films</h1>
       <ul class="header__list">
         <li class="header__item">
           <a href="../login/login.html" class="button button--sign-in">Sign in</a>
         </li>
       </ul>
-    </header>
     `
   ;
+
+  return header;
 }
 
 /**
@@ -57,10 +57,10 @@ export function createMainPage({ user, films }) {
 
   mainPage.insertAdjacentHTML('beforeend', getFooterHTML());
 
-  return mainPage;
+  return {mainPage, filmsList};
 }
 
-function createFilmsList(films) {
+export function createFilmsList(films) {
   const ul = document.createElement('ul');
   ul.classList.add('films__list');
 
@@ -96,7 +96,9 @@ function getFilmsOperationsHtml() {
   return `
   <div class="films__operations">
     <input class="films__search-input" type="search" placeholder="Search film by name...">
-    <button class="button button-sort">SORT</button>
+    <div class="button-sort">
+      <img src="https://img.icons8.com/color-glass/50/000000/sort.png" height="30" width="30" alt="SORT"/>
+    </div>
   </div>
   `;
 }

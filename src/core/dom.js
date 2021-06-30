@@ -1,12 +1,12 @@
 /**
  *
  */
-function createHeaderHTML(user = null, title = 'SW Films') {
+export function createHeaderHTML(user = null) {
   return user
     ?
     `
     <header class="main-page__header header">
-      <h1 class="header__title">${title}</h1>
+      <h1 class="header__title">SW Films</h1>
       <ul class="header__list">
         <li class="header__item">
           <div class="header__user">
@@ -21,7 +21,7 @@ function createHeaderHTML(user = null, title = 'SW Films') {
     :
     `
     <header class="main-page__header header">
-      <h1 class="header__title">${title}</h1>
+      <h1 class="header__title">SW Films</h1>
       <ul class="header__list">
         <li class="header__item">
           <a href="../login/login.html" class="button button--sign-in">Sign in</a>
@@ -35,20 +35,70 @@ function createHeaderHTML(user = null, title = 'SW Films') {
 /**
  *
  */
-function createFilmsHTML() {
+export function createMainPage({ user, films }) {
+  const mainPage = document.createElement('div');
+  mainPage.classList.add('main-page');
 
+  const filmsContent = document.createElement('main');
+  filmsContent.classList.add('films');
+  const filmsWrapper = document.createElement('div');
+  filmsWrapper.classList.add('films__wrapper');
+
+  filmsContent.append(filmsWrapper);
+
+  filmsWrapper.insertAdjacentHTML('afterbegin', getFilmsOperationsHtml());
+
+  const filmsList = createFilmsList(films);
+  filmsList.classList.add('films__list');
+
+  filmsWrapper.append(filmsList);
+
+  mainPage.append(filmsContent);
+
+  mainPage.insertAdjacentHTML('beforeend', getFooterHTML());
+
+  return mainPage;
 }
 
-/**
- *
- */
-export function createMainPage(options) {
-  const html = document.createElement('div');
-  html.classList.add('main-page');
+function createFilmsList(films) {
+  const ul = document.createElement('ul');
+  ul.classList.add('films__list');
 
-  html.insertAdjacentHTML('afterbegin', createHeaderHTML(options));
+  films.forEach(film => {
+    ul.insertAdjacentHTML('beforeend', createFilmItemHtml(film.fields));
+  });
 
-  return html;
+  return ul;
+}
+
+function createFilmItemHtml(film) {
+  console.log('film', film);
+  return `
+   <li class="film__item">
+    <div class="film__title">${film.title}</div>
+    <div class="film__img">${film.episode_id}</div>
+    <p class="film__description">${film.opening_crawl}</p>
+    <button class="button button--more">More details</button>
+  </li>
+  `;
+}
+
+function getFooterHTML() {
+  return `
+  <footer class="contacts">
+    <a class="contacts__link" href="https://www.interesnee.ru/">INTERESNEE.RU</a>
+    <span class="contacts__copy">&copy; Viktor Sakhno. 2021 JS Camp</span>
+  </footer>
+  `;
+}
+
+function getFilmsOperationsHtml() {
+  return `
+  <div class="films__operations">
+    <input class="films__search-input" type="search" placeholder="Search film by name...">
+    <button class="button button-sort">SORT</button>
+  </div>
+  `;
 }
 
 export function createLoginPage(user) {

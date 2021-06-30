@@ -114,7 +114,7 @@ body {
 .films__list {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
 
     margin: 0;
     padding: 50px 100px 50px;
@@ -140,7 +140,10 @@ body {
 }
 
 .film__title {
+    height: 40px;
+    display: block;
     font-size: 24px;
+    text-align: center;
 }
 
 .film__img {
@@ -361,4 +364,44 @@ body {
 
 .header__username {
     font-size: 20px;
+}
+
+.loader-wrapper {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CSS LOADER */
+.lds-hourglass {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.lds-hourglass:after {
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    margin: 8px;
+    box-sizing: border-box;
+    border: 32px solid #97e8fb;
+    border-color: #97e8fb transparent #97e8fb transparent;
+    animation: lds-hourglass 1.2s infinite;
+}
+@keyframes lds-hourglass {
+    0% {
+        transform: rotate(0);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    50% {
+        transform: rotate(900deg);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    100% {
+        transform: rotate(1800deg);
+    }
 }

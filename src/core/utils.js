@@ -9,4 +9,3 @@ export function getUserFromLocalStorage() {
 export function deleteUserFromLocalStorage() {
   localStorage.removeItem('currentUser');
 }
-

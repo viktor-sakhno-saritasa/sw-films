@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
         integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk"
         crossorigin="anonymous">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="../css/styles.css">
   <title>SW Films</title>
 </head>
 <body>
@@ -59,18 +59,83 @@
             </div>
             <button class="button button--more">More details</button>
           </li>
+          <li class="film__item">
+            <h2 class="film__title">A New Hope</h2>
+            <div class="film__img">3</div>
+            <div class="film__description">
+              <p>
+                It is a period of civil war. Rebel spaceships, striking from a
+                hidden base, have won their first victory against the evil Galactic Empire.
+                During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon,
+                the DEATH STAR, an armored space station with enough power to destroy an entire planet.
+                Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship,
+                custodian of the stolen plans that can save her people and restore freedom to the galaxy....
+              </p>
+            </div>
+            <button class="button button--more">More details</button>
+          </li>
+          <li class="film__item">
+            <h2 class="film__title">A New Hope</h2>
+            <div class="film__img">4</div>
+            <div class="film__description">
+              <p>
+                It is a period of civil war. Rebel spaceships, striking from a
+                hidden base, have won their first victory against the evil Galactic Empire.
+                During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon,
+                the DEATH STAR, an armored space station with enough power to destroy an entire planet.
+                Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship,
+                custodian of the stolen plans that can save her people and restore freedom to the galaxy....
+              </p>
+            </div>
+            <button class="button button--more">More details</button>
+          </li>
+          <li class="film__item">
+            <h2 class="film__title">A New Hope</h2>
+            <div class="film__img">5</div>
+            <div class="film__description">
+              <p>
+                It is a period of civil war. Rebel spaceships, striking from a
+                hidden base, have won their first victory against the evil Galactic Empire.
+                During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon,
+                the DEATH STAR, an armored space station with enough power to destroy an entire planet.
+                Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship,
+                custodian of the stolen plans that can save her people and restore freedom to the galaxy....
+              </p>
+            </div>
+            <button class="button button--more">More details</button>
+          </li>
+          <li class="film__item">
+            <h2 class="film__title">A New Hope</h2>
+            <div class="film__img">6</div>
+            <div class="film__description">
+              <p>
+                It is a period of civil war. Rebel spaceships, striking from a
+                hidden base, have won their first victory against the evil Galactic Empire.
+                During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon,
+                the DEATH STAR, an armored space station with enough power to destroy an entire planet.
+                Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship,
+                custodian of the stolen plans that can save her people and restore freedom to the galaxy....
+              </p>
+            </div>
+            <button class="button button--more">More details</button>
+          </li>
         </ul>
-        <ul class="films__pagination pagination-list">
-          <li class="pagination__item pagination__item--current">
-            <a class="pagination__link">1</a>
-          </li>
-          <li class="pagination__item">
-            <a class="pagination__link" href="#">2</a>
-          </li>
-          <li class="pagination__item">
-            <a class="pagination__link" href="#">3</a>
-          </li>
-        </ul>
+<!--        <ul class="films__pagination pagination-list">-->
+<!--          <li class="pagination__item pagination__item&#45;&#45;current">-->
+<!--            <a class="pagination__link">1</a>-->
+<!--          </li>-->
+<!--          <li class="pagination__item">-->
+<!--            <a class="pagination__link" href="#">2</a>-->
+<!--          </li>-->
+<!--          <li class="pagination__item">-->
+<!--            <a class="pagination__link" href="#">3</a>-->
+<!--          </li>-->
+<!--        </ul>-->
+        <div class="pagination">
+          <span id="button_prev" class="pagination__item pageButton outline-none">Prev</span>
+          <span id="page_number" class="pagination__item outline-none"></span>
+          <span id="button_next" class="pagination__item pageButton outline-none">Next</span>
+        </div>
       </div>
     </main>
     <footer class="contacts">
@@ -79,6 +144,113 @@
     </footer>
   </div>
 </div>
-<script src="index.js"></script>
+<script>
+  function Pagination() {
+    const items = document.querySelectorAll('.film__item');
+
+    const prevButton = document.getElementById('button_prev');
+    const nextButton = document.getElementById('button_next');
+    const clickPageNumber = document.querySelectorAll('.clickPageNumber');
+
+    let currentPage = 1;
+    let recordsPerPage = 2;
+
+    this.init = function () {
+      changePage(1);
+      pageNumbers();
+      selectedPage();
+      clickPage();
+      addEventListeners();
+    }
+
+    let addEventListeners = function () {
+      prevButton.addEventListener('click', prevPage);
+      nextButton.addEventListener('click', nextPage);
+    }
+
+    let selectedPage = function () {
+      let pageNumber = document.getElementsByClassName('clickPageNumber');
+
+      for (let i = 0; i < pageNumber.length; i++) {
+        if (i == currentPage - 1) {
+          pageNumber[i].style.opacity = '1.0';
+        } else {
+          pageNumber[i].style.opacity = '0.5';
+        }
+      }
+    }
+
+    let checkButtonOpacity = function () {
+      currentPage == 1
+          ? prevButton.classList.add('opacity')
+          : prevButton.classList.remove('opacity');
+      currentPage == numPages()
+          ? nextButton.classList.add('opacity')
+          : nextButton.classList.remove('opacity');
+    }
+
+    let changePage = function (page) {
+      let ul = document.querySelector('.films__list');
+
+      if (page < 1) {
+        page = 1;
+      }
+      if (page > numPages() - 1) {
+        page = numPages();
+      }
+
+      const newList = document.createElement('ul');
+      newList.classList.add('films__list');
+
+      for (let i = (page - 1) * recordsPerPage; i < (page * recordsPerPage) && i < items.length; i++) {
+        newList.append(items[i]);
+      }
+
+      ul.replaceWith(newList);
+      ul = newList;
+
+      checkButtonOpacity();
+      selectedPage();
+    }
+
+    let prevPage = function () {
+      if (currentPage > 1) {
+        currentPage--;
+        changePage(currentPage);
+      }
+    }
+
+    let nextPage = function () {
+      if (currentPage < numPages()) {
+        currentPage++;
+        changePage(currentPage);
+      }
+    }
+
+    let clickPage = function () {
+      document.addEventListener('click', function (e) {
+        if (e.target.nodeName == "SPAN" && e.target.classList.contains("clickPageNumber")) {
+          currentPage = e.target.textContent;
+          changePage(currentPage);
+        }
+      });
+    }
+
+    let pageNumbers = function () {
+      let pageNumber = document.getElementById('page_number');
+      pageNumber.innerHTML = "";
+
+      for (let i = 1; i < numPages() + 1; i++) {
+        pageNumber.innerHTML += "<span class='clickPageNumber'>" + i + "</span>";
+      }
+    }
+
+    let numPages = function () {
+      return Math.ceil(items.length / recordsPerPage);
+    }
+  }
+    let pagination = new Pagination();
+    pagination.init();
+</script>
 </body>
 </html>

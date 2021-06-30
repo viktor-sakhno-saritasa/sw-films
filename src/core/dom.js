@@ -83,6 +83,16 @@ function createFilmItemHtml(film) {
   `;
 }
 
+export function createPagination() {
+  return `
+    <div class="pagination-block">
+      <span id="button_prev" class="pageButton outline-none">Prev</span>
+      <span id="page_number" class="outline-none"></span>
+      <span id="button_next" class="pageButton outline-none">Next</span> 
+    </div>
+  `;
+}
+
 function getFooterHTML() {
   return `
   <footer class="contacts">

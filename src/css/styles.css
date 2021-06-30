@@ -239,7 +239,7 @@ body {
     font-size: 16px;
 }
 
-.pagination-list {
+.pagination {
     display: flex;
     justify-content: center;
     margin: 0;
@@ -279,6 +279,18 @@ body {
 .pagination__link:active {
     background: #ffffff;
     color: #97e8fb;
+}
+
+.pagination__item:hover {
+    cursor: pointer;
+}
+
+.opacity {
+    opacity: 0.5;
+}
+.outline-none {
+    outline: none;
+    user-select: none;
 }
 
 .films__search-input {

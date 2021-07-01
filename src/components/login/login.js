@@ -1,23 +1,27 @@
 import {fb} from '../../firebase/firebase.js';
-import {signInWithGoogle} from '../../core/auth.js';
+import {signInWithGoogle} from '../../utils/auth.js';
 import {getUserFromLocalStorage} from '../../core/utils.js';
-import {createLoginPage} from '../../core/dom.js';
+import {openStartPage} from '../../utils/utils.js';
+import {drawLoginPage} from './login.dom.js';
 
-const app = document.querySelector('#app');
+/**
+ * Run login page
+ */
+function run() {
+  const app = document.querySelector('#app');
+  const user = getUserFromLocalStorage();
 
-const user = getUserFromLocalStorage();
-app.insertAdjacentHTML('beforeend', createLoginPage(getUserFromLocalStorage()));
+  drawLoginPage(app, user);
 
-const mainButton = user
-  ? document.querySelector('#back-link')
-  : document.querySelector('#google-auth');
+  const centralButton = user
+    ? document.querySelector('#back-link')
+    : document.querySelector('#google-auth');
 
-const listenerFn = mainButton.classList.contains('button--link')
-  ? GoMainPage
-  : signInWithGoogle;
+  const listenerForCentralButton = centralButton.classList.contains('button--link')
+    ? openStartPage
+    : signInWithGoogle;
 
-mainButton.addEventListener('click', listenerFn);
-
-function GoMainPage() {
-  window.location.assign('../main/main.html');
+  centralButton.addEventListener('click', listenerForCentralButton);
 }
+
+run();

@@ -11,7 +11,7 @@ export function deleteUserFromLocalStorage() {
 }
 
 export function sortFilms(films, isAscending) {
-  const sorted =  films;
+  const sorted = films;
 
   if (isAscending) {
     sorted.sort((a, b) => {

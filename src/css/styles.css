@@ -135,6 +135,7 @@ body {
 
     width: 400px;
     padding: 10px 15px;
+    margin-left: 15px;
 
     box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.7);
 }

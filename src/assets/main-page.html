@@ -132,9 +132,9 @@
 <!--          </li>-->
 <!--        </ul>-->
         <div class="pagination">
-          <span id="button_prev" class="pagination__item pageButton outline-none">Prev</span>
+          <span id="button_prev" class="pagination__item pageButton outline-none"><</span>
           <span id="page_number" class="pagination__item outline-none"></span>
-          <span id="button_next" class="pagination__item pageButton outline-none">Next</span>
+          <span id="button_next" class="pagination__item pageButton outline-none">></span>
         </div>
       </div>
     </main>
@@ -221,6 +221,7 @@
     }
 
     let nextPage = function () {
+      console.log(this);
       if (currentPage < numPages()) {
         currentPage++;
         changePage(currentPage);

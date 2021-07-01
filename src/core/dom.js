@@ -52,6 +52,7 @@ export function createMainPage({ user, films }) {
   filmsList.classList.add('films__list');
 
   filmsWrapper.append(filmsList);
+  filmsWrapper.insertAdjacentHTML('beforeend', createPagination());
 
   mainPage.append(filmsContent);
 
@@ -85,10 +86,10 @@ function createFilmItemHtml(film) {
 
 export function createPagination() {
   return `
-    <div class="pagination-block">
-      <span id="button_prev" class="pageButton outline-none">Prev</span>
-      <span id="page_number" class="outline-none"></span>
-      <span id="button_next" class="pageButton outline-none">Next</span> 
+    <div class="pagination">
+      <span id="button_prev" class="pagination__item pageButton outline-none"><</span>
+      <span id="page_number" class="pagination__item pagination__numbers outline-none"></span>
+      <span id="button_next" class="pagination__item pageButton outline-none">></span>
     </div>
   `;
 }

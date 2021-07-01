@@ -78,7 +78,7 @@ body {
 }
 
 .films {
-    margin: 50px 35px 50px;
+    margin: 40px 35px 40px;
 }
 
 .films--login {
@@ -243,14 +243,34 @@ body {
 .pagination {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 0;
     padding: 0;
 
     list-style: none;
 }
 
+.pageButton {
+    font-size: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 50px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    background: #97e8fb;
+    border: 2px solid #97e8fb;
+}
+
+.pagination__numbers {
+    display: flex;
+    align-items: center;
+}
+
 .pagination__item {
-    margin-left: 10px;
 
     font-size: 24px;
     font-weight: 700;
@@ -270,9 +290,30 @@ body {
     border: 2px solid #97e8fb;
 }
 
-.pagination__item--current a {
-    background: #fff;
-    color: #97e8fb;
+
+
+.clickPageNumber {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    background: #97e8fb;
+    border: 2px solid #97e8fb;
+}
+
+.pagination__item--current {
+    background: #fff !important;
+    color: #97e8fb !important;
+}
+
+.pagination__numbers {
+    margin-left: 25px;
+    margin-right: 25px;
 }
 
 .pagination__link:hover,
@@ -289,6 +330,7 @@ body {
 .opacity {
     opacity: 0.5;
 }
+
 .outline-none {
     outline: none;
     user-select: none;

@@ -1,3 +1,3 @@
 node_modules
 .idea
-src/import/
+firebase/firebase-config.js

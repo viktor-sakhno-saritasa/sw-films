@@ -1,5 +1,4 @@
-import {MAIN_PAGE} from './consts.js';
-import {addUserToLocalStorage} from './utils.js';
+import {addUserToLocalStorage, openStartPage} from './utils.js';
 
 /**
  * Google-firebase authorization method
@@ -19,7 +18,7 @@ export function signInWithGoogle() {
         name: user.displayName,
       });
 
-      window.location.assign(MAIN_PAGE);
+      openStartPage();
     })
     .catch(error => {
       console.log(error);

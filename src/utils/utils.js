@@ -1,8 +1,8 @@
-import {KEY_FOR_FILM, KEY_FOR_USER, MAIN_PAGE} from './consts.js';
+import {KEY_FOR_FILM, KEY_FOR_USER, MAIN_PAGE_URL} from './consts.js';
 
 /**
  * Adds object with user data
- * after authorization to Local Storage
+ * after authorization to Local Storage.
  * @param {object} user
  */
 export function addUserToLocalStorage(user) {
@@ -12,24 +12,24 @@ export function addUserToLocalStorage(user) {
 /**
  * Check user is exists for correct render pages.
  * @return {any} Return object if user
- * is exists in local storage else null
+ * is exists in local storage else null.
  */
 export function getUserFromLocalStorage() {
   return JSON.parse(localStorage.getItem(KEY_FOR_USER) || 'null');
 }
 
 /**
- * Delete current user from localStorage
+ * Delete current user from localStorage.
  */
 export function deleteUserFromLocalStorage() {
   localStorage.removeItem(KEY_FOR_USER);
 }
 
 /**
- * Return to the main1 page with films
+ * Return to the main page with films.
  */
 export function openStartPage() {
-  window.location.assign(MAIN_PAGE);
+  window.location.assign(MAIN_PAGE_URL);
 }
 
 /**
@@ -37,29 +37,52 @@ export function openStartPage() {
  * Creates new array.
  * @param films list of films for sorting
  * @param orderByAscending boolean
- * @returns {Array} new sorted list of films
+ * @returns {Array} new sorted list of films.
  */
 export function sortFilms(films, orderByAscending) {
-  const sorted =  [...films];
+  const sortedFilms =  [...films];
 
   const ascending = (a, b) => a.episodeId - b.episodeId;
   const descending = (a, b) => b.episodeId - a.episodeId;
 
   if (orderByAscending) {
-    return sorted.sort(ascending);
+    return sortedFilms.sort(ascending);
   }
 
-  return sorted.sort(descending);
+  return sortedFilms.sort(descending);
 }
 
+/**
+ * Adds object with film data
+ * after clicking the "More Details" button
+ * for later display on the Film Page.
+ * @param film
+ */
 export function addFilmToLocalStorage(film) {
   localStorage.setItem(KEY_FOR_FILM, JSON.stringify(film));
 }
 
+
+/**
+ * Receives a film data in case it is saved in storage
+ * @return {any} Return object if film
+ * is exists in local storage else null.
+ */
 export function getFilmFromLocalStorage() {
   return JSON.parse(localStorage.getItem(KEY_FOR_FILM) || 'null');
 }
 
+/**
+ * Delete current film from localStorage if user logout.
+ */
 export function deleteFilmFromLocalStorage() {
   localStorage.removeItem(KEY_FOR_FILM);
+}
+
+/**
+ * Delete User and Film data from LocalStore if logout.
+ */
+export function logout() {
+  deleteUserFromLocalStorage();
+  deleteFilmFromLocalStorage();
 }

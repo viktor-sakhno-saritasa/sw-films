@@ -1,10 +1,10 @@
 import {COLLECTION_PATH} from '../utils/consts.js';
 import {Film} from '../models/Film.js';
-import {fb, firestore} from './firebase.js';
+import {firestore} from './firebase.js';
 
 /**
  * After receiving a response take the necessary keys
- * and call ctor with an object from those keys.
+ * and call Film constructor with an object from those keys.
  * @return {*}
  */
 export function getFilms() {

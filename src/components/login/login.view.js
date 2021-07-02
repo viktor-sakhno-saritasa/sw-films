@@ -1,23 +1,35 @@
 import {firebaseApp} from '../../firebase/firebase.js';
 import {openStartPage} from '../../utils/utils.js';
 import {signInWithGoogle} from '../../utils/auth.js';
+import {DONE_ICON_URL, GOOGLE_ICON_URL, MAIN_PAGE_URL} from '../../utils/consts.js';
 
+/**
+ * Class for render Login Page
+ */
 export default class LoginView {
   constructor() {
     this.app = document.querySelector('#app');
   }
 
+  /**
+   * Render full page
+   * @param user
+   */
   render(user) {
-    const loginPageHTML = this._createLoginPage(user);
+    const loginPageHTML = this.createLoginPage(user);
     this.app.insertAdjacentHTML('beforeend', loginPageHTML);
   }
 
+  /**
+   * Defines function for central button in the login page.
+   * @param user
+   */
   initListeners(user) {
     const centralButton = user
-      ? document.querySelector('#back-link')
-      : document.querySelector('#google-auth');
+      ? document.querySelector('.button-start')
+      : document.querySelector('.button-auth');
 
-    const listenerForCentralButton = centralButton.classList.contains('button--link')
+    const listenerForCentralButton = centralButton.classList.contains('button-start')
       ? openStartPage
       : signInWithGoogle;
 
@@ -30,28 +42,27 @@ export default class LoginView {
    * @param user
    * @returns {string} header html
    */
-  _createLoginPage(user) {
+  createLoginPage(user) {
     const innerContent = user
       ?
       `
-    <a href="../main1/main.html" id="back-link" class="button button--auth button--link">
-      <img src="https://img.icons8.com/clouds/100/000000/checkmark--v1.png" width="50" height="50" alt="authorized">
-      <span class="button__text">Hi, ${user.name}. Go back!</span>
-    </a>
-    `
-      :
+        <a href=${MAIN_PAGE_URL} class="button button-login button-start">
+          <img src=${DONE_ICON_URL} width="50" height="50" alt="authorized">
+          <span class="button__text">Hi, ${user.name}. Go back!</span>
+        </a>
+      ` 
+      : 
       `
-    <button id="google-auth" class="button button--auth">
-      <img src="https://img.icons8.com/fluent/48/000000/google-logo.png" width="50" height="50" alt="Google">
-      <span class="button__text">Sign in</span>
-    </button> 
-    `
-    ;
+        <button class="button button-login button-auth">
+          <img src=${GOOGLE_ICON_URL} width="50" height="50" alt="Google">
+          <span class="login-text">Sign in</span>
+        </button> 
+      `;
 
     return `
-    <main class="login">
-        <div class="wrapper">${innerContent}</div>
-    </main>
-  `;
+      <main class="login">
+          <div class="wrapper">${innerContent}</div>
+      </main>
+    `;
   }
 }

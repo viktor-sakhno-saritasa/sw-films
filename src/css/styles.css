@@ -22,6 +22,12 @@ ul {
     opacity: 0.5;
 }
 
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
+}
+
 .button {
     padding: 15px 20px;
 
@@ -183,28 +189,60 @@ ul {
     height: 100vh;
     margin: 0;
 }
-/** LOGIN PAGE END */
 
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
+.login-text {
+    text-transform: capitalize;
+    font-size: 36px;
+    margin-left: 30px;
 }
 
+.button-login {
+    padding: 10px 15px;
+    min-width: 500px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    color: #000;
+    text-decoration: none;
+}
 
-/*.films__wrapper {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);*/
-/*    padding-bottom: 40px;*/
-/*}*/
+/** LOGIN PAGE END */
 
+/** FOOTER */
+.footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
+    color: #8e93a4;
+    background: #eef2f5;
+}
 
+.footer-link {
+    margin-bottom: 10px;
 
+    color: #8e93a4;
+    font-size: 24px;
+    text-transform: uppercase;
+}
 
-.film__item {
+.footer-link:hover,
+.footer-link:focus {
+    color: #97e8fb;
+    text-decoration: none;
+}
+
+.footer-copy {
+    font-size: 16px;
+}
+/** FOOTER END */
+
+.film-item {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -217,19 +255,19 @@ ul {
     box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.7);
 }
 
-.film__item:hover {
+.film-item:hover {
     box-shadow: 0 0 10px 5px rgba(151,232,251, 1);
     cursor: pointer;
 }
 
-.film__title {
+.film-title {
     height: 40px;
     display: block;
     font-size: 24px;
     text-align: center;
 }
 
-.film__img {
+.film-img {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -243,7 +281,7 @@ ul {
     box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
 }
 
-.film__description {
+.film-description {
     line-height: 20px;
     height: 100px;
     display: block;
@@ -254,80 +292,19 @@ ul {
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
-/** FILMS END */
 
-
-
-
-
-
-
-
-
-
-
-
-.button--auth {
-    padding: 10px 15px;
-    min-width: 500px;
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: #000;
-    text-decoration: none;
-}
-
-
-
-.button__text {
-    text-transform: capitalize;
-    font-size: 36px;
-    margin-left: 30px;
-}
-
-.button--more {
+.button-details {
     margin-top: 25px;
     margin-bottom: 15px;
     border: 2px solid #97e8fb;
 }
 
-.button--more:hover,
-.button--more:focus {
+.button-details:hover,
+.button-details:focus {
     background-color: #97e8fb;
     color: #fff;
 }
-
-.contacts {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-
-    color: #8e93a4;
-    background: #eef2f5;
-}
-
-.contacts__link {
-    margin-bottom: 10px;
-
-    color: #8e93a4;
-    font-size: 24px;
-    text-transform: uppercase;
-}
-
-.contacts__link:hover,
-.contacts__link:focus {
-    color: #97e8fb;
-    text-decoration: none;
-}
-
-.contacts__copy {
-    font-size: 16px;
-}
+/** FILMS END */
 
 /** PAGINATION */
 .pagination {
@@ -399,20 +376,7 @@ ul {
 }
 /** PAGINATION END */
 
-
-
-
-
-.films__search-input {
-    margin-right: 20px;
-}
-
-/* FOR SINGLE FILM PAGE */
-
-.contacts--inner {
-    margin-top: 70px;
-}
-
+/** ONE FILM PAGE */
 .back-link {
     display: flex;
     justify-content: center;
@@ -436,49 +400,50 @@ ul {
     margin-bottom: 100px;
 }
 
-.card__main-content {
+.card-content {
     width: 500px;
 }
 
-.card__details {
+.card-details {
     border-collapse: collapse;
     width: 500px;
     text-align: left;
     vertical-align: bottom;
 }
 
-.card__item {
+.card-item {
     display: flex;
     align-items: center;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
-.card__item:nth-child(odd) {
+.card-item:nth-child(odd) {
     background: #97e8fb;
 }
 
-.card__name {
+.card-name {
     font-size: 30px;
     margin-bottom: 10px;
 }
 
-.card__img {
+.card-img {
     width: 300px;
     height: 300px;
 }
 
-.card__title {
+.card-title {
     margin-left: 15px;
 }
 
-.card__info {
+.card-info {
     margin-left: auto;
     margin-right: 15px;
 }
 
-.card__title, .card__info {
+.card-title,
+.card-info {
     font-size: 20px;
 }
-
+/** ONE FILM PAGE END */
 

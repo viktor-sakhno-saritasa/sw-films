@@ -1,9 +1,9 @@
 import addPagination from '../pagination/pagination.js';
 import {sortFilms} from '../../utils/utils.js';
-import Footer from '../footer/footer.js';
 import {FilmsList} from '../FilmsList/FilmsList.js';
 import createHeader from '../header/header.js';
 import {SORT_ICON_URL} from '../../utils/consts.js';
+import createFooter from '../footer/footer.js';
 
 /**
  * Class for render Main Page
@@ -40,7 +40,7 @@ export default class MainView {
 
     addPagination(this.filmsList);
 
-    this.app.append(Footer());
+    this.app.append(createFooter());
 
     const sortButton = document.querySelector('.toolbar-sort');
     sortButton.addEventListener('click', () => this.sort(user, films));

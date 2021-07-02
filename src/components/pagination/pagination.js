@@ -5,7 +5,7 @@ import {RECORDS_PER_PAGE} from '../../utils/consts.js';
  * @param ul
  */
 export default function addPagination(ul) {
-  let li = document.querySelectorAll('.film__item');
+  let li = document.querySelectorAll('.film-item');
   let prevButton = document.querySelector('.pagination-button-prev');
   let nextButton = document.querySelector('.pagination-button-next');
   let pagesList = document.querySelector('.pagination-pages-list');

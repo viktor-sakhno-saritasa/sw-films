@@ -9,3 +9,5 @@ export const RECORDS_PER_PAGE = 2;
 
 export const USER_ICON_URL = 'https://img.icons8.com/doodle/48/000000/user.png';
 export const SORT_ICON_URL = 'https://img.icons8.com/color-glass/50/000000/sort.png';
+export const GOOGLE_ICON_URL = 'https://img.icons8.com/fluent/48/000000/google-logo.png';
+export const DONE_ICON_URL = 'https://img.icons8.com/clouds/100/000000/checkmark--v1.png';

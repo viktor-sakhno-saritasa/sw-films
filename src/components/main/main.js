@@ -34,7 +34,7 @@ FirestoreFilmService.getFilms().then(films => {
   const searchField = document.querySelector('.films__search-input');
   searchField.addEventListener('input', event => {
     const searched = films.filter(film => {
-      return film.title.startsWith(event.target.value);
+      return film.title.includes(event.target.value);
     });
 
     /*TODO

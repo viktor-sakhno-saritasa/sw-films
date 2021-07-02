@@ -1,5 +1,7 @@
+import {RECORDS_PER_PAGE} from './consts.js';
+
 export default class Pagination {
-  constructor(domElements, recordsPerPage) {
+  constructor(domElements) {
     console.log(domElements);
     this.items = domElements.items;
     this.prevButton = domElements.prevButton;
@@ -8,7 +10,7 @@ export default class Pagination {
     this.pageNumber = domElements.pageNumber;
     this.list = domElements.list;
     this.currentPage = 1;
-    this.recordsPerPage = recordsPerPage;
+    this.recordsPerPage = RECORDS_PER_PAGE;
   }
 
   numPages() {

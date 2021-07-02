@@ -1,10 +1,10 @@
+import {KEY_FOR_FILM, KEY_FOR_USER, MAIN_PAGE} from './consts.js';
+
 /**
  * Adds object with user data
  * after authorization to Local Storage
  * @param {object} user
  */
-import {KEY_FOR_USER, MAIN_PAGE} from './consts.js';
-
 export function addUserToLocalStorage(user) {
   localStorage.setItem(KEY_FOR_USER, JSON.stringify(user));
 }
@@ -26,17 +26,18 @@ export function deleteUserFromLocalStorage() {
 }
 
 /**
- * Return to the main page with films
+ * Return to the main1 page with films
  */
 export function openStartPage() {
   window.location.assign(MAIN_PAGE);
 }
 
 /**
- *
- * @param films
- * @param isAscending
- * @return {array}
+ * Sorts films by episode.
+ * Creates new array.
+ * @param films list of films for sorting
+ * @param orderByAscending boolean
+ * @returns {Array} new sorted list of films
  */
 export function sortFilms(films, orderByAscending) {
   const sorted =  [...films];
@@ -49,4 +50,16 @@ export function sortFilms(films, orderByAscending) {
   }
 
   return sorted.sort(descending);
+}
+
+export function addFilmToLocalStorage(film) {
+  localStorage.setItem(KEY_FOR_FILM, JSON.stringify(film));
+}
+
+export function getFilmFromLocalStorage() {
+  return JSON.parse(localStorage.getItem(KEY_FOR_FILM) || 'null');
+}
+
+export function deleteFilmFromLocalStorage() {
+  localStorage.removeItem(KEY_FOR_FILM);
 }

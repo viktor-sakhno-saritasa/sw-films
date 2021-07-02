@@ -1,9 +1,13 @@
-import Pagination from '../Pagination/Pagination.js';
+import addPagination from '../pagination/pagination.js';
 import {sortFilms} from '../../utils/utils.js';
-import Header from '../header/header.js';
 import Footer from '../footer/footer.js';
 import {FilmsList} from '../FilmsList/FilmsList.js';
+import createHeader from '../header/header.js';
+import {SORT_ICON_URL} from '../../utils/consts.js';
 
+/**
+ * Class for render Main Page
+ */
 export default class MainView {
   constructor(handlers) {
     this.app = document.querySelector('#app');
@@ -11,114 +15,143 @@ export default class MainView {
     this.handlers = handlers;
   }
 
+  /**
+   * Renders those elements that do not need
+   * to wait for the loading of films.
+   * @param user
+   */
   initialRender(user) {
-    this.app.append(Header(user, this.handlers.logoutHandler));
+    this.app.append(createHeader(user, this.handlers.logoutHandler));
 
-    this.loader = this._createLoader();
+    this.loader = this.createLoader();
     this.app.append(this.loader);
   }
 
+  /**
+   * Main function in class, that render full page
+   * @param user
+   * @param films
+   */
   render(user, films) {
     this.loader.remove();
 
-    const filmsList = this._createMainPage(user, films);
+    this.createMainPage(user, films);
+    this.filmsList = document.querySelector('.films-list');
 
-    this.filmsList = filmsList;
-    Pagination(filmsList);
+    addPagination(this.filmsList);
 
     this.app.append(Footer());
 
+    const sortButton = document.querySelector('.toolbar-sort');
+    sortButton.addEventListener('click', () => this.sort(user, films));
 
-    const sortButton = document.querySelector('.button-sort');
-    sortButton.addEventListener('click', () => {
-      const sortedList = FilmsList(user, this._sort(films), this.handlers.detailsHandler);
-      this.filmsList.replaceWith(sortedList);
-      this.filmsList = sortedList;
-      Pagination(sortedList);
-    });
-
-    const searchField = document.querySelector('.films__search-input');
+    const searchField = document.querySelector('.toolbar-search');
     searchField.addEventListener('input', event => {
-      console.log(event.target.value);
-      const searched = films.filter(film => {
-        return film.title.toLowerCase().includes(event.target.value.trim().toLowerCase());
-      });
-
-      const hasItems = searched.length !== 0;
-
-      if (hasItems) {
-        const ul = FilmsList(user, searched, this.handlers.detailsHandler);
-        this.filmsList.replaceWith(ul);
-        this.filmsList = ul;
-        Pagination(ul);
-      } else {
-        this.filmsList.innerHTML = '<h1>Nothing found</h1>';
-      }
+      this.search(user, films, event);
     });
   }
 
-  _sort(films) {
-    this.orderByAscending = !this.orderByAscending;
-    return sortFilms(films, this.orderByAscending);
+  /**
+   * Searches for a substring in the name of films and draws them,
+   * if there is no substring, the last found ones will be drawn
+   * @param user
+   * @param films
+   * @param event
+   */
+  search(user, films, event) {
+    const founded = films.filter(film => {
+      return film.title.toLowerCase().includes(event.target.value.trim().toLowerCase());
+    });
+
+    const hasItems = founded.length !== 0;
+
+    if (hasItems) {
+      const ul = FilmsList(user, founded, this.handlers.detailsHandler);
+      this.filmsList.replaceWith(ul);
+      this.filmsList = ul;
+      addPagination(ul);
+    }
   }
 
+  /**
+   * Sorts the list of films and replace ul node in the DOM.
+   * @param user
+   * @param films
+   */
+  sort(user, films) {
+    this.orderByAscending = !this.orderByAscending;
+    const sortedList = FilmsList(
+      user, sortFilms(films, this.orderByAscending), this.handlers.detailsHandler
+    );
 
-  _createLoader() {
+    this.filmsList.replaceWith(sortedList);
+    this.filmsList = sortedList;
+    addPagination(sortedList);
+  }
+
+  /**
+   * Collects a wrapper consisting
+   * of ar components of the main page
+   * @param user
+   * @param films
+   * @return {*}
+   */
+  createMainPage(user, films) {
+    const filmsContent = document.createElement('main');
+    filmsContent.classList.add('films');
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('wrapper');
+
+    filmsContent.append(wrapper);
+
+    wrapper.insertAdjacentHTML('beforeend', this.createToolBar());
+
+    const filmsList = FilmsList(user, films, this.handlers.detailsHandler);
+    filmsList.classList.add('films-list');
+    wrapper.append(filmsList);
+
+    wrapper.insertAdjacentHTML('beforeend', this.getPaginationHTML());
+
+    this.app.append(filmsContent);
+  }
+
+  /**
+   * Creating toolbar with search field and sort button.
+   * @returns {string}
+   */
+  createToolBar() {
+    return `
+      <div class="toolbar">
+        <input class="toolbar-search" type="search" placeholder="Search film by name...">
+        <button class="button toolbar-sort">
+          <img src=${SORT_ICON_URL} height="30" width="30" alt="sort"/>
+        </button>
+      </div>
+    `;
+  }
+
+  /**
+   * Get html of the pagination block.
+   * @returns {string}
+   */
+  getPaginationHTML() {
+    return `
+    <section class="pagination">
+      <button class="pagination-button pagination-button-prev"><</button>
+      <ul class="pagination-pages-list"></ul>
+      <button class="pagination-button pagination-button-next">></button>
+    </section>
+  `;
+  }
+
+  /**
+   * Creates loader for append in the root while promises is pending.
+   * @return {HTMLDivElement}
+   */
+  createLoader() {
     const loader = document.createElement('div');
     loader.classList.add('loader-wrapper');
     loader.insertAdjacentHTML('beforeend', '<div class="lds-hourglass"></div>');
     return loader;
-  }
-
-
-  _createMainPage(user, films) {
-    const filmsContent = document.createElement('main');
-    filmsContent.classList.add('films');
-    const filmsWrapper = document.createElement('div');
-    filmsWrapper.classList.add('films__wrapper');
-
-    filmsContent.append(filmsWrapper);
-
-    filmsWrapper.insertAdjacentHTML('afterbegin', this._createToolsBar());
-
-    const filmsList = FilmsList(user, films, this.handlers.detailsHandler);
-    filmsList.classList.add('films__list');
-    filmsWrapper.append(filmsList);
-
-    filmsWrapper.insertAdjacentHTML('beforeend', this._createPagination());
-
-    this.app.append(filmsContent);
-
-    return filmsList;
-  }
-
-
-  /**
-   * Creating toolsbar with search field and sort button.
-   * @returns {string}
-   */
-  _createToolsBar() {
-    return `
-  <div class="films__operations">
-    <input class="films__search-input" type="search" placeholder="Search film by name...">
-    <div class="button-sort">
-      <img src="https://img.icons8.com/color-glass/50/000000/sort.png" height="30" width="30" alt="SORT"/>
-    </div>
-  </div>
-  `;
-  }
-
-  /**
-   * Creating html with pagination block.
-   * @returns {string}
-   */
-  _createPagination() {
-    return `
-    <div class="pagination">
-      <span id="button_prev" class="pagination__item pageButton outline-none"><</span>
-      <span id="page_number" class="pagination__item pagination__numbers outline-none"></span>
-      <span id="button_next" class="pagination__item pageButton outline-none">></span>
-    </div>
-  `;
   }
 }

@@ -1,4 +1,4 @@
-import {fb} from '../../firebase/firebase.js';
+import {firebaseApp} from '../../firebase/firebase.js';
 import {openStartPage} from '../../utils/utils.js';
 import {signInWithGoogle} from '../../utils/auth.js';
 
@@ -49,8 +49,8 @@ export default class LoginView {
     ;
 
     return `
-    <main class="films films--login">
-        <div class="films__wrapper">${innerContent}</div>
+    <main class="login">
+        <div class="wrapper">${innerContent}</div>
     </main>
   `;
   }

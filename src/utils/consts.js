@@ -6,3 +6,6 @@ export const COLLECTION_PATH = 'films';
 export const KEY_FOR_USER = 'currentUser';
 export const KEY_FOR_FILM = 'currentFilm';
 export const RECORDS_PER_PAGE = 2;
+
+export const USER_ICON_URL = 'https://img.icons8.com/doodle/48/000000/user.png';
+export const SORT_ICON_URL = 'https://img.icons8.com/color-glass/50/000000/sort.png';

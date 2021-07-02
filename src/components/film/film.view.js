@@ -1,6 +1,7 @@
 import Header from '../header/header.js';
 import Footer from '../footer/footer.js';
 import {MAIN_PAGE_URL} from '../../utils/consts.js';
+import createHeader from '../header/header.js';
 
 export default class FilmView {
   constructor(handlers) {
@@ -9,7 +10,7 @@ export default class FilmView {
   }
 
   render(user, film) {
-    this.app.append(Header(user, this.handlers.logoutHandler));
+    this.app.append(createHeader(user, this.handlers.logoutHandler));
     this.app.insertAdjacentHTML('beforeend', this._createFilmPage(film));
     this.app.append(Footer());
   }

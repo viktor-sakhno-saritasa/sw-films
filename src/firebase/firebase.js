@@ -1,9 +1,9 @@
 import firebaseConfig from './firebase-config.js';
 
-const fb = firebase.initializeApp(firebaseConfig);
-const firestore = fb.firestore();
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firestore = firebaseApp.firestore();
 
 export {
-  fb,
+  firebaseApp,
   firestore,
 };

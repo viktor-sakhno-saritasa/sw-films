@@ -3,7 +3,7 @@ import FilmItem from '../FilmItem/FilmItem.js';
 /**
  * Creates FilmList Component
  * @param {object} user - The object saved in LocalStorage containing two keys: token and name
- * @param {Film[]} films - List of Film instances
+ * @param {object[]} films - Array of films
  * @param {function} detailsHandler - Event handler for "More Details" button
  * @return {HTMLUListElement} List with film items generated
  */

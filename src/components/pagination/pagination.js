@@ -2,7 +2,7 @@ import {RECORDS_PER_PAGE} from '../../utils/consts.js';
 
 /**
  * Add pagination for the list
- * @param {HTMLUListElement} listItems - List of Film instances
+ * @param {HTMLUListElement} listItems - List of Films
  */
 export default function addPagination(listItems) {
   const li = document.querySelectorAll('.film-item');
@@ -22,13 +22,13 @@ export default function addPagination(listItems) {
   
   /** Change classes for pages depending current state */
   const selectedPage = () => {
-    let pages = document.querySelectorAll('.pagination-page-item');
+    let pages = document.querySelectorAll('.pagination-item');
 
     for (let i = 0; i < pages.length; i++) {
       if (i === currentPage - 1) {
-        pages[i].classList.add('pagination-page-item--current');
+        pages[i].classList.add('pagination-item--current');
       } else {
-        pages[i].classList.remove('pagination-page-item--current');
+        pages[i].classList.remove('pagination-item--current');
       }
     }
   };
@@ -76,7 +76,7 @@ export default function addPagination(listItems) {
   const clickPage = () => {
     pagesList.addEventListener('click', event => {
       if (event.target.nodeName === 'BUTTON'
-          && event.target.classList.contains('pagination-page-item')) {
+          && event.target.classList.contains('pagination-item')) {
         currentPage = event.target.textContent;
         changePage(currentPage);
       }
@@ -87,10 +87,10 @@ export default function addPagination(listItems) {
   const createPaginationList = () => {
     pagesList.innerHTML = '';
 
-    for (let i = 1; i < numPages() + 1; i++) {
+    for (let pageNumber = 1; pageNumber < numPages() + 1; pageNumber++) {
       pagesList.innerHTML += `
         <li>
-          <button class="pagination-page-item">${i}</button>
+          <button class="pagination-item">${pageNumber}</button>
         </li>`;
     }
   };

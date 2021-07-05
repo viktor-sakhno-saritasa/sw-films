@@ -5,12 +5,12 @@ import {firestore} from './firebase.js';
 /**
  * After receiving a response take the necessary keys
  * and call Film constructor with an object from those keys
- * @return {Promise} Promise object represents the list of films
+ * @return {Promise} Promise object represents the list of films objects
  */
 export function getFilms() {
   return firestore.collection(COLLECTION_PATH).get()
-    .then(films => {
-      return films.docs.map(doc => {
+    .then(snapshot => {
+      return snapshot.docs.map(doc => {
         const {
           title,
           director,
@@ -18,7 +18,7 @@ export function getFilms() {
           episode_id: episodeId,
           release_date: releaseDate,
           opening_crawl: description} = doc.data().fields;
-        return new Film({ title, director, producer, episodeId, releaseDate, description});
+        return { title, director, producer, episodeId, releaseDate, description };
       });
     });
 }

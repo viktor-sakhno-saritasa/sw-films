@@ -17,7 +17,7 @@ export default class FilmView {
   /**
    * Render one film page
    * @param {object} user - The object saved in LocalStorage containing two keys: token and name
-   * @param {Film} film - Film instance that saved in LocalStorage for opening
+   * @param {object} film - Film object that saved in LocalStorage for opening
    */
   render(user, film) {
     this.app.append(createHeader(user, this.handlers.logoutHandler));
@@ -27,7 +27,7 @@ export default class FilmView {
   /**
    * Collects a wrapper consisting
    * of ar components of the film page
-   * @param {Film} film - Film instance that saved in LocalStorage for opening
+   * @param {object} film - Film object that saved in LocalStorage for opening
    * @return {string} Inner HTML for insert in the root element of the page
    */
   createFilmPage(film) {
@@ -43,7 +43,7 @@ export default class FilmView {
 
   /**
    * Wraps the Film entity into a card for render
-   * @param {Film} film - Film instance that saved in LocalStorage for opening
+   * @param {object} film - Film object that saved in LocalStorage for opening
    * @return {string} Inner HTML of film card
    */
   createCard(film) {

@@ -357,7 +357,7 @@ ul {
     margin-right: 25px;
 }
 
-.pagination-page-item {
+.pagination-item {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -375,14 +375,14 @@ ul {
     cursor: pointer;
 }
 
-.pagination-page-item--current {
+.pagination-item--current {
     background: #fff;
     color: #97e8fb;
 }
 
-.pagination-page-item:hover,
-.pagination-page-item:focus,
-.pagination-page-item:active {
+.pagination-item:hover,
+.pagination-item:focus,
+.pagination-item:active {
     background: #ffffff;
     color: #97e8fb;
 }

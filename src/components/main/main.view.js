@@ -33,7 +33,7 @@ export default class MainView {
   /**
    * Main function in class, that render full page
    * @param {object} user - The object saved in LocalStorage containing two keys: token and name
-   * @param {Film[]} films - List of Film instances
+   * @param {object[]} films - Array of film's objects
    */
   render(user, films) {
     this.loader.remove();
@@ -56,7 +56,7 @@ export default class MainView {
    * Searches for a substring in the name of films and draws them,
    * if there is no substring, the last found ones will be drawn
    * @param {object} user - The object saved in LocalStorage containing two keys: token and name
-   * @param {Film[]} films - List of Film instances
+   * @param {object[]} films - Array of film's objects
    * @param {function} event - Event handler for search input
    */
   search(user, films, event) {
@@ -77,7 +77,7 @@ export default class MainView {
   /**
    * Sorts the list of films and replace ul node in the DOM
    * @param {object} user - The object saved in LocalStorage containing two keys: token and name
-   * @param {Film[]} films - List of Film instances
+   * @param {object[]} films - Array of film's objects
    */
   sort(user, films) {
     this.orderByAscending = !this.orderByAscending;
@@ -94,7 +94,7 @@ export default class MainView {
    * Collects a wrapper consisting
    * of ar components of the main page
    * @param {object} user - The object saved in LocalStorage containing two keys: token and name
-   * @param {Film[]} films - List of Film instances
+   * @param {object[]} films - Array of film's objects
    */
   createMainPage(user, films) {
     const filmsContent = document.createElement('main');

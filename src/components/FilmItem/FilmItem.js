@@ -2,7 +2,7 @@
  * Creates FilmItem Component
  * And set event handler on more details button
  * @param {object} user - The object saved in LocalStorage containing two keys: token and name
- * @param {Film} film - Film instance
+ * @param {object} film - Film object
  * @param {function} detailsHandler - Event handler for "More Details" button
  * @return {HTMLLIElement} List Item with Film information
  */

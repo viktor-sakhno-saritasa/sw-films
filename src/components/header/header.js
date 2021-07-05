@@ -13,19 +13,19 @@ export default function createHeader(user, logoutHandler) {
   const header = document.createElement('header');
   header.classList.add('header');
 
-  const innerContent = user
-    ?
-    `
-      <div class="header-user">
+  const logoutTemplate = () => {
+    return `
+    <div class="header-user">
         <img src=${USER_ICON_URL} alt=${user.name}>
         <span class="header-username">${user.name}</span>
       </div>
-      <button id="sign-btn" class="button button-auth">Log out</button>
-    `
-    :
-    `
-      <button id="sign-btn" class="button button-auth">Sign in</button>
+    <button id="sign-btn" class="button button-auth">Log out</button>
     `;
+  };
+
+  const loginTemplate = () => '<button id="sign-btn" class="button button-auth">Sign in</button>';
+
+  const innerContent = user ? logoutTemplate() : loginTemplate();
 
   header.innerHTML = `
       <h1 class="header-title">SW Films</h1>

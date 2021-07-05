@@ -39,9 +39,9 @@ export function openLoginPage() {
 /**
  * Sorts films by episode
  * Creates new array
- * @param {Film[]} films - List of films for sorting
+ * @param {objects[]} films - List of films objects for sorting
  * @param {boolean} orderByAscending True if ascending sort, else descending
- * @return {Film[]} New sorted list of films
+ * @return {objects[]} New sorted list of films
  */
 export function sortFilms(films, orderByAscending) {
   const sortedFilms =  [...films];
@@ -60,7 +60,7 @@ export function sortFilms(films, orderByAscending) {
  * Adds object with film data
  * after clicking the "More Details" button
  * for later display on the Film Page
- * @param {Film} film - Film instance to add to LocalStorage
+ * @param {object} film - Film object to add to LocalStorage
  */
 export function addFilmToLocalStorage(film) {
   localStorage.setItem(KEY_FOR_FILM, JSON.stringify(film));

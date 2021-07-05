@@ -1,7 +1,7 @@
-import {firebaseApp} from '../../firebase/firebase.js';
-import {openStartPage} from '../../utils/utils.js';
-import {signInWithGoogle} from '../../utils/auth.js';
-import {DONE_ICON_URL, GOOGLE_ICON_URL, MAIN_PAGE_URL} from '../../utils/consts.js';
+import { firebaseApp } from '../../firebase/firebase.js';
+import { openStartPage } from '../../utils/utils.js';
+import { signInWithGoogle } from '../../utils/auth.js';
+import { DONE_ICON_URL, GOOGLE_ICON_URL, MAIN_PAGE_URL } from '../../utils/consts.js';
 
 /**
  * Class for render Login Page
@@ -53,8 +53,8 @@ export default class LoginView {
           <img src=${DONE_ICON_URL} class="login-icon" alt="authorized">
           <span class="button__text">Hi, ${user.name}. Go back!</span>
         </a>
-      ` 
-      : 
+      `
+      :
       `
         <button class="button button-login button-auth">
           <img src=${GOOGLE_ICON_URL} class="login-icon" alt="Google">

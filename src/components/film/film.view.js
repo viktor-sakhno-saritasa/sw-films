@@ -1,4 +1,4 @@
-import {MAIN_PAGE_URL} from '../../utils/consts.js';
+import { MAIN_PAGE_URL } from '../../utils/consts.js';
 import createHeader from '../header/header.js';
 
 /**

@@ -1,8 +1,8 @@
 import addPagination from '../pagination/pagination.js';
-import {sortFilms} from '../../utils/utils.js';
-import {FilmsList} from '../FilmsList/FilmsList.js';
+import { sortFilms } from '../../utils/utils.js';
+import { FilmsList } from '../FilmsList/FilmsList.js';
 import createHeader from '../header/header.js';
-import {SORT_ICON_URL} from '../../utils/consts.js';
+import { SORT_ICON_URL } from '../../utils/consts.js';
 
 /**
  * Class for render Main Page

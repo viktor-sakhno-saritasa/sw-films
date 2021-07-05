@@ -1,5 +1,5 @@
-import {USER_ICON_URL} from '../../utils/consts.js';
-import {openLoginPage} from '../../utils/utils.js';
+import { USER_ICON_URL } from '../../utils/consts.js';
+import { openLoginPage } from '../../utils/utils.js';
 
 /**
  * Creates Header Component
@@ -40,6 +40,6 @@ export default function createHeader(user, logoutHandler) {
       openLoginPage();
     }
   });
-    
+
   return header;
 }

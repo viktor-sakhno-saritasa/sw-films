@@ -1,4 +1,4 @@
-import {RECORDS_PER_PAGE} from '../../utils/consts.js';
+import { RECORDS_PER_PAGE } from '../../utils/consts.js';
 
 /**
  * Add pagination for the list
@@ -19,7 +19,7 @@ export default function addPagination(listItems) {
     prevButton.addEventListener('click', prevPage);
     nextButton.addEventListener('click', nextPage);
   };
-  
+
   /** Change classes for pages depending current state */
   const selectedPage = () => {
     let pages = document.querySelectorAll('.pagination-item');
@@ -76,7 +76,7 @@ export default function addPagination(listItems) {
   const clickPage = () => {
     pagesList.addEventListener('click', event => {
       if (event.target.nodeName === 'BUTTON'
-          && event.target.classList.contains('pagination-item')) {
+        && event.target.classList.contains('pagination-item')) {
         currentPage = event.target.textContent;
         changePage(currentPage);
       }

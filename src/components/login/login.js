@@ -1,4 +1,4 @@
-import {getUserFromLocalStorage} from '../../utils/utils.js';
+import { getUserFromLocalStorage } from '../../utils/utils.js';
 import LoginView from './login.view.js';
 
 const loginView = new LoginView();

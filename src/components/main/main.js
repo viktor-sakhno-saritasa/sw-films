@@ -1,6 +1,6 @@
-import {addFilmToLocalStorage, getUserFromLocalStorage, logout} from '../../utils/utils.js';
-import {getFilms} from '../../firebase/firestore.js';
-import {FILM_PAGE_URL} from '../../utils/consts.js';
+import { addFilmToLocalStorage, getUserFromLocalStorage, logout } from '../../utils/utils.js';
+import { getFilms } from '../../firebase/firestore.js';
+import { FILM_PAGE_URL } from '../../utils/consts.js';
 import MainView from './main.view.js';
 
 const handlers = {

@@ -1,6 +1,6 @@
-import {COLLECTION_PATH} from '../utils/consts.js';
-import {Film} from '../models/Film.js';
-import {firestore} from './firebase.js';
+import { COLLECTION_PATH } from '../utils/consts.js';
+import { Film } from '../models/Film.js';
+import { firestore } from './firebase.js';
 
 /**
  * After receiving a response take the necessary keys
@@ -17,7 +17,7 @@ export function getFilms() {
           producer,
           episode_id: episodeId,
           release_date: releaseDate,
-          opening_crawl: description} = doc.data().fields;
+          opening_crawl: description } = doc.data().fields;
         return { title, director, producer, episodeId, releaseDate, description };
       });
     });

@@ -1,4 +1,4 @@
-import {KEY_FOR_FILM, KEY_FOR_USER, LOGIN_PAGE_URL, MAIN_PAGE_URL} from './consts.js';
+import { KEY_FOR_FILM, KEY_FOR_USER, LOGIN_PAGE_URL, MAIN_PAGE_URL } from './consts.js';
 
 /**
  * Adds object with user data
@@ -44,7 +44,7 @@ export function openLoginPage() {
  * @return {objects[]} New sorted list of films
  */
 export function sortFilms(films, orderByAscending) {
-  const sortedFilms =  [...films];
+  const sortedFilms = [...films];
 
   const ascending = (a, b) => a.episodeId - b.episodeId;
   const descending = (a, b) => b.episodeId - a.episodeId;

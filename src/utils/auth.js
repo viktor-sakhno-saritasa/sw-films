@@ -1,4 +1,4 @@
-import {addUserToLocalStorage, openStartPage} from './utils.js';
+import { addUserToLocalStorage, openStartPage } from './utils.js';
 
 /**
  * Google-firebase authorization method
@@ -11,7 +11,7 @@ export function signInWithGoogle() {
 
   auth.signInWithPopup(googleProvider)
     .then(result => {
-      const {credential, user} = result;
+      const { credential, user } = result;
 
       addUserToLocalStorage({
         token: credential.idToken,

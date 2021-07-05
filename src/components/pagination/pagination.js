@@ -2,9 +2,9 @@ import {RECORDS_PER_PAGE} from '../../utils/consts.js';
 
 /**
  * Add pagination for the list
- * @param {HTMLUlElement} ul - List of Film instances
+ * @param {HTMLUlElement} listItems - List of Film instances
  */
-export default function addPagination(ul) {
+export default function addPagination(listItems) {
   let li = document.querySelectorAll('.film-item');
   let prevButton = document.querySelector('.pagination-button-prev');
   let nextButton = document.querySelector('.pagination-button-next');
@@ -34,14 +34,10 @@ export default function addPagination(ul) {
     }
   };
 
-  /** Checks currentPage and changes opacity for the button */
-  const checkButtonOpacity = () => {
-    currentPage == 1
-      ? prevButton.classList.add('opacity')
-      : prevButton.classList.remove('opacity');
-    currentPage == numPages()
-      ? nextButton.classList.add('opacity')
-      : nextButton.classList.remove('opacity');
+  /** Set side buttons state and apply styles depending it */
+  const setSideButtonsState = () => {
+    prevButton.disabled = currentPage == 1;
+    nextButton.disabled = currentPage == numPages();
   };
 
   /**
@@ -50,22 +46,14 @@ export default function addPagination(ul) {
    * @param {number} page - Page number to switch to
    */
   const changePage = page => {
-    if (page < 1) {
-      page = 1;
-    }
-
-    if (page > numPages() - 1) {
-      page = numPages();
-    }
-
-    ul.innerHTML = '';
+    listItems.innerHTML = '';
 
     for (let i = (page - 1) * recordsPerPage;
       i < (page * recordsPerPage) && i < li.length; i++) {
-      ul.append(li[i]);
+      listItems.append(li[i]);
     }
 
-    checkButtonOpacity();
+    setSideButtonsState();
     selectedPage();
   };
 
@@ -87,7 +75,7 @@ export default function addPagination(ul) {
 
   /** Set listener for click event and changes page depending node target */
   const clickPage = () => {
-    document.addEventListener('click', event => {
+    pagesList.addEventListener('click', event => {
       if (event.target.nodeName === 'BUTTON'
           && event.target.classList.contains('pagination-page-item')) {
         currentPage = event.target.textContent;

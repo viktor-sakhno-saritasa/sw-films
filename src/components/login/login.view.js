@@ -50,14 +50,14 @@ export default class LoginView {
       ?
       `
         <a href=${MAIN_PAGE_URL} class="button button-login button-start">
-          <img src=${DONE_ICON_URL} width="50" height="50" alt="authorized">
+          <img src=${DONE_ICON_URL} class="login-icon" alt="authorized">
           <span class="button__text">Hi, ${user.name}. Go back!</span>
         </a>
       ` 
       : 
       `
         <button class="button button-login button-auth">
-          <img src=${GOOGLE_ICON_URL} width="50" height="50" alt="Google">
+          <img src=${GOOGLE_ICON_URL} class="login-icon" alt="Google">
           <span class="login-text">Sign in</span>
         </button> 
       `;

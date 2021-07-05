@@ -124,7 +124,7 @@ export default class MainView {
       <div class="toolbar">
         <input class="toolbar-search" type="search" placeholder="Search film by name...">
         <button class="button toolbar-sort">
-          <img src=${SORT_ICON_URL} height="30" width="30" alt="sort"/>
+          <img src=${SORT_ICON_URL} class="toolbar-icon" alt="sort"/>
         </button>
       </div>
     `;

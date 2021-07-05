@@ -16,7 +16,7 @@ export default function createHeader(user, logoutHandler) {
     ?
     `
       <div class="header-user">
-        <img src=${USER_ICON_URL}>
+        <img src=${USER_ICON_URL} alt=${user.name}>
         <span class="header-username">${user.name}</span>
       </div>
       <a href=${MAIN_PAGE_URL} id="logout-btn" class="button button-auth">Log out</a>

@@ -1,5 +1,4 @@
 import { COLLECTION_PATH } from '../utils/consts.js';
-import { Film } from '../models/Film.js';
 import { firestore } from './firebase.js';
 
 /**

@@ -46,25 +46,29 @@ export default class LoginView {
    * @return {string} Inner HTML for insert in the root element of the page
    */
   createLoginPage(user) {
-    const innerContent = user
-      ?
-      `
+    const loggedTemplate = () => {
+      return `
         <a href=${MAIN_PAGE_URL} class="button button-login button-start">
           <img src=${DONE_ICON_URL} class="login-icon" alt="authorized">
           <span class="button__text">Hi, ${user.name}. Go back!</span>
         </a>
-      `
-      :
-      `
+      `;
+    };
+
+    const notLoggedTemplate = () => {
+      return `
         <button class="button button-login button-auth">
           <img src=${GOOGLE_ICON_URL} class="login-icon" alt="Google">
           <span class="login-text">Sign in</span>
         </button> 
       `;
+    };
+
+    const innerContent = user ? loggedTemplate() : notLoggedTemplate();
 
     return `
       <main class="login">
-          <div class="wrapper">${innerContent}</div>
+          <div class="wrapper login-wrapper">${innerContent}</div>
       </main>
     `;
   }

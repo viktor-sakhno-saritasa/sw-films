@@ -7,13 +7,16 @@ import {DONE_ICON_URL, GOOGLE_ICON_URL, MAIN_PAGE_URL} from '../../utils/consts.
  * Class for render Login Page
  */
 export default class LoginView {
+  /**
+   * Initialize root element for the page
+   */
   constructor() {
     this.app = document.querySelector('#app');
   }
 
   /**
    * Render full page
-   * @param user
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
    */
   render(user) {
     const loginPageHTML = this.createLoginPage(user);
@@ -21,7 +24,7 @@ export default class LoginView {
   }
 
   /**
-   * Defines function for central button in the login page.
+   * Defines function for central button in the login page
    * @param user
    */
   initListeners(user) {
@@ -39,8 +42,8 @@ export default class LoginView {
   /**
    * Collect a pieces of html and
    * return it depending on user is existing
-   * @param user
-   * @returns {string} header html
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+   * @return {string} Inner HTML for insert in the root element of the page
    */
   createLoginPage(user) {
     const innerContent = user

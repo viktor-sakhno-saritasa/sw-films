@@ -8,6 +8,10 @@ import {SORT_ICON_URL} from '../../utils/consts.js';
  * Class for render Main Page
  */
 export default class MainView {
+  /**
+   * Initialize root element and event handlers for the page
+   * @param {object} handlers - Object with functions - event handlers for different components
+   */
   constructor(handlers) {
     this.app = document.querySelector('#app');
     this.orderByAscending = false;
@@ -16,8 +20,8 @@ export default class MainView {
 
   /**
    * Renders those elements that do not need
-   * to wait for the loading of films.
-   * @param user
+   * to wait for the loading of films
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
    */
   initialRender(user) {
     this.app.append(createHeader(user, this.handlers.logoutHandler));
@@ -28,8 +32,8 @@ export default class MainView {
 
   /**
    * Main function in class, that render full page
-   * @param user
-   * @param films
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+   * @param {Film[]} films - List of Film instances
    */
   render(user, films) {
     this.loader.remove();
@@ -51,9 +55,9 @@ export default class MainView {
   /**
    * Searches for a substring in the name of films and draws them,
    * if there is no substring, the last found ones will be drawn
-   * @param user
-   * @param films
-   * @param event
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+   * @param {Film[]} films - List of Film instances
+   * @param {function} event - Event handler for search input
    */
   search(user, films, event) {
     const founded = films.filter(film => {
@@ -71,9 +75,9 @@ export default class MainView {
   }
 
   /**
-   * Sorts the list of films and replace ul node in the DOM.
-   * @param user
-   * @param films
+   * Sorts the list of films and replace ul node in the DOM
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+   * @param {Film[]} films - List of Film instances
    */
   sort(user, films) {
     this.orderByAscending = !this.orderByAscending;
@@ -89,9 +93,8 @@ export default class MainView {
   /**
    * Collects a wrapper consisting
    * of ar components of the main page
-   * @param user
-   * @param films
-   * @return {*}
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+   * @param {Film[]} films - List of Film instances
    */
   createMainPage(user, films) {
     const filmsContent = document.createElement('main');
@@ -113,8 +116,8 @@ export default class MainView {
   }
 
   /**
-   * Creating toolbar with search field and sort button.
-   * @returns {string}
+   * Creating toolbar with search field and sort button
+   * @return {string} HTML layout for ToolBar
    */
   createToolBar() {
     return `
@@ -128,8 +131,8 @@ export default class MainView {
   }
 
   /**
-   * Get html of the pagination block.
-   * @returns {string}
+   * Get html of the pagination block
+   * @return {string} HTML layout for Pagination
    */
   getPaginationHTML() {
     return `
@@ -142,8 +145,8 @@ export default class MainView {
   }
 
   /**
-   * Creates loader for append in the root while promises is pending.
-   * @return {HTMLDivElement}
+   * Creates loader for append in the root while promises is pending
+   * @return {HTMLDivElement} Loader Component
    */
   createLoader() {
     const loader = document.createElement('div');

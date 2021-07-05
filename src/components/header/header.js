@@ -2,10 +2,10 @@ import {LOGIN_PAGE_URL, MAIN_PAGE_URL, USER_ICON_URL} from '../../utils/consts.j
 
 /**
  * Creates Header Component
- * And set event handler on logout button.
- * @param user
- * @param logoutHandler
- * @return {HTMLElement}
+ * And set event handler on logout button
+ * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+ * @param {function} logoutHandler - Event handler for Logout button
+ * @return {HTMLElement} Header component
  */
 export default function createHeader(user, logoutHandler) {
 

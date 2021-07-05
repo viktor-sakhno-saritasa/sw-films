@@ -4,8 +4,8 @@ import {firestore} from './firebase.js';
 
 /**
  * After receiving a response take the necessary keys
- * and call Film constructor with an object from those keys.
- * @return {*}
+ * and call Film constructor with an object from those keys
+ * @return {Promise} Promise object represents the list of films
  */
 export function getFilms() {
   return firestore.collection(COLLECTION_PATH).get()

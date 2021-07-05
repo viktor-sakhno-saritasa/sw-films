@@ -2,8 +2,8 @@ import {addUserToLocalStorage, openStartPage} from './utils.js';
 
 /**
  * Google-firebase authorization method
- * Saves idToken and displayName from response.
- * After that info adds to localStorage.
+ * Saves idToken and displayName from response
+ * After that info adds to localStorage
  */
 export function signInWithGoogle() {
   const auth = firebase.auth();

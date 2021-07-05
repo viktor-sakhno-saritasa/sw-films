@@ -2,7 +2,7 @@ import {RECORDS_PER_PAGE} from '../../utils/consts.js';
 
 /**
  * Add pagination for the list
- * @param ul
+ * @param {HTMLUlElement} ul - List of Film instances
  */
 export default function addPagination(ul) {
   let li = document.querySelectorAll('.film-item');
@@ -47,7 +47,7 @@ export default function addPagination(ul) {
   /**
    * There is a page change, if the user has reached
    * the edge and continues to click, the change will not occur
-   * @param page
+   * @param {number} page - Page number to switch to
    */
   const changePage = page => {
     if (page < 1) {

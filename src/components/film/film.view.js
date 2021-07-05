@@ -5,6 +5,10 @@ import createHeader from '../header/header.js';
  * Class for render Film Page
  */
 export default class FilmView {
+  /**
+   * Initialize root element and event handlers for the page
+   * @param {object} handlers - Object with functions - event handlers for different components
+   */
   constructor(handlers) {
     this.app = document.querySelector('#app');
     this.handlers = handlers;
@@ -12,8 +16,8 @@ export default class FilmView {
 
   /**
    * Render one film page
-   * @param user
-   * @param film
+   * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+   * @param {Film} film - Film instance that saved in LocalStorage for opening
    */
   render(user, film) {
     this.app.append(createHeader(user, this.handlers.logoutHandler));
@@ -23,8 +27,8 @@ export default class FilmView {
   /**
    * Collects a wrapper consisting
    * of ar components of the film page
-   * @param film
-   * @return {string}
+   * @param {Film} film - Film instance that saved in LocalStorage for opening
+   * @return {string} Inner HTML for insert in the root element of the page
    */
   createFilmPage(film) {
     return `
@@ -38,9 +42,9 @@ export default class FilmView {
   }
 
   /**
-   * Wraps the Film entity into a card for render.
-   * @param film
-   * @return {string}
+   * Wraps the Film entity into a card for render
+   * @param {Film} film - Film instance that saved in LocalStorage for opening
+   * @return {string} Inner HTML of film card
    */
   createCard(film) {
     return `

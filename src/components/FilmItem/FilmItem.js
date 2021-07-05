@@ -1,10 +1,10 @@
 /**
  * Creates FilmItem Component
- * And set event handler on more details button.
- * @param user
- * @param film
- * @param detailsHandler
- * @return {HTMLLIElement}
+ * And set event handler on more details button
+ * @param {object} user - The object saved in LocalStorage containing two keys: token and name
+ * @param {Film} film - Film instance
+ * @param {function} detailsHandler - Event handler for "More Details" button
+ * @return {HTMLLIElement} List Item with Film information
  */
 function FilmItem(user, film, detailsHandler) {
   const li = document.createElement('li');

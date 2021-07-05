@@ -137,9 +137,9 @@ export default class MainView {
   getPaginationHTML() {
     return `
     <section class="pagination">
-      <button class="pagination-button pagination-button-prev"><</button>
+      <button class="pagination-button pagination-button-prev">&lt;</button>
       <ul class="pagination-pages-list"></ul>
-      <button class="pagination-button pagination-button-next">></button>
+      <button class="pagination-button pagination-button-next">&gt;</button>
     </section>
   `;
   }

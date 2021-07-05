@@ -1,4 +1,4 @@
-import {KEY_FOR_FILM, KEY_FOR_USER, MAIN_PAGE_URL} from './consts.js';
+import {KEY_FOR_FILM, KEY_FOR_USER, LOGIN_PAGE_URL, MAIN_PAGE_URL} from './consts.js';
 
 /**
  * Adds object with user data
@@ -30,6 +30,10 @@ export function deleteUserFromLocalStorage() {
  */
 export function openStartPage() {
   window.location.assign(MAIN_PAGE_URL);
+}
+
+export function openLoginPage() {
+  window.location.assign(LOGIN_PAGE_URL);
 }
 
 /**
@@ -85,4 +89,5 @@ export function deleteFilmFromLocalStorage() {
 export function logout() {
   deleteUserFromLocalStorage();
   deleteFilmFromLocalStorage();
+  openStartPage();
 }

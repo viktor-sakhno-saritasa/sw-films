@@ -2,18 +2,17 @@ import {RECORDS_PER_PAGE} from '../../utils/consts.js';
 
 /**
  * Add pagination for the list
- * @param {HTMLUlElement} listItems - List of Film instances
+ * @param {HTMLUListElement} listItems - List of Film instances
  */
 export default function addPagination(listItems) {
-  let li = document.querySelectorAll('.film-item');
-  let prevButton = document.querySelector('.pagination-button-prev');
-  let nextButton = document.querySelector('.pagination-button-next');
-  let pagesList = document.querySelector('.pagination-pages-list');
+  const li = document.querySelectorAll('.film-item');
+  const prevButton = document.querySelector('.pagination-button-prev');
+  const nextButton = document.querySelector('.pagination-button-next');
+  const pagesList = document.querySelector('.pagination-pages-list');
   let currentPage = 1;
-  let recordsPerPage = RECORDS_PER_PAGE;
 
   /** Counts the number of pages depending on the length of the list */
-  const numPages = () => Math.ceil(li.length / recordsPerPage);
+  const numPages = () => Math.ceil(li.length / RECORDS_PER_PAGE);
 
   /** Adds listeners to the side buttons of the pagination block */
   const addListeners = () => {
@@ -23,7 +22,7 @@ export default function addPagination(listItems) {
   
   /** Change classes for pages depending current state */
   const selectedPage = () => {
-    let pages = document.getElementsByClassName('pagination-page-item');
+    let pages = document.querySelectorAll('.pagination-page-item');
 
     for (let i = 0; i < pages.length; i++) {
       if (i === currentPage - 1) {
@@ -48,8 +47,8 @@ export default function addPagination(listItems) {
   const changePage = page => {
     listItems.innerHTML = '';
 
-    for (let i = (page - 1) * recordsPerPage;
-      i < (page * recordsPerPage) && i < li.length; i++) {
+    for (let i = (page - 1) * RECORDS_PER_PAGE;
+      i < (page * RECORDS_PER_PAGE) && i < li.length; i++) {
       listItems.append(li[i]);
     }
 

@@ -34,8 +34,8 @@ export default class FilmView {
     return `
     <main class="films">
       <div class="wrapper">
-      ${this.createCard(film)}
-      <a class="button back-link" href=${MAIN_PAGE_URL}>Go to the main page</a>
+        ${this.createCard(film)}
+        <a class="button back-link" href=${MAIN_PAGE_URL}>Go to the main page</a>
       </div>
     </main>
     `;
@@ -57,7 +57,6 @@ export default class FilmView {
       </div>
       <div class="card-img film-img">${film.episodeId}</div>
       <table class="card-details">
-        <thead>
         <tr class="card-item">
           <th class="card-title">Episode</th>
           <td class="card-info">${film.episodeId}</td>

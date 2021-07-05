@@ -1,4 +1,5 @@
-import {LOGIN_PAGE_URL, MAIN_PAGE_URL, USER_ICON_URL} from '../../utils/consts.js';
+import {USER_ICON_URL} from '../../utils/consts.js';
+import {openLoginPage} from '../../utils/utils.js';
 
 /**
  * Creates Header Component
@@ -11,7 +12,7 @@ export default function createHeader(user, logoutHandler) {
 
   const header = document.createElement('header');
   header.classList.add('header');
-    
+
   const innerContent = user
     ?
     `
@@ -19,22 +20,26 @@ export default function createHeader(user, logoutHandler) {
         <img src=${USER_ICON_URL} alt=${user.name}>
         <span class="header-username">${user.name}</span>
       </div>
-      <a href=${MAIN_PAGE_URL} id="logout-btn" class="button button-auth">Log out</a>
+      <button id="sign-btn" class="button button-auth">Log out</button>
     `
     :
     `
-      <a href=${LOGIN_PAGE_URL} class="button button-auth">Sign in</a>
+      <button id="sign-btn" class="button button-auth">Sign in</button>
     `;
-    
+
   header.innerHTML = `
       <h1 class="header-title">SW Films</h1>
       <nav class="header-navigation">${innerContent}</nav>
     `;
 
-  if (user) {
-    const logoutButton = header.querySelector('#logout-btn');
-    logoutButton.addEventListener('click', logoutHandler);
-  }
+  const signButton = header.querySelector('#sign-btn');
+  signButton.addEventListener('click', () => {
+    if (user) {
+      logoutHandler();
+    } else {
+      openLoginPage();
+    }
+  });
     
   return header;
 }

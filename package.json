@@ -1,0 +1,35 @@
+{
+  "name": "camp-js-2021-viktor-sakhno",
+  "version": "1.0.0",
+  "description": "Viktor-Sakhno Repository For Camp-Js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint -c .eslintrc.js src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saritasa-nest/camp-js-2021-viktor-sakhno.git"
+  },
+  "keywords": [
+    "js",
+    "javascript",
+    "camp"
+  ],
+  "author": "Viktor Sakhno <viktor.sakhno@saritasa.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saritasa-nest/camp-js-2021-viktor-sakhno/issues"
+  },
+  "homepage": "https://github.com/saritasa-nest/camp-js-2021-viktor-sakhno#readme",
+  "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsdoc": "^35.4.1",
+    "eslint-plugin-prefer-arrow": "^1.2.3"
+  },
+  "dependencies": {
+    "firebase-admin": "^9.10.0",
+    "firestore-export-import": "^0.15.0"
+  }
+}

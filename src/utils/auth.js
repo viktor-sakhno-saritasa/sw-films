@@ -13,14 +13,16 @@ export function signInWithGoogle() {
     .then(result => {
       const { credential, user } = result;
 
+      console.log(credential);
+
       addUserToLocalStorage({
         token: credential.idToken,
         name: user.displayName,
       });
 
-      openStartPage();
+      // openStartPage();
     })
     .catch(error => {
-      console.log(error);
+      console.error(error);
     });
 }

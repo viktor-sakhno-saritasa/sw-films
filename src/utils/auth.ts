@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import { addUserToLocalStorage, redirectMainPage } from './utils';
 
 /**
@@ -11,11 +12,12 @@ export function signInWithGoogle(): void {
   auth
     .signInWithPopup(googleProvider)
     .then((result) => {
-      const { credential, user } = result;
+      const credential = result.credential as firebase.auth.OAuthCredential;
+      const user = result.user;
 
       addUserToLocalStorage({
-        token: credential.idToken,
-        name: user.displayName,
+        token: credential.idToken!,
+        name: user!.displayName!,
       });
 
       redirectMainPage();

@@ -1,13 +1,13 @@
-import { RECORDS_PER_PAGE } from '../../utils/consts.js';
+import { RECORDS_PER_PAGE } from '../../utils/consts';
 
 /**
  * Add pagination for the list
- * @param {HTMLUListElement} listItems - List of Films
+ * @param listItems - List of Films
  */
-export default function addPagination(listItems) {
+export default function addPagination(listItems: HTMLUListElement): void {
   const li = document.querySelectorAll('.film-item');
-  const prevButton = document.querySelector('.pagination-button-prev');
-  const nextButton = document.querySelector('.pagination-button-next');
+  const prevButton = document.querySelector('.pagination-button-prev') as HTMLButtonElement;
+  const nextButton = document.querySelector('.pagination-button-next') as HTMLButtonElement;
   const pagesList = document.querySelector('.pagination-pages-list');
   let currentPage = 1;
 
@@ -16,8 +16,8 @@ export default function addPagination(listItems) {
 
   /** Adds listeners to the side buttons of the pagination block */
   const addListeners = () => {
-    prevButton.addEventListener('click', prevPage);
-    nextButton.addEventListener('click', nextPage);
+    prevButton!.addEventListener('click', prevPage);
+    nextButton!.addEventListener('click', nextPage);
   };
 
   /** Change classes for pages depending current state */
@@ -35,20 +35,19 @@ export default function addPagination(listItems) {
 
   /** Set side buttons state and apply styles depending it */
   const setSideButtonsState = () => {
-    prevButton.disabled = currentPage == 1;
-    nextButton.disabled = currentPage == numPages();
+    prevButton!.disabled = currentPage == 1;
+    nextButton!.disabled = currentPage == numPages();
   };
 
   /**
    * There is a page change, if the user has reached
    * the edge and continues to click, the change will not occur
-   * @param {number} page - Page number to switch to
+   * @param page - Page number to switch to
    */
-  const setPage = page => {
+  const setPage = (page: number): void => {
     listItems.innerHTML = '';
 
-    for (let i = (page - 1) * RECORDS_PER_PAGE;
-      i < (page * RECORDS_PER_PAGE) && i < li.length; i++) {
+    for (let i = (page - 1) * RECORDS_PER_PAGE; i < page * RECORDS_PER_PAGE && i < li.length; i++) {
       listItems.append(li[i]);
     }
 
@@ -74,10 +73,10 @@ export default function addPagination(listItems) {
 
   /** Set listener for click event and changes page depending node target */
   const clickPage = () => {
-    pagesList.addEventListener('click', event => {
-      if (event.target.nodeName === 'BUTTON'
-        && event.target.classList.contains('pagination-item')) {
-        currentPage = event.target.textContent;
+    pagesList!.addEventListener('click', (event: Event): void => {
+      const target = event.target as Element;
+      if (target.nodeName === 'BUTTON' && target.classList.contains('pagination-item')) {
+        currentPage = Number(target.textContent);
         setPage(currentPage);
       }
     });
@@ -85,10 +84,10 @@ export default function addPagination(listItems) {
 
   /** Fills the ul node with buttons with pages */
   const createPaginationList = () => {
-    pagesList.innerHTML = '';
+    pagesList!.innerHTML = '';
 
     for (let pageNumber = 1; pageNumber < numPages() + 1; pageNumber++) {
-      pagesList.innerHTML += `
+      pagesList!.innerHTML += `
         <li>
           <button class="pagination-item">${pageNumber}</button>
         </li>`;

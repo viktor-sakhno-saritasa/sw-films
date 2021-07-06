@@ -1,4 +1,9 @@
-import { KEY_FOR_FILM, KEY_FOR_USER, LOGIN_PAGE_URL, MAIN_PAGE_URL } from './consts.js';
+import {
+  KEY_FOR_FILM,
+  KEY_FOR_USER,
+  LOGIN_PAGE_URL,
+  MAIN_PAGE_URL,
+} from './consts.js';
 
 /**
  * Adds object with user data
@@ -65,7 +70,6 @@ export function sortFilms(films, orderByAscending) {
 export function addFilmToLocalStorage(film) {
   localStorage.setItem(KEY_FOR_FILM, JSON.stringify(film));
 }
-
 
 /**
  * Receives a film data in case it is saved in storage

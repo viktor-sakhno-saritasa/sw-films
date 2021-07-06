@@ -6,3 +6,5 @@ export type Film = {
   releaseDate: string,
   description: string
 }
+
+export type filmLocalStorageType = Film | null;

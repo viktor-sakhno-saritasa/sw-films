@@ -1,6 +1,6 @@
+import { filmLocalStorageType, Film } from './../film-type';
+import { userLocalStorageType, User } from './../user-type';
 import { LocalStorageKeys, PageUrls } from '../enums';
-import { Film } from '../film-type';
-import { User } from '../user-type';
 
 /**
  * Adds object with user data after authorization to Local Storage.
@@ -14,7 +14,7 @@ export function addUserToLocalStorage(user: User): void {
  * Check user is exists for correct render pages.
  * @return User saved in LocalStorage or nothing if user is not exists.
  */
-export function getUserFromLocalStorage(): User | null {
+export function getUserFromLocalStorage(): userLocalStorageType {
   return JSON.parse(localStorage.getItem(LocalStorageKeys.User) || 'null');
 }
 
@@ -71,7 +71,7 @@ export function addFilmToLocalStorage(film: Film): void {
  * Receives a film data in case it is saved in storage.
  * @return Film saved in LocalStorage or nothing if film is not exists.
  */
-export function getFilmFromLocalStorage(): Film | null {
+export function getFilmFromLocalStorage(): filmLocalStorageType {
   return JSON.parse(localStorage.getItem(LocalStorageKeys.Film) || 'null');
 }
 

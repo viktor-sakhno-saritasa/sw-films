@@ -1,4 +1,5 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import { auth, Providers } from '../firebase/firebase';
 import { addUserToLocalStorage, redirectMainPage } from './utils';
 
 /**
@@ -6,11 +7,9 @@ import { addUserToLocalStorage, redirectMainPage } from './utils';
  * from response after that info adds to localStorage.
  */
 export function signInWithGoogle(): void {
-  const auth = firebase.auth();
-  const googleProvider = new firebase.auth.GoogleAuthProvider();
 
   auth
-    .signInWithPopup(googleProvider)
+    .signInWithPopup(Providers.google)
     .then((result) => {
       const credential = result.credential as firebase.auth.OAuthCredential;
       const user = result.user;

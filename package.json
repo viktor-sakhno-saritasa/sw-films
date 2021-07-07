@@ -3,14 +3,10 @@
   "version": "1.0.0",
   "description": "Viktor-Sakhno Repository For Camp-Js",
   "scripts": {
-    "start": "npm run dev",
-    "dev": "npm run build-dev && concurrently \"npm:watch-dev\" \"npm:serve-dev\"",
-    "serve-dev": "live-server --ignorePattern=\".*\\.ts\" ./dist",
-    "watch-dev": "npm run build-dev -- -w",
-    "build": "webpack",
-    "build-dev": "webpack --mode development --devtool inline-source-map",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint -c .eslintrc.js src"
+    "start": "npx webpack serve --mode development --progress --devtool inline-source-map",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development --devtool inline-source-map",
+    "lint": "eslint src/**/*.ts --fix"
   },
   "repository": {
     "type": "git",
@@ -28,20 +24,22 @@
   },
   "homepage": "https://github.com/saritasa-nest/camp-js-2021-viktor-sakhno#readme",
   "devDependencies": {
-    "clean-webpack-plugin": "^4.0.0-alpha.0",
-    "concurrently": "^6.2.0",
+    "@chernodub/eslint-config": "^1.0.14",
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^5.2.6",
     "eslint": "^7.29.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jsdoc": "^35.4.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "live-server": "^1.2.1",
+    "html-webpack-plugin": "^5.3.2",
     "style-loader": "^3.0.0",
     "ts-loader": "^9.2.3",
     "typescript": "^4.3.5",
-    "webpack": "^5.42.0",
-    "webpack-cli": "^4.7.2"
+    "webpack": "^5.42.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "firebase": "^8.7.0",

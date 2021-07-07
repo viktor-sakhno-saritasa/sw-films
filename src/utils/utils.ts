@@ -1,6 +1,7 @@
+import { LocalStorageKeys, PageUrls } from '../enums';
+
 import { filmLocalStorageType, Film } from './../film-type';
 import { userLocalStorageType, User } from './../user-type';
-import { LocalStorageKeys, PageUrls } from '../enums';
 
 /**
  * Adds object with user data after authorization to Local Storage.
@@ -12,7 +13,7 @@ export function addUserToLocalStorage(user: User): void {
 
 /**
  * Check user is exists for correct render pages.
- * @return User saved in LocalStorage or nothing if user is not exists.
+ * @returns User saved in LocalStorage or nothing if user is not exists.
  */
 export function getUserFromLocalStorage(): userLocalStorageType {
   return JSON.parse(localStorage.getItem(LocalStorageKeys.User) || 'null');
@@ -43,7 +44,7 @@ export function redirectLoginPage(): void {
  * Creates new array and sorts films by episode.
  * @param films - List of films for sorting.
  * @param orderByAscending True if ascending sort, else descending.
- * @return New sorted list of films.
+ * @returns New sorted list of films.
  */
 export function sortFilms(films: Film[], orderByAscending: boolean): Film[] {
   const sortedFilms = [...films];
@@ -69,7 +70,7 @@ export function addFilmToLocalStorage(film: Film): void {
 
 /**
  * Receives a film data in case it is saved in storage.
- * @return Film saved in LocalStorage or nothing if film is not exists.
+ * @returns Film saved in LocalStorage or nothing if film is not exists.
  */
 export function getFilmFromLocalStorage(): filmLocalStorageType {
   return JSON.parse(localStorage.getItem(LocalStorageKeys.Film) || 'null');

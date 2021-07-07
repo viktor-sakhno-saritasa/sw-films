@@ -1,4 +1,4 @@
 node_modules/
 .idea/
 dist/
-src/firebase/firebase-config.js
+src/firebase/firebase-config.ts

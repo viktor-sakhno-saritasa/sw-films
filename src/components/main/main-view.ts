@@ -4,21 +4,29 @@ import { FilmsList } from '../FilmsList/FilmsList';
 import createHeader from '../header/header';
 import { userLocalStorageType } from '../../user-type';
 import { Film } from '../../film-type';
-import { Handlers } from './main';
+
 import { IconUrls } from '../../enums';
 
+import { Handlers } from './main';
+
 /**
- * Class for render Main Page
+ * Class for render Main Page.
  */
 export default class MainView {
   private readonly app: HTMLElement;
+
   private readonly handlers: Handlers;
+
   private orderByAscending: boolean;
+
   private filmsList!: HTMLUListElement;
+
   private loader!: HTMLDivElement;
+
+
   /**
-   * Initialize root element and event handlers for the page
-   * @param handlers - Object with functions - event handlers for different components
+   * Initialize root element and event handlers for the page.
+   * @param handlers - Object with functions - event handlers for different components.
    */
   constructor(handlers: Handlers) {
     this.app = document.querySelector('#app')!;
@@ -31,7 +39,7 @@ export default class MainView {
    * to wait for the loading of films.
    * @param user - The object saved in LocalStorage containing two keys: token and name.
    */
-  initialRender(user: userLocalStorageType): void {
+  public initialRender(user: userLocalStorageType): void {
     this.app.append(createHeader(user, this.handlers['logoutHandler']!));
 
     this.loader = this.createLoader();
@@ -43,7 +51,7 @@ export default class MainView {
    * @param user - The object saved in LocalStorage containing two keys: token and name.
    * @param films - Array of film's objects.
    */
-  render(user: userLocalStorageType, films: Film[]): void {
+  public render(user: userLocalStorageType, films: Film[]): void {
     this.loader.remove();
 
     this.createMainPage(user, films);
@@ -91,7 +99,7 @@ export default class MainView {
   private sort(user: userLocalStorageType, films: Film[]): void {
     this.orderByAscending = !this.orderByAscending;
     const sortedList = FilmsList(
-      user, sortFilms(films, this.orderByAscending), this.handlers['detailsHandler']!
+      user, sortFilms(films, this.orderByAscending), this.handlers['detailsHandler']!,
     );
 
     this.filmsList.replaceWith(sortedList);
@@ -126,7 +134,7 @@ export default class MainView {
 
   /**
    * Creating toolbar with search field and sort button.
-   * @return HTML layout for ToolBar.
+   * @returns HTML layout for ToolBar.
    */
   private createToolBar(): string {
     return `
@@ -141,7 +149,7 @@ export default class MainView {
 
   /**
    * Get html of the pagination block.
-   * @return HTML layout for Pagination.
+   * @returns HTML layout for Pagination.
    */
   private getPaginationHTML(): string {
     return `
@@ -155,7 +163,7 @@ export default class MainView {
 
   /**
    * Creates loader for append in the root while promises is pending.
-   * @return Loader Component.
+   * @returns Loader Component.
    */
   private createLoader(): HTMLDivElement {
     const loader = document.createElement('div');

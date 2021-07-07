@@ -13,14 +13,14 @@ export function fetchFilms(): Promise<Film[]> {
     .collection(COLLECTION_PATH)
     .get()
     .then(snapshot => snapshot.docs.map(doc => {
-        const {
-          title,
-          director,
-          producer,
-          episode_id: episodeId,
-          release_date: releaseDate,
-          opening_crawl: description,
-        } = doc.data()['fields'];
-        return { title, director, producer, episodeId, releaseDate, description };
-      }));
+      const {
+        title,
+        director,
+        producer,
+        episode_id: episodeId,
+        release_date: releaseDate,
+        opening_crawl: description,
+      } = doc.data()['fields'];
+      return { title, director, producer, episodeId, releaseDate, description };
+    }));
 }

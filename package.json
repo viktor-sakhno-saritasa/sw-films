@@ -6,7 +6,7 @@
     "start": "npx webpack serve --mode development --progress --devtool inline-source-map",
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development --devtool inline-source-map",
-    "lint": "eslint src/**/*.ts --fix"
+    "lint": "eslint src/**/**/*.ts --fix"
   },
   "repository": {
     "type": "git",

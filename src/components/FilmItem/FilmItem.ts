@@ -7,7 +7,7 @@ import { userLocalStorageType } from '../../user-type';
  * @param user - The object saved in LocalStorage containing two keys: token and name.
  * @param film - Film object.
  * @param detailsHandler - Event handler for "More Details" button.
- * @return List Item with Film information.
+ * @returns List Item with Film information.
  */
 function FilmItem(user: userLocalStorageType, film: Film, detailsHandler: Function): HTMLLIElement {
   const li = document.createElement('li');

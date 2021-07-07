@@ -22,7 +22,7 @@ export default function addPagination(listItems: HTMLUListElement): void {
 
   /** Change classes for pages depending current state. */
   const selectedPage = () => {
-    let pages = document.querySelectorAll('.pagination-item');
+    const pages = document.querySelectorAll('.pagination-item');
 
     for (let i = 0; i < pages.length; i++) {
       if (i === currentPage - 1) {
@@ -41,7 +41,7 @@ export default function addPagination(listItems: HTMLUListElement): void {
 
   /**
    * There is a page change, if the user has reached.
-   * the edge and continues to click, the change will not occur.
+   * The edge and continues to click, the change will not occur.
    * @param page - Page number to switch to.
    */
   const setPage = (page: number): void => {

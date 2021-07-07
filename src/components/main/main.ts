@@ -1,20 +1,21 @@
-import { PageUrls } from "../../enums";
-import { Film } from "../../film-type";
-import { fetchFilms } from "../../firebase/firestore";
-import { userLocalStorageType } from "../../user-type";
-import { addFilmToLocalStorage, getUserFromLocalStorage, logout } from "../../utils/utils";
-import MainView from "./main-view";
+import { PageUrls } from '../../enums';
+import { Film } from '../../film-type';
+import { fetchFilms } from '../../firebase/firestore';
+import { userLocalStorageType } from '../../user-type';
+import { addFilmToLocalStorage, getUserFromLocalStorage, logout } from '../../utils/utils';
+
+import MainView from './main-view';
 
 console.log('main');
 
 
 export interface Handlers {
-  [key: string]: Function
+  [key: string]: Function;
 }
 
 const handlers: Handlers = {
   logoutHandler: logout,
-  detailsHandler: (film: Film) => {
+  detailsHandler(film: Film) {
     addFilmToLocalStorage(film);
     window.location.assign(PageUrls.Film);
   },

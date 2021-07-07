@@ -1,5 +1,5 @@
 import { Film } from '../../film-type';
-import { User } from '../../user-type';
+import { userLocalStorageType } from '../../user-type';
 import FilmItem from '../FilmItem/FilmItem';
 
 /**
@@ -9,7 +9,7 @@ import FilmItem from '../FilmItem/FilmItem';
  * @param detailsHandler - Event handler for "More Details" button.
  * @return List with film items generated.
  */
-export function FilmsList(user: User, films: Film[], detailsHandler: Function): HTMLUListElement {
+export function FilmsList(user: userLocalStorageType, films: Film[], detailsHandler: Function): HTMLUListElement {
   const ul = document.createElement('ul');
   ul.classList.add('films-list');
 

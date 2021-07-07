@@ -1,5 +1,5 @@
 import { Film } from '../../film-type';
-import { User } from '../../user-type';
+import { userLocalStorageType } from '../../user-type';
 
 /**
  * Creates FilmItem Component.
@@ -9,7 +9,7 @@ import { User } from '../../user-type';
  * @param detailsHandler - Event handler for "More Details" button.
  * @return List Item with Film information.
  */
-function FilmItem(user: User, film: Film, detailsHandler: Function): HTMLLIElement {
+function FilmItem(user: userLocalStorageType, film: Film, detailsHandler: Function): HTMLLIElement {
   const li = document.createElement('li');
   li.classList.add('film-item');
 

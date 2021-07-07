@@ -1,6 +1,6 @@
 import { IconUrls } from '../../enums';
-import { User } from '../../user-type';
-import { redirectMainPage } from '../../utils/utils';
+import { userLocalStorageType } from '../../user-type';
+import { redirectLoginPage } from '../../utils/utils';
 
 /**
  * Creates Header Component
@@ -9,15 +9,15 @@ import { redirectMainPage } from '../../utils/utils';
  * @param logoutHandler - Event handler for Logout button
  * @return Header component
  */
-export default function createHeader(user: User, logoutHandler: Function): HTMLElement {
+export default function createHeader(user: userLocalStorageType, logoutHandler: Function): HTMLElement {
   const header = document.createElement('header');
   header.classList.add('header');
 
   const logoutTemplate = () => {
     return `
     <div class="header-user">
-        <img src=${IconUrls.User} alt=${user.name}>
-        <span class="header-username">${user.name}</span>
+        <img src=${IconUrls.User} alt=${user!.name}>
+        <span class="header-username">${user!.name}</span>
       </div>
     <button id="sign-btn" class="button button-auth">Log out</button>
     `;
@@ -37,7 +37,7 @@ export default function createHeader(user: User, logoutHandler: Function): HTMLE
     if (user) {
       logoutHandler();
     } else {
-      redirectMainPage();
+      redirectLoginPage();
     }
   });
 

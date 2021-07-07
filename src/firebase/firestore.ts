@@ -20,7 +20,7 @@ export function fetchFilms(): Promise<Film[]> {
           episode_id: episodeId,
           release_date: releaseDate,
           opening_crawl: description,
-        } = doc.data().fields;
+        } = doc.data()['fields'];
         return { title, director, producer, episodeId, releaseDate, description };
       }));
 }

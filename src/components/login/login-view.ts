@@ -1,4 +1,3 @@
-import firebase from 'firebase/app';
 import { userLocalStorageType } from './../../user-type';
 import { PageUrls, IconUrls } from './../../enums';
 import { redirectMainPage } from '../../utils/utils';
@@ -64,7 +63,7 @@ export default class LoginView {
         <button class="button button-login button-auth">
           <img src=${IconUrls.Google} class="login-icon" alt="Google">
           <span class="login-text">Sign in</span>
-        </button> 
+        </button>
       `;
     };
 

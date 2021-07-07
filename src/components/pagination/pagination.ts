@@ -26,9 +26,9 @@ export default function addPagination(listItems: HTMLUListElement): void {
 
     for (let i = 0; i < pages.length; i++) {
       if (i === currentPage - 1) {
-        pages[i].classList.add('pagination-item--current');
+        pages[i]!.classList.add('pagination-item--current');
       } else {
-        pages[i].classList.remove('pagination-item--current');
+        pages[i]!.classList.remove('pagination-item--current');
       }
     }
   };
@@ -48,7 +48,7 @@ export default function addPagination(listItems: HTMLUListElement): void {
     listItems.innerHTML = '';
 
     for (let i = (page - 1) * RECORDS_PER_PAGE; i < page * RECORDS_PER_PAGE && i < li.length; i++) {
-      listItems.append(li[i]);
+      listItems.append(li[i]!);
     }
 
     setSideButtonsState();

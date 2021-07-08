@@ -6,9 +6,6 @@ import { addFilmToLocalStorage, getUserFromLocalStorage, logout } from '../../ut
 
 import MainView from './main-view';
 
-console.log('main');
-
-
 export interface Handlers {
   [key: string]: Function;
 }

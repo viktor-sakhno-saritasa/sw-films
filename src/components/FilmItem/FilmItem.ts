@@ -1,5 +1,5 @@
-import { Film } from '../../film-type';
-import { userLocalStorageType } from '../../user-type';
+import { FilmDto } from '../../models/film-dto';
+import { UserDto } from '../../models/user-dto';
 
 /**
  * Creates FilmItem Component.
@@ -9,7 +9,7 @@ import { userLocalStorageType } from '../../user-type';
  * @param detailsHandler - Event handler for "More Details" button.
  * @returns List Item with Film information.
  */
-function FilmItem(user: userLocalStorageType, film: Film, detailsHandler: Function): HTMLLIElement {
+function FilmItem(user: UserDto, film: FilmDto, detailsHandler: Function): HTMLLIElement {
   const li = document.createElement('li');
   li.classList.add('film-item');
 
@@ -19,7 +19,7 @@ function FilmItem(user: userLocalStorageType, film: Film, detailsHandler: Functi
       <p class="film-description">${film.description}</p>
   `;
 
-  if (user) {
+  if (user.name) {
     const button = document.createElement('button');
     button.classList.add('button', 'button-details');
     button.innerText = 'More details';

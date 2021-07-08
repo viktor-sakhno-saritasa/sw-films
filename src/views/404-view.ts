@@ -1,4 +1,5 @@
 import { PageUrls } from '../enums';
+
 import View from './view';
 
 /**

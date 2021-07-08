@@ -1,7 +1,7 @@
 /**
  * Interface for with film object.
  */
- export interface FilmDto {
+export interface FilmDto {
 
   /**
    * Title of film.

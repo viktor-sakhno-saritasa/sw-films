@@ -12,7 +12,31 @@ abstract class View {
   protected readonly root: HTMLElement;
 
   constructor() {
-    this.root = document.querySelector('#root')!;
+    this.root = this.getElement('#root');
+  }
+
+  /**
+   * Universal method for get element from DOM tree.
+   * @param selector Search selector.
+   */
+  protected getElement(selector: string): HTMLElement {
+    return document.querySelector(selector) as HTMLElement;
+  }
+
+  /**
+   * Universal method for create HtmlElement.
+   * @param tag Needed tag.
+   * @param className Classes for element.
+   * @returns HtmlElement with classes.
+   */
+  protected createElement(tag: string, className?: string): HTMLElement {
+    const element = document.createElement(tag);
+
+    if (className) {
+      element.classList.add(className);
+    }
+
+    return element;
   }
 
   /**

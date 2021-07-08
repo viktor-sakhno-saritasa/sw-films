@@ -19,8 +19,7 @@ class LoginView extends View {
    * @param user Current user of application.
    */
   public render(user: UserDto): void {
-    const loginPageHTML = this.createLoginTemplate(user);
-    this.root.insertAdjacentHTML('beforeend', loginPageHTML);
+    this.root.insertAdjacentHTML('beforeend', this.createLoginTemplate(user));
     this.initLocalListeners(user);
   }
 
@@ -29,7 +28,7 @@ class LoginView extends View {
    * @param user Current user of application.
    */
   private initLocalListeners(user: UserDto): void {
-    const centralButton = user.name ? document.querySelector('.button-start') : document.querySelector('.button-auth');
+    const centralButton = user.name ? this.getElement('.button-start') : this.getElement('.button-auth');
     const listenerForCentralButton = centralButton?.classList.contains('button-start') ? redirectMainPage : signInWithGoogle;
 
     centralButton?.addEventListener('click', listenerForCentralButton);
@@ -58,7 +57,7 @@ class LoginView extends View {
      * @returns HtmlTemplate for unauthorized user.
      */
     const notLoggedTemplate = (): string => `
-      <button class="button button-login button-auth">
+      <button type="button" class="button button-login button-auth">
         <img src=${IconUrls.Google} class="login-icon" alt="Google">
         <span class="login-text">Sign in</span>
       </button>

@@ -1,6 +1,7 @@
-import { FilmsList } from '../components/FilmsList/FilmsList';
-import createHeader from '../components/header/header';
-import addPagination from '../components/pagination/pagination';
+
+import { FilmsList } from '../components/FilmsList';
+import createHeader from '../components/header';
+import addPagination from '../components/pagination';
 import { IconUrls } from '../enums';
 import { FilmDto } from '../models/film-dto';
 import { UserDto } from '../models/user-dto';
@@ -52,7 +53,7 @@ class MainView extends View {
    * @param films List of films of application.
    * @param detailsHandler Event handler for "More details" button.
    */
-  public render(user: UserDto, films: FilmDto[], detailsHandler: Function): void {
+  public render(user: UserDto, detailsHandler: Function, films: FilmDto[]): void {
     this.loader.remove();
 
     this.createMainPage(user, films, detailsHandler);

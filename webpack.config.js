@@ -6,7 +6,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     css: './src/css/styles.css',
-    main: './src/components/main/main.ts',
+    main: './src/main.ts',
   },
   resolve: {
     extensions: ['.ts', '.js'],

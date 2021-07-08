@@ -2,13 +2,14 @@ import firebase from 'firebase/app';
 
 import { auth, Providers } from '../firebase/firebase';
 
-import { addUserToLocalStorage, redirectMainPage } from './utils';
+import { redirectMainPage } from './utils';
 
 /**
  * Google-firebase authorization method and displayName
  * from response after that info adds to localStorage.
+ * @param signInHandler Function calls when user is authorized.
  */
-export function signInWithGoogle(): void {
+export function signInWithGoogle(signInHandler: Function): void {
   auth
     .signInWithPopup(Providers.google)
     .then(result => {
@@ -16,7 +17,7 @@ export function signInWithGoogle(): void {
       const { user } = result;
 
       if (credential && credential.idToken && user && user.displayName) {
-        addUserToLocalStorage({
+        signInHandler({
           token: credential.idToken,
           name: user.displayName,
         });

@@ -36,4 +36,14 @@ export class FilmService {
   public deleteFilmFromLocalStorage(): void {
     localStorage.removeItem(LocalStorageKeys.Film);
   }
+
+  /**
+   * Get film from localStorage.
+   * @returns Active user located in localStorage or null if film is not located in storage.
+   */
+  public getFilmFromLocalStorage(): FilmDto | null {
+    const film = JSON.parse(localStorage.getItem(LocalStorageKeys.Film) || 'null');
+
+    return film;
+  }
 }

@@ -1,12 +1,12 @@
-import { FilmDto } from '../../models/film-dto';
-import { UserDto } from '../../models/user-dto';
+import { FilmDto } from '../models/film-dto';
+import { UserDto } from '../models/user-dto';
 
 /**
  * Creates FilmItem Component.
  * And set event handler on more details button.
- * @param user - The object saved in LocalStorage containing two keys: token and name.
- * @param film - Film object.
- * @param detailsHandler - Event handler for "More Details" button.
+ * @param user The object saved in LocalStorage containing two keys: token and name.
+ * @param film Film object.
+ * @param detailsHandler Event handler for "More Details" button.
  * @returns List Item with Film information.
  */
 function FilmItem(user: UserDto, film: FilmDto, detailsHandler: Function): HTMLLIElement {

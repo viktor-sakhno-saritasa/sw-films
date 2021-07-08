@@ -20,6 +20,15 @@ export class UserService {
   }
 
   /**
+   * Adds object with user data after authorization to Local Storage.
+   * @param user Just logged in current user.
+   */
+  public addUserToLocalStorage(user: UserDto): void {
+    localStorage.setItem(LocalStorageKeys.User, JSON.stringify(user));
+    this.commit();
+  }
+
+  /**
    * Delete user located in localStorage from there.
    * After that commit changes for update variables.
    */

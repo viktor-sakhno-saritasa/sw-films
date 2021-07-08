@@ -1,12 +1,12 @@
-import { IconUrls } from '../../enums';
-import { UserDto } from '../../models/user-dto';
-import { redirectLoginPage } from '../../utils/utils';
+import { IconUrls } from '../enums';
+import { UserDto } from '../models/user-dto';
+import { redirectLoginPage } from '../utils/utils';
 
 /**
  * Creates Header Component
  * And set event handler on logout button.
- * @param user - The object saved in LocalStorage containing two keys: token and name.
- * @param logoutHandler - Event handler for Logout button.
+ * @param user The object saved in LocalStorage containing two keys: token and name.
+ * @param logoutHandler Event handler for Logout button.
  * @returns Header component.
  */
 export default function createHeader(user: UserDto, logoutHandler: Function): HTMLElement {

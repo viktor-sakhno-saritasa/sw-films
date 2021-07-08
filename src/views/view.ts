@@ -45,10 +45,10 @@ abstract class View {
    * which can be rendered without this arguments.
    * For example, 404 page.
    * @param user Current user of application.
-   * @param films List of films from firestore.
+   * @param filmsState List of films from firestore.
    * @param handler Event handlers for interactive with user.
    */
-  abstract render(user?: UserDto, films?: FilmDto[], handler?: Function): void;
+  abstract render(user?: UserDto, handler?: Function, filmsState?: FilmDto[] | FilmDto, ): void;
 }
 
 export default View;

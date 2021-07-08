@@ -17,19 +17,23 @@ class LoginView extends View {
   /**
    * Render full page.
    * @param user Current user of application.
+   * @param handler Function calls when user is authorized.
    */
-  public render(user: UserDto): void {
+  public render(user: UserDto, handler: Function): void {
     this.root.insertAdjacentHTML('beforeend', this.createLoginTemplate(user));
-    this.initLocalListeners(user);
+    this.initLocalListeners(user, handler);
   }
 
   /**
    * Initialize listeners for interactive with user.
    * @param user Current user of application.
+   * @param signInHandler Function calls when user is authorized.
    */
-  private initLocalListeners(user: UserDto): void {
+  private initLocalListeners(user: UserDto, signInHandler: Function): void {
     const centralButton = user.name ? this.getElement('.button-start') : this.getElement('.button-auth');
-    const listenerForCentralButton = centralButton?.classList.contains('button-start') ? redirectMainPage : signInWithGoogle;
+    const listenerForCentralButton = centralButton?.classList.contains('button-start') ?
+      redirectMainPage :
+      () => signInWithGoogle(signInHandler);
 
     centralButton?.addEventListener('click', listenerForCentralButton);
   }

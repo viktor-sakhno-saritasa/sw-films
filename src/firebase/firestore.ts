@@ -1,4 +1,3 @@
-import { Film } from '../film-type';
 import { COLLECTION_PATH } from '../utils/consts';
 
 import { firestore } from './firebase';
@@ -8,7 +7,7 @@ import { firestore } from './firebase';
  * and call Film constructor with an object from those keys.
  * @returns Promise object represents the list of films objects.
  */
-export function fetchFilms(): Promise<Film[]> {
+export function fetchFilms(): Promise<Object[]> {
   return firestore
     .collection(COLLECTION_PATH)
     .get()

@@ -8,35 +8,35 @@ export default function addPagination(listItems: HTMLUListElement): void {
   const li = document.querySelectorAll('.film-item');
   const prevButton = document.querySelector('.pagination-button-prev') as HTMLButtonElement;
   const nextButton = document.querySelector('.pagination-button-next') as HTMLButtonElement;
-  const pagesList = document.querySelector('.pagination-pages-list');
+  const pagesList = document.querySelector('.pagination-pages-list') as Element;
   let currentPage = 1;
 
   /** Counts the number of pages depending on the length of the list. */
-  const numPages = () => Math.ceil(li.length / RECORDS_PER_PAGE);
+  const numPages = (): number => Math.ceil(li.length / RECORDS_PER_PAGE);
 
   /** Adds listeners to the side buttons of the pagination block. */
-  const addListeners = () => {
-    prevButton!.addEventListener('click', prevPage);
-    nextButton!.addEventListener('click', nextPage);
+  const addListeners = (): void => {
+    prevButton?.addEventListener('click', prevPage);
+    nextButton?.addEventListener('click', nextPage);
   };
 
   /** Change classes for pages depending current state. */
-  const selectedPage = () => {
+  const selectedPage = (): void => {
     const pages = document.querySelectorAll('.pagination-item');
 
     for (let i = 0; i < pages.length; i++) {
       if (i === currentPage - 1) {
-        pages[i]!.classList.add('pagination-item--current');
+        pages[i]?.classList.add('pagination-item--current');
       } else {
-        pages[i]!.classList.remove('pagination-item--current');
+        pages[i]?.classList.remove('pagination-item--current');
       }
     }
   };
 
   /** Set side buttons state and apply styles depending it. */
-  const setSideButtonsState = () => {
-    prevButton!.disabled = currentPage == 1;
-    nextButton!.disabled = currentPage == numPages();
+  const setSideButtonsState = (): void => {
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage === numPages();
   };
 
   /**
@@ -48,7 +48,7 @@ export default function addPagination(listItems: HTMLUListElement): void {
     listItems.innerHTML = '';
 
     for (let i = (page - 1) * RECORDS_PER_PAGE; i < page * RECORDS_PER_PAGE && i < li.length; i++) {
-      listItems.append(li[i]!);
+        listItems.append(li[i] as Node);
     }
 
     setSideButtonsState();
@@ -56,7 +56,7 @@ export default function addPagination(listItems: HTMLUListElement): void {
   };
 
   /** Jump to the previous page. */
-  const prevPage = () => {
+  const prevPage = (): void => {
     if (currentPage > 1) {
       currentPage--;
       setPage(currentPage);
@@ -64,7 +64,7 @@ export default function addPagination(listItems: HTMLUListElement): void {
   };
 
   /** Jump to the next page. */
-  const nextPage = () => {
+  const nextPage = (): void => {
     if (currentPage < numPages()) {
       currentPage++;
       setPage(currentPage);
@@ -72,8 +72,8 @@ export default function addPagination(listItems: HTMLUListElement): void {
   };
 
   /** Set listener for click event and changes page depending node target. */
-  const clickPage = () => {
-    pagesList!.addEventListener('click', (event: Event): void => {
+  const clickPage = (): void => {
+    pagesList?.addEventListener('click', (event: Event): void => {
       const target = event.target as Element;
       if (target.nodeName === 'BUTTON' && target.classList.contains('pagination-item')) {
         currentPage = Number(target.textContent);
@@ -83,14 +83,16 @@ export default function addPagination(listItems: HTMLUListElement): void {
   };
 
   /** Fills the ul node with buttons with pages. */
-  const createPaginationList = () => {
-    pagesList!.innerHTML = '';
+  const createPaginationList = (): void => {
+    pagesList.innerHTML = '';
 
-    for (let pageNumber = 1; pageNumber < numPages() + 1; pageNumber++) {
-      pagesList!.innerHTML += `
-        <li>
-          <button class="pagination-item">${pageNumber}</button>
-        </li>`;
+    const pagesCount = numPages();
+
+    for (let pageNumber = 1; pageNumber < pagesCount + 1; pageNumber++) {
+     pagesList.innerHTML += `
+      <li>
+        <button class="pagination-item">${pageNumber}</button>
+      </li>`;
     }
   };
 

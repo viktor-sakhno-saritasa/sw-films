@@ -7,15 +7,13 @@ import { Film } from '../../film-type';
 
 import { IconUrls } from '../../enums';
 
-import { Handlers } from './main';
-
 /**
  * Class for render Main Page.
  */
 export default class MainView {
   private readonly app: HTMLElement;
 
-  private readonly handlers: Handlers;
+  private readonly handlers: Record<string, Function>;
 
   private orderByAscending: boolean;
 
@@ -28,7 +26,7 @@ export default class MainView {
    * Initialize root element and event handlers for the page.
    * @param handlers - Object with functions - event handlers for different components.
    */
-  constructor(handlers: Handlers) {
+  constructor(handlers: Record<string, Function>) {
     this.app = document.querySelector('#app')!;
     this.orderByAscending = false;
     this.handlers = handlers;

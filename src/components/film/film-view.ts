@@ -2,7 +2,6 @@ import { PageUrls } from '../../enums';
 import { Film } from '../../film-type';
 import { User } from '../../user-type';
 import createHeader from '../header/header';
-import { Handlers } from '../main/main';
 
 /**
  * Class for render Film Page.
@@ -14,7 +13,7 @@ export default class FilmView {
    * Initialize root element and event handlers for the page.
    * @param handlers - Object with functions - event handlers for different components.
    */
-  constructor(private handlers: Handlers) {
+  constructor(private handlers: Record<string, Function>) {
     this.app = document.querySelector('#app')!;
   }
 
@@ -38,7 +37,7 @@ export default class FilmView {
     return `
     <main class="films">
       <div class="wrapper">
-        ${this.createCard(film)}
+        ${this.createCardTemplate(film)}
         <a class="button back-link" href=${PageUrls.Main}>Go to the main page</a>
       </div>
     </main>
@@ -50,7 +49,7 @@ export default class FilmView {
    * @param film - Film object that saved in LocalStorage for opening.
    * @returns Inner HTML of film card.
    */
-  private createCard(film: Film): string {
+  private createCardTemplate(film: Film): string {
     return `
     <div class="card">
       <div class="card-content">

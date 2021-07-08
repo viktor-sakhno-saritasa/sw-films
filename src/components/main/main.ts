@@ -6,11 +6,7 @@ import { addFilmToLocalStorage, getUserFromLocalStorage, logout } from '../../ut
 
 import MainView from './main-view';
 
-export interface Handlers {
-  [key: string]: Function;
-}
-
-const handlers: Handlers = {
+const handlers: Record<string, Function> = {
   logoutHandler: logout,
   detailsHandler(film: Film) {
     addFilmToLocalStorage(film);

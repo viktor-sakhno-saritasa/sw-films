@@ -1,3 +1,4 @@
-node_modules
-.idea
-src/firebase/firebase-config.js
+node_modules/
+.idea/
+dist/
+src/firebase/firebase-config.ts

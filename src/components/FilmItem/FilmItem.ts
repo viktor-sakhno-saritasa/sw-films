@@ -1,12 +1,15 @@
+import { Film } from '../../film-type';
+import { userLocalStorageType } from '../../user-type';
+
 /**
- * Creates FilmItem Component
- * And set event handler on more details button
- * @param {object} user - The object saved in LocalStorage containing two keys: token and name
- * @param {object} film - Film object
- * @param {function} detailsHandler - Event handler for "More Details" button
- * @return {HTMLLIElement} List Item with Film information
+ * Creates FilmItem Component.
+ * And set event handler on more details button.
+ * @param user - The object saved in LocalStorage containing two keys: token and name.
+ * @param film - Film object.
+ * @param detailsHandler - Event handler for "More Details" button.
+ * @returns List Item with Film information.
  */
-function FilmItem(user, film, detailsHandler) {
+function FilmItem(user: userLocalStorageType, film: Film, detailsHandler: Function): HTMLLIElement {
   const li = document.createElement('li');
   li.classList.add('film-item');
 

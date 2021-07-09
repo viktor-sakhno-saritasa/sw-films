@@ -30,24 +30,11 @@ export function fetchFilms(): Promise<Object[]> {
     }));
 }
 
-/**
- * Fetch one film by episode id.
- * @param id Episode id of film.
- * @returns Object with all fields for work.
- */
-// async function fetchFilmById(id: number): Promise<Object> {
-//   const film = await firestore
-//     .collection('films')
-//     .where('fields.episode_id', '==', id)
-//     .get()
-//     .then(snapshot => snapshot.docs.map(doc => doc.data()['fields']));
-
-//   return film[0];
-// }
 
 /**
  * Fetch list of related info from film.
  * @param ids Ids from film.
+ * @param collection Collection for fetch.
  * @returns List of related data.
  */
 export async function fetchRelated(ids: number[], collection: string): Promise<string[]> {
@@ -59,11 +46,18 @@ export async function fetchRelated(ids: number[], collection: string): Promise<s
       .get());
   });
 
-  const planets = await Promise.all(planetsPromises).then(snapshots => snapshots.map(snapshot => snapshot.docs.map(doc => doc.data()['fields'])));
+  const planets = await Promise.all(planetsPromises).then(snapshots => {
+    return snapshots.map(snapshot => snapshot.docs.map(doc => doc.data()['fields']));
+  });
 
   return planets.map(planet => planet[0].name);
 }
 
+/**
+ * Fetch list of related info from film and update FilmDto object.
+ * @param filmId Id of film for fetch need docs.
+ * @returns
+ */
 export function fetchFilmWithRelated(filmId: number): Promise<FilmDto[]> {
   return firestore
     .collection('films')

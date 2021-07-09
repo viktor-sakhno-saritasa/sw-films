@@ -101,6 +101,11 @@ class FilmView extends View {
       `;
   }
 
+  /**
+   * Create Select Template for film page.
+   * @param options List of options for select.
+   * @returns
+   */
   private createSelect(options: string[]): string {
     let innerContent = '';
 

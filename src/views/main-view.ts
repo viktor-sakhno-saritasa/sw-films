@@ -13,12 +13,6 @@ import View from './view';
  * View for index page render.
  */
 class MainView extends View {
-
-  /**
-   * Created loader for next remove from DOM when films will be loaded.
-   */
-  private loader!: HTMLDivElement;
-
   /**
    * Ul with films for that not lose link for replace element when sort or update list.
    */
@@ -68,16 +62,6 @@ class MainView extends View {
     searchField.addEventListener('input', event => {
       this.search(user, films, event, detailsHandler);
     });
-  }
-
-  /**
-   * Create loader for adding in the DOM tree while films is not loaded.
-   * @returns Loader element.
-   */
-  private createLoader(): HTMLDivElement {
-    const loader = this.createElement('div', 'loader-wrapper') as HTMLDivElement;
-    loader.insertAdjacentHTML('beforeend', '<div class="lds-hourglass"></div>');
-    return loader;
   }
 
   /**

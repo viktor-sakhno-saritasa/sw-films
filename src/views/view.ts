@@ -11,6 +11,11 @@ abstract class View {
    */
   protected readonly root: HTMLElement;
 
+  /**
+   * Created loader for next remove from DOM when films will be loaded.
+   */
+  protected loader!: HTMLDivElement;
+
   constructor() {
     this.root = this.getElement('#root');
   }
@@ -37,6 +42,16 @@ abstract class View {
     }
 
     return element;
+  }
+
+  /**
+   * Create loader for adding in the DOM tree while films is not loaded.
+   * @returns Loader element.
+   */
+  protected createLoader(): HTMLDivElement {
+    const loader = this.createElement('div', 'loader-wrapper') as HTMLDivElement;
+    loader.insertAdjacentHTML('beforeend', '<div class="lds-hourglass"></div>');
+    return loader;
   }
 
   /**

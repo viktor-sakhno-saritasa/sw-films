@@ -15,13 +15,23 @@ class FilmView extends View {
   }
 
   /**
+   * Renders those elements that do not need to wait for the loading of films.
+   */
+  public initialRender(): void {
+    this.loader = this.createLoader();
+    this.root.append(this.loader);
+  }
+
+
+  /**
    * Main function in class, that render full page.
    * @param user Current user of application.
    * @param film List of films of application.
-   * @param handler Event handler for logout button.
+   * @param logoutHandler Event handler for logout button.
    */
-  public render(user: UserDto, handler: Function, film: FilmDto): void {
-    this.root.append(createHeader(user, handler));
+  public render(user: UserDto, logoutHandler: Function, film: FilmDto): void {
+    this.root.append(createHeader(user, logoutHandler));
+    this.loader.remove();
     this.root.insertAdjacentHTML('beforeend', this.createFilmPage(film));
   }
 
@@ -74,9 +84,31 @@ class FilmView extends View {
               <th class="card-title">Producer</th>
               <td class="card-info">${film.producer}</td>
             </tr>
+            <tr class="card-item">
+              <th class="card-title">Planets</th>
+              <td class="card-info">
+                ${this.createSelect(film.planetsNames || [])}
+              </td>
+            </tr>
+            <tr class="card-item">
+            <th class="card-title">Characters</th>
+            <td class="card-info">
+              ${this.createSelect(film.charactersNames || [])}
+            </td>
+          </tr>
           </table>
         </div>
       `;
+  }
+
+  private createSelect(options: string[]): string {
+    let innerContent = '';
+
+    for (const item of options) {
+      innerContent += `<option>${item}</option>`;
+    }
+
+    return `<select>${innerContent}</select>`;
   }
 }
 

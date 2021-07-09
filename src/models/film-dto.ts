@@ -32,4 +32,24 @@ export interface FilmDto {
    * Announce to the film.
    */
   description: string;
+
+  /**
+   * List of planets in number format.
+   */
+  planets: number[];
+
+  /**
+   * List of characters in number format.
+   */
+  characters: number[];
+
+  /**
+   * List of characters in string format.
+   */
+  planetsNames?: string[];
+
+  /**
+   * List of characters in string format.
+   */
+  charactersNames?: string[];
 }

@@ -2,7 +2,7 @@ import MainView from './views/main-view';
 import LoginView from './views/login-view';
 import FilmView from './views/film-view';
 import View from './views/view';
-import { fetchFilms } from './firebase/firestore';
+import { fetchFilms, fetchFilmWithRelated } from './firebase/firestore';
 import { FilmDto } from './models/film-dto';
 import { UserService } from './services/user.service';
 import { FilmService } from './services/film.service';
@@ -75,7 +75,13 @@ if (view instanceof FilmView) {
   const film = filmService.getFilmFromLocalStorage();
 
   if (user && film) {
-    view.render(user, handlers.logoutHandler, film);
+    view.initialRender();
+
+    fetchFilmWithRelated(film.episodeId).then(currentFilm => {
+      view.render(user, handlers.logoutHandler, currentFilm[0]!);
+    });
+
+    // view.render(user, handlers.logoutHandler, currentFilm);
   } else {
     redirectMainPage();
   }

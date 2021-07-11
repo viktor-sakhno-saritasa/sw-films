@@ -1,6 +1,5 @@
 import firebase from 'firebase/app';
 
-import 'firebase/firestore';
 import { FilmDto } from '../models/film-dto';
 
 import { firestore } from './firebase';
@@ -30,6 +29,22 @@ export function fetchFilms(): Promise<Object[]> {
     }));
 }
 
+/**
+ * Fetch to firebase for get all collections in firestore.
+ * @param collections Names of all collections.
+ * @returns List of objects with all collections.
+ */
+export function fetchCollections(collections: string[]): Promise<Object[]> {
+  const promises = [];
+
+  for (const collectionName of collections) {
+    promises.push(firestore.collection(collectionName).get());
+  }
+
+  return Promise.all(promises).then(snapshots => {
+    return snapshots.map(snapshot => snapshot.docs.map(doc => doc.data()['fields']));
+  });
+}
 
 /**
  * Fetch list of related info from film.

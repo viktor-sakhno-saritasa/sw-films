@@ -46,4 +46,27 @@ export class FilmService {
 
     return film;
   }
+
+  /**
+   * Add all collection data for add and edit films.
+   * @param collectionData Data for save in local storage.
+   */
+  public addCollectionDataToLocalStorage(collectionData: Object[]): void {
+    localStorage.setItem(LocalStorageKeys.Collection, JSON.stringify(collectionData));
+  }
+
+  /**
+   * Get collection data from localStorage.
+   * @returns Current collection data saved in localStorage.
+   */
+  public getCollectionDataFromLocalStorage(): Object[] | null {
+    return JSON.parse(localStorage.getItem(LocalStorageKeys.Collection) || 'null');
+  }
+
+  public normalizeCollectionData(): Object[] {
+    const collection = this.getCollectionDataFromLocalStorage() as Object[];
+
+    console.log(collection);
+    return collection;
+  }
 }

@@ -13,6 +13,7 @@ export enum PageUrls {
 export enum LocalStorageKeys {
   User = 'currentUser',
   Film = 'currentFilm',
+  Collection = 'collectionData',
 }
 
 /**

@@ -63,7 +63,7 @@ abstract class View {
    * @param filmsState List of films from firestore.
    * @param handler Event handlers for interactive with user.
    */
-  abstract render(user?: UserDto, handler?: Function, filmsState?: FilmDto[] | FilmDto,): void;
+  abstract render(user?: UserDto, handler?: Function, filmsState?: FilmDto[] | FilmDto): void;
 }
 
 export default View;

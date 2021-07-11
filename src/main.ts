@@ -2,7 +2,7 @@ import MainView from './views/main-view';
 import LoginView from './views/login-view';
 import FilmView from './views/film-view';
 import View from './views/view';
-import { fetchFilms, fetchFilmWithRelated } from './firebase/firestore';
+import { fetchCollections, fetchFilms, fetchFilmWithRelated } from './firebase/firestore';
 import { FilmDto } from './models/film-dto';
 import { UserService } from './services/user.service';
 import { FilmService } from './services/film.service';
@@ -10,6 +10,7 @@ import { redirectMainPage } from './utils/utils';
 import { PageUrls } from './enums';
 import NotFoundView from './views/404-view';
 import { UserDto } from './models/user-dto';
+import AddView from './views/add-view';
 
 /**
  * Get view from routes depending current window.location.pathname.
@@ -33,6 +34,7 @@ const route: Record<string, Function> = {
   '/login.html': () => new LoginView(),
   '/film.html': () => new FilmView(),
   '/404.html': () => new NotFoundView(),
+  '/add.html': () => new AddView(),
 };
 
 const handlers = {
@@ -48,6 +50,14 @@ const handlers = {
   signInHandler(user: UserDto): void {
     userService.addUserToLocalStorage(user);
   },
+  addSubmitHandler(event: Event): void {
+    event.preventDefault();
+    const target = event.target as Element;
+    const charSelect = target.querySelector('#characters') as HTMLSelectElement;
+    const charSelected = [...charSelect.selectedOptions].map(option => Number(option.value));
+    console.log(charSelected);
+    console.log(event);
+  }
 };
 
 const view: View = getView(route);
@@ -74,14 +84,13 @@ if (view instanceof FilmView) {
   const user = userService.getUser();
   const film = filmService.getFilmFromLocalStorage();
 
-  if (user && film) {
+  if (user.name && film) {
     view.initialRender();
 
     fetchFilmWithRelated(film.episodeId).then(currentFilm => {
       view.render(user, handlers.logoutHandler, currentFilm[0]!);
     });
 
-    // view.render(user, handlers.logoutHandler, currentFilm);
   } else {
     redirectMainPage();
   }
@@ -91,4 +100,30 @@ if (view instanceof NotFoundView) {
   view.render();
 }
 
+if (view instanceof AddView) {
+  const user = userService.getUser();
+
+  if (user.name) {
+    view.initialRender(userService.getUser(), handlers.logoutHandler);
+
+    const collectionData = filmService.getCollectionDataFromLocalStorage();
+    const isEmptyCollection = collectionData === null;
+
+    if (isEmptyCollection) {
+      const collections = ['people', 'planets', 'species', 'starships', 'transport', 'vehicles'];
+      fetchCollections(collections).then(data => {
+        filmService.addCollectionDataToLocalStorage(data);
+        view.addRender(filmService.getCollectionDataFromLocalStorage() as Object[], handlers.addSubmitHandler);
+        console.log('ch', data);
+      });
+    } else {
+      view.addRender(filmService.getCollectionDataFromLocalStorage() as Object[], handlers.addSubmitHandler);
+    }
+
+    console.log(filmService.normalizeCollectionData());
+
+  } else {
+    redirectMainPage();
+  }
+}
 

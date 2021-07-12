@@ -1,6 +1,3 @@
-import { FilmDto } from '../models/film-dto';
-import { UserDto } from '../models/user-dto';
-
 /**
  * Every page need their view.
  * It's base View from which inheritance occurs.
@@ -16,6 +13,7 @@ abstract class View {
    */
   protected loader!: HTMLDivElement;
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   constructor() {
     this.root = this.getElement('#root');
   }
@@ -54,16 +52,16 @@ abstract class View {
     return loader;
   }
 
-  /**
-   * Every view need implement this method for render.
-   * User and films is not required, because can exist page
-   * which can be rendered without this arguments.
-   * For example, 404 page.
-   * @param user Current user of application.
-   * @param filmsState List of films from firestore.
-   * @param handler Event handlers for interactive with user.
-   */
-  abstract render(user?: UserDto, handler?: Function, filmsState?: FilmDto[] | FilmDto): void;
+  // /**
+  //  * Every view need implement this method for render.
+  //  * User and films is not required, because can exist page
+  //  * which can be rendered without this arguments.
+  //  * For example, 404 page.
+  //  * @param user Current user of application.
+  //  * @param filmsState List of films from firestore.
+  //  * @param handler Event handlers for interactive with user.
+  //  */
+  // abstract render(user?: UserDto, handler?: Function, filmsState?: FilmDto[] | FilmDto): void;
 }
 
 export default View;

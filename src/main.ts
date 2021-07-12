@@ -1,3 +1,4 @@
+import { executeIndex } from './pages/index';
 import { executeLogin } from './pages/login';
 
 /**
@@ -5,6 +6,7 @@ import { executeLogin } from './pages/login';
  */
 function run(): void {
   const route: Record<string, Function> = {
+    '/index.html': executeIndex,
     '/login.html': executeLogin,
   };
 

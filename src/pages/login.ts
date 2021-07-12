@@ -1,3 +1,4 @@
+import { HandlersType } from '../interfaces';
 import { UserDto } from '../models/user-dto';
 import { UserService } from '../services/user.service';
 import LoginView from '../views/login-view';
@@ -9,6 +10,12 @@ import LoginView from '../views/login-view';
 export function executeLogin(): void {
   const view = new LoginView();
   const userService = new UserService();
-  const signInHandler = (user: UserDto): void => userService.addUserToLocalStorage(user);
-  view.render(userService.getUser(), signInHandler);
+
+  const handlers: HandlersType = {
+    signInHandler(user: UserDto): void {
+      userService.addUserToLocalStorage(user);
+    },
+  };
+
+  view.render(userService.getUser(), handlers);
 }

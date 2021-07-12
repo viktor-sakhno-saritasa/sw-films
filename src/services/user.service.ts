@@ -7,6 +7,7 @@ import { UserDto } from '../models/user-dto';
 export class UserService {
   private user: UserDto;
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   constructor() {
     this.user = this.getUserFromLocalStorage();
   }

@@ -10,6 +10,7 @@ export class FilmService {
    */
   public readonly films: FilmDto[];
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   constructor() {
     this.films = [];
   }
@@ -73,8 +74,6 @@ export class FilmService {
     sortedFilms.sort((a, b) => a.episodeId - b.episodeId);
 
     const lastItem = sortedFilms.pop() || null;
-
-    console.log(lastItem);
 
     if (lastItem) {
       return lastItem.episodeId + 1;

@@ -1,4 +1,5 @@
 import { IconUrls, PageUrls } from '../enums';
+import { HandlersType } from '../interfaces';
 import { UserDto } from '../models/user-dto';
 import { signInWithGoogle } from '../utils/auth';
 import { redirectMainPage } from '../utils/utils';
@@ -12,11 +13,11 @@ class LoginView extends View {
   /**
    * Render full page.
    * @param user Current user of application.
-   * @param handler Function calls when user is authorized.
+   * @param handlers Handlers for login page.
    */
-  public render(user: UserDto, handler: Function): void {
+  public render(user: UserDto, handlers: HandlersType): void {
     this.root.insertAdjacentHTML('beforeend', this.createLoginTemplate(user));
-    this.initLocalListeners(user, handler);
+    this.initLocalListeners(user, handlers.signInHandler as Function);
   }
 
   /**

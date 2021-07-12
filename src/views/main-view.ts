@@ -3,6 +3,7 @@ import { FilmsList } from '../components/FilmsList';
 import createHeader from '../components/header';
 import addPagination from '../components/pagination';
 import { IconUrls } from '../enums';
+import { HandlersType } from '../interfaces';
 import { FilmDto } from '../models/film-dto';
 import { UserDto } from '../models/user-dto';
 import { sortFilms } from '../utils/utils';
@@ -25,6 +26,7 @@ class MainView extends View {
    */
   private orderByAscending: boolean;
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   constructor() {
     super();
     this.orderByAscending = false;
@@ -33,10 +35,10 @@ class MainView extends View {
   /**
    * Renders those elements that do not need to wait for the loading of films.
    * @param user Current user of application.
-   * @param logoutHandler Event handler for logout button.
+   * @param handlers Event handler for header.
    */
-  public initialRender(user: UserDto, logoutHandler: Function): void {
-    this.root.append(createHeader(user, logoutHandler));
+  public initialRender(user: UserDto, handlers: HandlersType): void {
+    this.root.append(createHeader(user, handlers.logoutHandler as Function));
     this.loader = this.createLoader();
     this.root.append(this.loader);
   }
@@ -45,10 +47,12 @@ class MainView extends View {
    * Main function in class, that render full page.
    * @param user Current user of application.
    * @param films List of films of application.
-   * @param detailsHandler Event handler for "More details" button.
+   * @param handlers Event handlers for main page.
    */
-  public render(user: UserDto, detailsHandler: Function, films: FilmDto[]): void {
+  public render(user: UserDto, films: FilmDto[], handlers: HandlersType): void {
     this.loader.remove();
+
+    const detailsHandler = handlers.detailsHandler as Function;
 
     this.createMainPage(user, films, detailsHandler);
     this.filmsList = this.getElement('.films-list') as HTMLUListElement;

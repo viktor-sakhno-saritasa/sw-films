@@ -52,4 +52,29 @@ export interface FilmDto {
    * List of characters in string format.
    */
   charactersNames?: string[];
+
+  /**
+   * List of species in number format.
+   */
+  species: number[];
+
+  /**
+   * List of starships in number format.
+   */
+  starships: number[];
+
+  /**
+   * List of vehicles in number format.
+   */
+  vehicles: number[];
+
+  /**
+   * Date of create film.
+   */
+  created: string;
+
+  /**
+   * Doc id of collection.
+   */
+  docId: string;
 }

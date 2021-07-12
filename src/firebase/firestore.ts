@@ -14,6 +14,15 @@ export function addNewFilm(film: Object): Promise<void> {
   return newFilmRef.set(film);
 }
 
+export function editFilm(film: Object, docId: string): Promise<void> {
+  const filmRf = firestore.collection('films').doc(docId);
+
+  // Set the "capital" field of the city 'DC'
+  return filmRf.update(film).then(() => {
+      console.log("Document successfully updated!");
+  });
+}
+
 /**
  * After receiving a response take the necessary keys
  * and call Film constructor with an object from those keys.
@@ -24,17 +33,23 @@ export function fetchFilms(): Promise<Object[]> {
     .collection('films')
     .get()
     .then(snapshot => snapshot.docs.map(doc => {
+      const docId = doc.id;
+
       const {
         title,
         director,
         producer,
         planets,
         characters,
+        species,
+        vehicles,
+        starships,
+        created,
         episode_id: episodeId,
         release_date: releaseDate,
         opening_crawl: description,
       } = doc.data()['fields'];
-      return { title, director, producer, episodeId, releaseDate, description, planets, characters };
+      return { title, director, producer, episodeId, releaseDate, description, planets, characters, species, vehicles, starships, created, docId};
     }));
 }
 

@@ -2,7 +2,7 @@ import MainView from './views/main-view';
 import LoginView from './views/login-view';
 import FilmView from './views/film-view';
 import View from './views/view';
-import { addNewFilm, fetchCollections, fetchFilms, fetchFilmWithRelated } from './firebase/firestore';
+import { addNewFilm, editFilm, fetchCollections, fetchFilms, fetchFilmWithRelated } from './firebase/firestore';
 import { FilmDto } from './models/film-dto';
 import { UserService } from './services/user.service';
 import { FilmService } from './services/film.service';
@@ -11,6 +11,7 @@ import { PageUrls } from './enums';
 import NotFoundView from './views/404-view';
 import { UserDto } from './models/user-dto';
 import AddView from './views/add-view';
+import EditView from './views/edit-view';
 
 /**
  * Get view from routes depending current window.location.pathname.
@@ -35,6 +36,7 @@ const route: Record<string, Function> = {
   '/film.html': () => new FilmView(),
   '/404.html': () => new NotFoundView(),
   '/add.html': () => new AddView(),
+  '/edit.html': () => new EditView(),
 };
 
 const handlers = {
@@ -50,7 +52,7 @@ const handlers = {
   signInHandler(user: UserDto): void {
     userService.addUserToLocalStorage(user);
   },
-  addSubmitHandler(event: Event): void {
+  addSubmitHandler(event: Event, action: string): void {
     event.preventDefault();
     const target = event.target as Element;
     const charSelect = target.querySelector('#characters') as HTMLSelectElement;
@@ -72,35 +74,61 @@ const handlers = {
 
     const d = releaseDate.value.trim();
     const created = new Date();
-    const nextId = filmService.getNextIdForFilm();
 
-    const film = {
-      fields: {
-        characters: charSelected,
-        planets: planetsSelected,
-        species: speciesSelected,
-        starships: starshipSelected,
-        vehicles: vehicleSelected,
-        title: title.value.trim(),
-        director: director.value.trim(),
-        producer: producer.value.trim(),
-        release_date: d,
-        opening_crawl: description.value.trim(),
-        created: created.toISOString(),
-        edited: created.toISOString(),
-        episode_id: nextId,
-      },
-      model: 'resources.film',
-      pk: nextId,
-    };
+    const previous = filmService.getFilmFromLocalStorage() as FilmDto;
 
-    addNewFilm(film).then(result => {
-      console.log(result);
-      redirectMainPage();
-    });
+    if (action === 'add') {
+      const nextId = filmService.getNextIdForFilm();
+      const film = {
+        fields: {
+          characters: charSelected,
+          planets: planetsSelected,
+          species: speciesSelected,
+          starships: starshipSelected,
+          vehicles: vehicleSelected,
+          title: title.value.trim(),
+          director: director.value.trim(),
+          producer: producer.value.trim(),
+          release_date: d,
+          opening_crawl: description.value.trim(),
+          created: created.toISOString(),
+          edited: created.toISOString(),
+          episode_id: nextId,
+        },
+        model: 'resources.film',
+        pk: nextId,
+      };
 
-    console.log(film);
-  }
+      addNewFilm(film).then(() => {
+        redirectMainPage();
+      });
+    }
+
+    if (action === 'update') {
+      const film = {
+        fields: {
+          characters: charSelected,
+          planets: planetsSelected,
+          species: speciesSelected,
+          starships: starshipSelected,
+          vehicles: vehicleSelected,
+          title: title.value.trim(),
+          director: director.value.trim(),
+          producer: producer.value.trim(),
+          release_date: d,
+          opening_crawl: description.value.trim(),
+          created: previous.created,
+          edited: created.toISOString(),
+          episode_id: previous.episodeId,
+        },
+        model: 'resources.film',
+        pk: previous.episodeId,
+      };
+      editFilm(film, previous.docId).then(() => {
+        redirectMainPage();
+      });
+    }
+  },
 };
 
 const view: View = getView(route);
@@ -168,3 +196,28 @@ if (view instanceof AddView) {
   }
 }
 
+if (view instanceof EditView) {
+  const user = userService.getUser();
+
+  if (user.name) {
+    view.initialRender(userService.getUser(), handlers.logoutHandler);
+
+    const collectionData = filmService.getCollectionDataFromLocalStorage();
+    const isEmptyCollection = collectionData === null;
+
+    const film = filmService.getFilmFromLocalStorage() as FilmDto;
+
+    if (isEmptyCollection) {
+      const collections = ['people', 'planets', 'species', 'starships', 'transport', 'vehicles'];
+      fetchCollections(collections).then(data => {
+        filmService.addCollectionDataToLocalStorage(data);
+        view.editRender(filmService.getCollectionDataFromLocalStorage() as Object[], handlers.addSubmitHandler, film);
+        console.log('ch', data);
+      });
+    } else {
+      view.editRender(filmService.getCollectionDataFromLocalStorage() as Object[], handlers.addSubmitHandler, film);
+    }
+  } else {
+    redirectMainPage();
+  }
+}

@@ -1,13 +1,14 @@
 import createHeader from '../components/header';
 import { collectionType } from '../interfaces';
+import { FilmDto } from '../models/film-dto';
 import { UserDto } from '../models/user-dto';
 
 import View from './view';
 
 /**
- * Class for render add page.
+ * Class for render edit page.
  */
-class AddView extends View {
+class EditView extends View {
   constructor() {
     super();
   }
@@ -24,40 +25,56 @@ class AddView extends View {
   }
 
   /**
-   * Render add page.
+   * Render edit page.
    * @param collection All collection from firestore.
    * @param submitHandler Event handler for submit form.
+   * @param film Film that needed to update.
    */
-  public addRender(collection: Object[], submitHandler: Function): void {
+  public editRender(collection: Object[], submitHandler: Function, film: FilmDto): void {
     this.loader.remove();
-    this.root.insertAdjacentHTML('beforeend', this.createFormTemplate(collection));
+    this.root.insertAdjacentHTML('beforeend', this.createFormTemplate(collection, film));
 
-    const form = this.getElement('#add-form');
-    form.addEventListener('submit', event => submitHandler(event, 'add'));
+    const form = this.getElement('#edit-form');
+    form.addEventListener('submit', event => submitHandler(event, 'update'));
   }
 
   public render(): void {}
 
-  /**
-   * Create Html form template for add/edit film.
-   * @param collection All collection from firestore.
-   * @returns Form template.
-   */
-  private createFormTemplate(collection: Object[]): string {
+  private createOptionsTemplate(collection: Object[], film: FilmDto, idx: 0 | 1 | 2): string {
 
-    const createOptionsTemplate = (idx: number): string => {
+    const indexes = {
+      0: film.characters,
+      1: film.planets,
+      2: film.species,
+    };
 
-      const options = collection[idx] as collectionType[];
-      let template = '';
+    const options = collection[idx] as collectionType[];
+    let template = '';
 
-      options.forEach((option, index) => {
-        if (option.name !== undefined) {
+    const param = indexes[idx];
+
+    options.forEach((option, index) => {
+      if (option.name !== undefined) {
+
+        if (param.includes(index + 1)) {
+
+          template += `<option selected value=${index + 1}>${option.name}</option>`;
+        } else {
           template += `<option value=${index + 1}>${option.name}</option>`;
         }
-      });
+      }
+    });
 
-      return template;
-    };
+    return template;
+  }
+
+  /**
+   * Create Html form template for edit film.
+   * @param collection All collection from firestore.
+   * @param film Current film that needed to update.
+   * @returns Form template.
+   */
+  private createFormTemplate(collection: Object[], film: FilmDto): string {
 
     const createVehiclesTemplate = (): string => {
       const vehicles = collection[5] as collectionType[];
@@ -65,7 +82,11 @@ class AddView extends View {
 
       vehicles.forEach((vehicle, index) => {
         if (vehicle.vehicle_class !== undefined) {
-          template += `<option value=${index + 1}>${index + 1}: ${vehicle.vehicle_class}</option>`;
+          if ((film.vehicles.includes(index + 1))) {
+            template += `<option selected value=${index + 1}>${index + 1}: ${vehicle.vehicle_class}</option>`;
+          } else {
+            template += `<option value=${index + 1}>${index + 1}: ${vehicle.vehicle_class}</option>`;
+          }
         }
       });
 
@@ -78,7 +99,11 @@ class AddView extends View {
 
       starships.forEach((starship, index) => {
         if (starship.starship_class !== undefined) {
-          template += `<option value=${index + 1}>${index + 1}: ${starship.starship_class}</option>`;
+          if ((film.starships.includes(index + 1))) {
+            template += `<option selected value=${index + 1}>${index + 1}: ${starship.starship_class}</option>`;
+          } else {
+            template += `<option value=${index + 1}>${index + 1}: ${starship.starship_class}</option>`;
+          }
         }
       });
 
@@ -86,44 +111,44 @@ class AddView extends View {
     };
 
     return `
-      <form id="add-form" class="form">
+      <form id="edit-form" class="form">
         <ul class="form-list">
           <li class="form-item">
             <label class="form-label" for="title">Title</label>
-            <input class="form-input" type="text" id="title"
-              name="title" minlength="5" maxlength="50" placeholder="50 shades of star wars" required>
+            <input class="form-input" type="text" id="title" value="${film.title}"
+              name="title" minlength="5" maxlength="50" required>
           </li>
           <li class="form-item">
             <label class="form-label" for="director">Director</label>
-            <input class="form-input" type="text" id="director"
-              name="director" minlength="5" maxlength="50" placeholder="George Lucas" required>
+            <input class="form-input" type="text" id="director" value="${film.director}"
+              name="director" minlength="5" maxlength="50" required>
           </li>
           <li class="form-item">
             <label class="form-label" for="producer">Producer</label>
-            <input class="form-input" type="text" id="producer"
-              name="producer" minlength="5" maxlength="50" placeholder="Rick McCallum" required>
+            <input class="form-input" type="text" id="producer" value="${film.producer}"
+              name="producer" minlength="5" maxlength="50" required>
           </li>
           <li class="form-item">
             <label class="form-label" for="release-date">Release Date</label>
-            <input class="form-input" type="date" id="release-date"
+            <input class="form-input" type="date" id="release-date" value=${film.releaseDate}
               name="release-date" required>
           </li>
           <li class="form-item">
             <label class="form-label" for="characters">Characters</label>
             <select id="characters" name="characters" multiple="multiple" size="5" required>
-              ${createOptionsTemplate(0)}
+              ${this.createOptionsTemplate(collection, film, 0)}
             </select>
           </li>
           <li class="form-item">
             <label class="form-label" for="planets">Planets</label>
             <select id="planets" name="planets" multiple size="5" required>
-              ${createOptionsTemplate(1)}
+              ${this.createOptionsTemplate(collection, film, 1)}
             </select>
           </li>
           <li class="form-item">
           <label class="form-label" for="species">Species</label>
             <select id="species" name="species" multiple size="5" required>
-              ${createOptionsTemplate(2)}
+              ${this.createOptionsTemplate(collection, film, 2)}
             </select>
           </li>
           <li class="form-item">
@@ -140,13 +165,13 @@ class AddView extends View {
           </li>
           <li class="form-item">
             <label class="form-label" for="description">Description</label>
-            <textarea class="form-textarea" id="description" name="description" rows="5" cols="33" placeholder="It was a dark and stormy night..." required></textarea>
+            <textarea class="form-textarea" id="description" name="description" rows="5" cols="33" required>${film.description.trim()}</textarea>
           </li>
         </ul>
-        <button class="form-button" type="submit">Edit film</button>
+        <button class="form-button" type="submit">Update film</button>
       </form>
     `;
   }
 }
 
-export default AddView;
+export default EditView;

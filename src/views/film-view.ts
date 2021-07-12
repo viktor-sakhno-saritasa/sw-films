@@ -16,7 +16,7 @@ class FilmView extends View {
    * @param handlers Event handler for header.
    */
   public initialRender(user: UserDto, handlers: HandlersType): void {
-    this.root.append(createHeader(user, handlers.logoutHandler as Function));
+    this.root.append(createHeader(user, handlers));
     this.loader = this.createLoader();
     this.root.append(this.loader);
   }

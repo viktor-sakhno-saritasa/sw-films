@@ -1,4 +1,5 @@
-import { IconUrls } from '../enums';
+import { IconUrls, PageUrls } from '../enums';
+import { HandlersType } from '../interfaces';
 import { UserDto } from '../models/user-dto';
 import { redirectLoginPage } from '../utils/utils';
 
@@ -6,10 +7,10 @@ import { redirectLoginPage } from '../utils/utils';
  * Creates Header Component
  * And set event handler on logout button.
  * @param user The object saved in LocalStorage containing two keys: token and name.
- * @param logoutHandler Event handler for Logout button.
+ * @param handlers Event handlers for header.
  * @returns Header component.
  */
-export default function createHeader(user: UserDto, logoutHandler: Function): HTMLElement {
+export default function createHeader(user: UserDto, handlers: HandlersType): HTMLElement {
   const header = document.createElement('header');
   header.classList.add('header');
 
@@ -25,13 +26,15 @@ export default function createHeader(user: UserDto, logoutHandler: Function): HT
   const innerContent = user.name ? logoutTemplate() : loginTemplate();
 
   header.innerHTML = `
-      <h1 class="header-title">SW Films</h1>
+      <h1 class="header-title">
+        <a class="header-link" href=${PageUrls.Main}>SW Films</a></h1>
       <nav class="header-navigation">${innerContent}</nav>
     `;
 
   const signButton = header.querySelector('#sign-btn');
   signButton?.addEventListener('click', () => {
     if (user.name) {
+      const logoutHandler = handlers.logoutHandler as Function;
       logoutHandler();
     } else {
       redirectLoginPage();

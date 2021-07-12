@@ -40,7 +40,7 @@ export class FilmService {
 
   /**
    * Get film from localStorage.
-   * @returns Active user located in localStorage or null if film is not located in storage.
+   * @returns Film located in localStorage or null if film is not located in storage.
    */
   public getFilmFromLocalStorage(): FilmDto | null {
     const film = JSON.parse(localStorage.getItem(LocalStorageKeys.Film) || 'null');
@@ -96,5 +96,30 @@ export class FilmService {
    */
   public getAllFilmsFromLocalStorage(): FilmDto[] | null {
     return JSON.parse(localStorage.getItem(LocalStorageKeys.AllFilms) || 'null');
+  }
+
+  /**
+   * Add film in localStorage for edit.
+   * @param film Film to add in localStorage.
+   */
+  public addEditableFilmToLocalStorage(film: FilmDto): void {
+    localStorage.setItem(LocalStorageKeys.EditableFilm, JSON.stringify(film));
+  }
+
+  /**
+   * Delete edited film located in localStorage from there.
+   */
+  public deleteEditableFilmFromLocalStorage(): void {
+    localStorage.removeItem(LocalStorageKeys.EditableFilm);
+  }
+
+  /**
+   * Get film from localStorage.
+   * @returns Film for edit located in localStorage or null if film is not located in storage.
+   */
+  public getEditableFilmFromLocalStorage(): FilmDto | null {
+    const film = JSON.parse(localStorage.getItem(LocalStorageKeys.EditableFilm) || 'null');
+
+    return film;
   }
 }

@@ -28,4 +28,16 @@ export interface HandlersType {
 
   /** Event handler for "More details" button. */
   detailsHandler?: Function;
+
+  /** Event handler for "Add" button on main page. */
+  addFilmHandler?: Function;
+
+  /** Event handler for submit form on add page. */
+  submitHandler?: Function;
+
+  /** Event handler for edit button on the card item. */
+  editHandler?: Function;
+
+  /** Event handler for delete button on the card item. */
+  deleteHandler?: Function;
 }

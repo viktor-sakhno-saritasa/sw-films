@@ -38,7 +38,7 @@ class MainView extends View {
    * @param handlers Event handler for header.
    */
   public initialRender(user: UserDto, handlers: HandlersType): void {
-    this.root.append(createHeader(user, handlers.logoutHandler as Function));
+    this.root.append(createHeader(user, handlers));
     this.loader = this.createLoader();
     this.root.append(this.loader);
   }
@@ -52,20 +52,23 @@ class MainView extends View {
   public render(user: UserDto, films: FilmDto[], handlers: HandlersType): void {
     this.loader.remove();
 
-    const detailsHandler = handlers.detailsHandler as Function;
+    const addFilmHandler = handlers.addFilmHandler as Function;
 
-    this.createMainPage(user, films, detailsHandler);
+    this.createMainPage(user, films, handlers);
     this.filmsList = this.getElement('.films-list') as HTMLUListElement;
 
     addPagination(this.filmsList);
 
     const sortButton = this.getElement('.toolbar-sort');
-    sortButton.addEventListener('click', () => this.sort(user, films, detailsHandler));
+    sortButton.addEventListener('click', () => this.sort(user, films, handlers));
 
     const searchField = this.getElement('.toolbar-search');
     searchField.addEventListener('input', event => {
-      this.search(user, films, event, detailsHandler);
+      this.search(user, films, event, handlers);
     });
+
+    const addButton = this.getElement('.toolbar-add');
+    addButton.addEventListener('click', () => addFilmHandler());
   }
 
   /**
@@ -74,9 +77,9 @@ class MainView extends View {
    * @param user Current user of application.
    * @param films List of films of application.
    * @param event Event for search input.
-   * @param detailsHandler Event handler for "More details" button.
+   * @param handlers Event handlers element.
    */
-  private search(user: UserDto, films: FilmDto[], event: Event, detailsHandler: Function): void {
+  private search(user: UserDto, films: FilmDto[], event: Event, handlers: HandlersType): void {
     const founded = films.filter(film => {
         const target = event.target as HTMLInputElement;
         return film.title.toLowerCase().includes(target.value.trim().toLowerCase());
@@ -85,7 +88,7 @@ class MainView extends View {
     const hasItems = founded.length !== 0;
 
     if (hasItems) {
-      const ul = FilmsList(user, founded, detailsHandler);
+      const ul = FilmsList(user, founded, handlers);
       this.filmsList.replaceWith(ul);
       this.filmsList = ul;
       addPagination(ul);
@@ -96,11 +99,11 @@ class MainView extends View {
    * Sorts the list of films and replace ul node in the DOM.
    * @param user Current user of application.
    * @param films List of films of application.
-   * @param detailsHandler Event handler for "More details" button.
+   * @param handlers Event handlers for elements.
    */
-  private sort(user: UserDto, films: FilmDto[], detailsHandler: Function): void {
+  private sort(user: UserDto, films: FilmDto[], handlers: HandlersType): void {
     this.orderByAscending = !this.orderByAscending;
-    const sortedList = FilmsList(user, sortFilms(films, this.orderByAscending), detailsHandler);
+    const sortedList = FilmsList(user, sortFilms(films, this.orderByAscending), handlers);
 
     this.filmsList.replaceWith(sortedList);
     this.filmsList = sortedList;
@@ -111,17 +114,17 @@ class MainView extends View {
    * Collects a wrapper consisting of ar components of the main page.
    * @param user Current user of application.
    * @param films List of films of application.
-   * @param detailsHandler Event handler for "More details" button.
+   * @param handlers Event handlers for elements.
    */
-  private createMainPage(user: UserDto, films: FilmDto[], detailsHandler: Function): void {
+  private createMainPage(user: UserDto, films: FilmDto[], handlers: HandlersType): void {
     const filmsContent = this.createElement('main', 'films');
     const wrapper = this.createElement('div', 'wrapper');
 
     filmsContent.append(wrapper);
 
-    wrapper.insertAdjacentHTML('beforeend', this.createToolBarTemplate());
+    wrapper.insertAdjacentHTML('beforeend', this.createToolBarTemplate(user));
 
-    const filmsList = FilmsList(user, films, detailsHandler);
+    const filmsList = FilmsList(user, films, handlers);
     filmsList.classList.add('films-list');
 
     wrapper.append(filmsList);
@@ -132,13 +135,22 @@ class MainView extends View {
 
   /**
    * Creating toolbar with search field and sort button.
+   * @param user Current user.
    * @returns HTML template for ToolBar.
    */
-  private createToolBarTemplate(): string {
+  private createToolBarTemplate(user: UserDto): string {
+
+    const addButtonTemplate = user.name ?
+      `<button type="button" class="button toolbar-button toolbar-add">
+        <img src=${IconUrls.AddFilm} class="toolbar-icon" alt="add-film"/>
+      </button>
+      ` : '';
+
     return `
       <div class="toolbar">
+        ${addButtonTemplate}
         <input class="toolbar-search" type="search" placeholder="Search film by name...">
-        <button type="button" class="button toolbar-sort">
+        <button type="button" class="button toolbar-button toolbar-sort">
           <img src=${IconUrls.Sorting} class="toolbar-icon" alt="sort"/>
         </button>
       </div>

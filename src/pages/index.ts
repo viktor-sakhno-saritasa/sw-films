@@ -1,5 +1,5 @@
 import { PageUrls } from '../enums';
-import { fetchFilms } from '../firebase/firestore';
+import { deleteFilm, fetchFilms } from '../firebase/firestore';
 import { HandlersType } from '../interfaces';
 import { FilmDto } from '../models/film-dto';
 import { FilmService } from '../services/film.service';
@@ -25,9 +25,31 @@ export function executeIndex(): void {
       filmService.addFilmToLocalStorage(film);
       window.location.assign(PageUrls.Film);
     },
+    addFilmHandler(): void {
+      window.location.assign(PageUrls.Add);
+    },
+    editHandler(film: FilmDto): void {
+      filmService.addEditableFilmToLocalStorage(film);
+      window.location.assign(PageUrls.Edit);
+    },
+    deleteHandler(film: FilmDto): void {
+      // eslint-disable-next-line no-alert
+      const confirmation = window.confirm('Do you really want to delete the film?');
+      if (confirmation) {
+        deleteFilm(film.docId).then(() => {
+          window.location.assign(PageUrls.Main);
+        });
+      }
+    },
   };
 
+  if (filmService.getFilmFromLocalStorage() || filmService.getEditableFilmFromLocalStorage()) {
+    filmService.deleteFilmFromLocalStorage();
+    filmService.deleteEditableFilmFromLocalStorage();
+  }
+
   view.initialRender(userService.getUser(), handlers);
+
 
   fetchFilms().then(snapshot => {
     const films = snapshot as FilmDto[];

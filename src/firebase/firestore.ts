@@ -14,12 +14,35 @@ export function addNewFilm(film: Object): Promise<void> {
   return newFilmRef.set(film);
 }
 
+/**
+ * Delete film from firebase.
+ * @param docId ID of docs.
+ * @returns Just promise with state of executing.
+ */
+export function deleteFilm(docId: string): Promise<void> {
+  const filmRef = firestore.collection('films').doc(docId)
+    .delete()
+    .then(() => {
+    console.log('Document successfully deleted!');
+  })
+    .catch(error => {
+    console.error('Error removing document: ', error);
+  });
+
+  return filmRef;
+}
+
+/**
+ * Update film.
+ * @param film Film that needed to update.
+ * @param docId ID of document.
+ * @returns Promise represent state of executing.
+ */
 export function editFilm(film: Object, docId: string): Promise<void> {
   const filmRf = firestore.collection('films').doc(docId);
 
-  // Set the "capital" field of the city 'DC'
   return filmRf.update(film).then(() => {
-      console.log("Document successfully updated!");
+      console.log('Document successfully updated!');
   });
 }
 
@@ -49,7 +72,7 @@ export function fetchFilms(): Promise<Object[]> {
         release_date: releaseDate,
         opening_crawl: description,
       } = doc.data()['fields'];
-      return { title, director, producer, episodeId, releaseDate, description, planets, characters, species, vehicles, starships, created, docId};
+      return { title, director, producer, episodeId, releaseDate, description, planets, characters, species, vehicles, starships, created, docId };
     }));
 }
 
@@ -65,9 +88,7 @@ export function fetchCollections(collections: string[]): Promise<Object[]> {
     promises.push(firestore.collection(collectionName).get());
   }
 
-  return Promise.all(promises).then(snapshots => {
-    return snapshots.map(snapshot => snapshot.docs.map(doc => doc.data()['fields']));
-  });
+  return Promise.all(promises).then(snapshots => snapshots.map(snapshot => snapshot.docs.map(doc => doc.data()['fields'])));
 }
 
 /**
@@ -85,9 +106,7 @@ export async function fetchRelated(ids: number[], collection: string): Promise<s
       .get());
   });
 
-  const planets = await Promise.all(planetsPromises).then(snapshots => {
-    return snapshots.map(snapshot => snapshot.docs.map(doc => doc.data()['fields']));
-  });
+  const planets = await Promise.all(planetsPromises).then(snapshots => snapshots.map(snapshot => snapshot.docs.map(doc => doc.data()['fields'])));
 
   return planets.map(planet => planet[0].name);
 }
@@ -115,11 +134,9 @@ export function fetchFilmWithRelated(filmId: number): Promise<FilmDto[]> {
       } = doc.data()['fields'];
       return { title, director, producer, episodeId, releaseDate, description, planets, characters } as FilmDto;
     }))
-    .then(data => {
-      return Promise.all(data.map(async film => {
+    .then(data => Promise.all(data.map(async film => {
         film.planetsNames = await fetchRelated(film.planets, 'planets');
         film.charactersNames = await fetchRelated(film.characters, 'people');
         return film;
-      }));
-    });
+      })));
 }

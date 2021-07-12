@@ -1,3 +1,4 @@
+import { executeFilm } from './pages/film';
 import { executeIndex } from './pages/index';
 import { executeLogin } from './pages/login';
 
@@ -8,6 +9,7 @@ function run(): void {
   const route: Record<string, Function> = {
     '/index.html': executeIndex,
     '/login.html': executeLogin,
+    '/film.html': executeFilm,
   };
 
   const { pathname } = window.location;

@@ -1,5 +1,6 @@
 import createHeader from '../components/header';
 import { PageUrls } from '../enums';
+import { HandlersType } from '../interfaces';
 import { FilmDto } from '../models/film-dto';
 import { UserDto } from '../models/user-dto';
 
@@ -9,28 +10,22 @@ import View from './view';
  * View for Film page render.
  */
 class FilmView extends View {
-
-  constructor() {
-    super();
-  }
-
   /**
    * Renders those elements that do not need to wait for the loading of films.
+   * @param user Current user of application.
+   * @param handlers Event handler for header.
    */
-  public initialRender(): void {
+  public initialRender(user: UserDto, handlers: HandlersType): void {
+    this.root.append(createHeader(user, handlers.logoutHandler as Function));
     this.loader = this.createLoader();
     this.root.append(this.loader);
   }
 
-
   /**
    * Main function in class, that render full page.
-   * @param user Current user of application.
    * @param film List of films of application.
-   * @param logoutHandler Event handler for logout button.
    */
-  public render(user: UserDto, logoutHandler: Function, film: FilmDto): void {
-    this.root.append(createHeader(user, logoutHandler));
+  public render(film: FilmDto): void {
     this.loader.remove();
     this.root.insertAdjacentHTML('beforeend', this.createFilmPage(film));
   }

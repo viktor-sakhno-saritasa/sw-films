@@ -9,11 +9,6 @@ import View from './view';
  * View for Login page render.
  */
 class LoginView extends View {
-
-  constructor() {
-    super();
-  }
-
   /**
    * Render full page.
    * @param user Current user of application.

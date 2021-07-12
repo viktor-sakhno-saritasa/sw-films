@@ -33,3 +33,20 @@ export function sortFilms(films: FilmDto[], orderByAscending: boolean): FilmDto[
 
   return sortedFilms.sort(descending);
 }
+
+/**
+ * Get view from routes depending current window.location.pathname.
+ * @param route Routes where each url has its own view.
+ * @returns View depending url.
+ */
+export function getView(route: Record<string, Function>): Function {
+  const { pathname } = window.location;
+
+  if (pathname in route && typeof route[pathname] === 'function') {
+    const view = route[pathname] as Function;
+    return view();
+  }
+
+  const notFoundView = route['/404.html'] as Function;
+  return notFoundView();
+}

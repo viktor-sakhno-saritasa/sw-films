@@ -4,6 +4,15 @@ import { FilmDto } from '../models/film-dto';
 
 import { firestore } from './firebase';
 
+/**
+ * Add new film in firestore.
+ * @param film Film for add.
+ * @returns
+ */
+export function addNewFilm(film: Object): Promise<void> {
+  const newFilmRef = firestore.collection('films').doc();
+  return newFilmRef.set(film);
+}
 
 /**
  * After receiving a response take the necessary keys

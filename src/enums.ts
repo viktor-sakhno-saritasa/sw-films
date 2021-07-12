@@ -14,6 +14,7 @@ export enum LocalStorageKeys {
   User = 'currentUser',
   Film = 'currentFilm',
   Collection = 'collectionData',
+  AllFilms = 'allFilms',
 }
 
 /**

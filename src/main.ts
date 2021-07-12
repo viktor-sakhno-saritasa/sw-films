@@ -2,7 +2,7 @@ import MainView from './views/main-view';
 import LoginView from './views/login-view';
 import FilmView from './views/film-view';
 import View from './views/view';
-import { fetchCollections, fetchFilms, fetchFilmWithRelated } from './firebase/firestore';
+import { addNewFilm, fetchCollections, fetchFilms, fetchFilmWithRelated } from './firebase/firestore';
 import { FilmDto } from './models/film-dto';
 import { UserService } from './services/user.service';
 import { FilmService } from './services/film.service';
@@ -55,8 +55,51 @@ const handlers = {
     const target = event.target as Element;
     const charSelect = target.querySelector('#characters') as HTMLSelectElement;
     const charSelected = [...charSelect.selectedOptions].map(option => Number(option.value));
-    console.log(charSelected);
-    console.log(event);
+    const planetsSelect = target.querySelector('#planets') as HTMLSelectElement;
+    const planetsSelected = [...planetsSelect.selectedOptions].map(option => Number(option.value));
+    const speciesSelect = target.querySelector('#species') as HTMLSelectElement;
+    const speciesSelected = [...speciesSelect.selectedOptions].map(option => Number(option.value));
+    const starshipSelect = target.querySelector('#starships') as HTMLSelectElement;
+    const starshipSelected = [...starshipSelect.selectedOptions].map(option => Number(option.value));
+    const vehicleSelect = target.querySelector('#vehicles') as HTMLSelectElement;
+    const vehicleSelected = [...vehicleSelect.selectedOptions].map(option => Number(option.value));
+
+    const title = target.querySelector('#title') as HTMLInputElement;
+    const director = target.querySelector('#director') as HTMLInputElement;
+    const producer = target.querySelector('#producer') as HTMLInputElement;
+    const releaseDate = target.querySelector('#release-date') as HTMLInputElement;
+    const description = target.querySelector('#description') as HTMLTextAreaElement;
+
+    const d = releaseDate.value.trim();
+    const created = new Date();
+    const nextId = filmService.getNextIdForFilm();
+
+    const film = {
+      fields: {
+        characters: charSelected,
+        planets: planetsSelected,
+        species: speciesSelected,
+        starships: starshipSelected,
+        vehicles: vehicleSelected,
+        title: title.value.trim(),
+        director: director.value.trim(),
+        producer: producer.value.trim(),
+        release_date: d,
+        opening_crawl: description.value.trim(),
+        created: created.toISOString(),
+        edited: created.toISOString(),
+        episode_id: nextId,
+      },
+      model: 'resources.film',
+      pk: nextId,
+    };
+
+    addNewFilm(film).then(result => {
+      console.log(result);
+      redirectMainPage();
+    });
+
+    console.log(film);
   }
 };
 
@@ -71,6 +114,7 @@ if (view instanceof MainView) {
   fetchFilms().then(snapshot => {
     const films = snapshot as FilmDto[];
     films.forEach(film => filmService.add(film));
+    filmService.addAllFilmsToLocalStorage(films);
 
     view.render(userService.getUser(), handlers.detailsHandler, filmService.films);
   });
@@ -119,9 +163,6 @@ if (view instanceof AddView) {
     } else {
       view.addRender(filmService.getCollectionDataFromLocalStorage() as Object[], handlers.addSubmitHandler);
     }
-
-    console.log(filmService.normalizeCollectionData());
-
   } else {
     redirectMainPage();
   }

@@ -63,10 +63,39 @@ export class FilmService {
     return JSON.parse(localStorage.getItem(LocalStorageKeys.Collection) || 'null');
   }
 
-  public normalizeCollectionData(): Object[] {
-    const collection = this.getCollectionDataFromLocalStorage() as Object[];
+  /**
+   * Count and get next id for next film.
+   * @returns Id for next film.
+   */
+  public getNextIdForFilm(): number {
+    const allFilms = this.getAllFilmsFromLocalStorage() as FilmDto[];
+    const sortedFilms = [...allFilms];
+    sortedFilms.sort((a, b) => a.episodeId - b.episodeId);
 
-    console.log(collection);
-    return collection;
+    const lastItem = sortedFilms.pop() || null;
+
+    console.log(lastItem);
+
+    if (lastItem) {
+      return lastItem.episodeId + 1;
+    }
+
+    return 1;
+  }
+
+  /**
+   * Add all films in LS.
+   * @param films List of all films.
+   */
+  public addAllFilmsToLocalStorage(films: FilmDto[]): void {
+    localStorage.setItem(LocalStorageKeys.AllFilms, JSON.stringify(films));
+  }
+
+  /**
+   * Get all films located in LocalStorage.
+   * @returns All films from LS.
+   */
+  public getAllFilmsFromLocalStorage(): FilmDto[] | null {
+    return JSON.parse(localStorage.getItem(LocalStorageKeys.AllFilms) || 'null');
   }
 }

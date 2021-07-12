@@ -26,6 +26,7 @@ class AddView extends View {
   /**
    * Render add page.
    * @param collection All collection from firestore.
+   * @param submitHandler Event handler for submit form.
    */
   public addRender(collection: Object[], submitHandler: Function): void {
     this.loader.remove();
@@ -90,7 +91,7 @@ class AddView extends View {
           <li class="form-item">
             <label class="form-label" for="title">Title</label>
             <input class="form-input" type="text" id="title"
-              name="title" minlength="5" maxlength="20" placeholder="50 shades of star wars" required>
+              name="title" minlength="5" maxlength="50" placeholder="50 shades of star wars" required>
           </li>
           <li class="form-item">
             <label class="form-label" for="director">Director</label>
@@ -129,12 +130,6 @@ class AddView extends View {
           <label class="form-label" for="starships">Starships</label>
             <select id="starships" name="starships" multiple size="5" required>
               ${createStarshipsTemplate()}
-            </select>
-          </li>
-          <li class="form-item">
-          <label class="form-label" for="transport">Transport</label>
-            <select id="transport" name="transport" multiple size="5" required>
-              ${createOptionsTemplate(4)}
             </select>
           </li>
           <li class="form-item">

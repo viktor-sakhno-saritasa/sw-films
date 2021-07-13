@@ -41,3 +41,21 @@ export interface HandlersType {
   /** Event handler for delete button on the card item. */
   deleteHandler?: Function;
 }
+
+/**
+ * Interface for manage modal window.
+ */
+export interface ModalType {
+
+  /** Open modal. */
+  open: Function;
+
+  /** Set dynamic content. */
+  setContent: Function;
+
+  /** Destroy modal with event handlers. */
+  destroy: Function;
+
+  /** CLose modal. */
+  close: Function;
+}

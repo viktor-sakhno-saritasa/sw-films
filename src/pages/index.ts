@@ -1,3 +1,4 @@
+import { getModal } from '../components/modal';
 import { PageUrls } from '../enums';
 import { deleteFilm, fetchFilms } from '../firebase/firestore';
 import { HandlersType } from '../interfaces';
@@ -33,13 +34,19 @@ export function executeIndex(): void {
       window.location.assign(PageUrls.Edit);
     },
     deleteHandler(film: FilmDto): void {
-      // eslint-disable-next-line no-alert
-      const confirmation = window.confirm('Do you really want to delete the film?');
-      if (confirmation) {
-        deleteFilm(film.docId).then(() => {
-          window.location.assign(PageUrls.Main);
-        });
-      }
+      const okPressed = (event: Event): void => {
+        const target = event.target as HTMLElement;
+        if (target.classList.contains('modal-success')) {
+          modal.setContent('Deleting...');
+
+          deleteFilm(film.docId).then(() => {
+            window.location.assign(PageUrls.Main);
+            modal.destroy();
+          });
+        }
+      };
+      const modal = getModal('Delete film', 'Do you really want to delete the film?', okPressed);
+      modal.open();
     },
   };
 

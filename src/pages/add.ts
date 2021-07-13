@@ -36,6 +36,7 @@ export function executeAdd(): void {
       const collections = ['people', 'planets', 'species', 'starships', 'vehicles'];
 
       fetchCollections(collections).then(data => {
+
         filmService.addCollectionDataToLocalStorage(data);
         view.render(filmService.getCollectionDataFromLocalStorage() as Object[], handlers);
       });

@@ -117,6 +117,7 @@ class AddView extends View {
 
     options.forEach((option, index) => {
       if (idx === CollectionIndexes.Vehicles) {
+
         template += `<option value=${index + 1}>${index + 1}: ${option.vehicle_class}</option>`;
       } else if (idx === CollectionIndexes.Starships) {
         template += `<option value=${index + 1}>${index + 1}: ${option.starship_class}</option>`;

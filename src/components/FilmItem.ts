@@ -23,7 +23,7 @@ function FilmItem(user: UserDto, film: FilmDto, handlers: HandlersType): HTMLLIE
 
   if (user.name) {
     const moreButtonTemplate = `
-      <button id="more-btn" class="button button-details">More details</button>
+      <button id="more-btn" type="button" class="button button-details">More details</button>
     `;
 
     const editButtonTemplate = `

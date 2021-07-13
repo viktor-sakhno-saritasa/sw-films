@@ -721,8 +721,6 @@ hr:after {
 }
 
 /** MODAL */
-.vmodal {}
-
 .vmodal.open .modal-overlay {
     opacity: 1;
     z-index: 900;

@@ -878,11 +878,3 @@ hr:after {
 }
 
 /** END ADD/EDIT VIEW */
-
-/** RESPONSIVE */
-
-@media (max-width: 1200px) {
-  .film-item {
-    width: calc(100px + (400 - 100) * ((100vw - 320px) / (1200 - 320)));
-  }
-}

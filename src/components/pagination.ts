@@ -1,8 +1,8 @@
-import { RECORDS_PER_PAGE } from '../../utils/consts';
+import { RECORDS_PER_PAGE } from '../utils/consts';
 
 /**
  * Add pagination for the list.
- * @param listItems - List of Films.
+ * @param listItems List of Films.
  */
 export default function addPagination(listItems: HTMLUListElement): void {
   const li = document.querySelectorAll('.film-item');

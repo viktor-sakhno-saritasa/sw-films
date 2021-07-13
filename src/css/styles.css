@@ -788,6 +788,15 @@ hr:after {
     border-bottom: 1px solid #eee;
 }
 
+.modal-button {
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+
+  box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
+  background:rgba(151, 232, 251, 1);
+}
+
 .modal-title {
     font-size: 1.5rem;
 }
@@ -797,7 +806,7 @@ hr:after {
 }
 
 .modal-body {
-    padding: 10px;
+    padding: 25px;
 }
 
 .modal-body p {
@@ -805,7 +814,77 @@ hr:after {
 }
 
 .modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
     padding: 5px 10px;
     border-top: 1px solid #eee;
 }
 /** END OF MODAL */
+
+/** ADD/EDIT VIEW */
+
+.form {
+  width: 600px;
+  margin: 0 auto;
+  margin-top: 50px;
+  padding: 30px 50px;
+
+  box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
+}
+
+.form-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 25px;
+}
+
+.form-label {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.form-input {
+  font: inherit;
+  font-size: 20px;
+  padding: 5px 10px;
+
+  border: 2px solid #000;
+}
+
+.form-textarea {
+  font: inherit;
+  font-size: 20px;
+  padding: 5px 10px;
+
+  border: 2px solid #000;
+}
+
+.form-button {
+  width: 100%;
+  font: inherit;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+
+  box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
+  background:rgba(151, 232, 251, 1);
+}
+
+/** END ADD/EDIT VIEW */
+
+/** RESPONSIVE */
+
+@media (max-width: 1200px) {
+  .film-item {
+    width: calc(100px + (400 - 100) * ((100vw - 320px) / (1200 - 320)));
+  }
+}

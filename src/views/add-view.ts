@@ -99,7 +99,7 @@ class AddView extends View {
               rows="5" cols="33" placeholder="It was a dark and stormy night..." required></textarea>
           </li>
         </ul>
-        <button class="form-button" type="submit">Add film</button>
+        <button class="button form-button" type="submit">Add film</button>
       </form>
     `;
   }

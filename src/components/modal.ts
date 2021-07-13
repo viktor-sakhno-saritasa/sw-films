@@ -16,8 +16,8 @@ function getModalHTML(title: string, content: string): string {
       </div>
       <div class="modal-body">${content}</div>
       <div class="modal-footer">
-        <button class="modal-success">OK</button>
-        <button class="modal-cancel">Cancel</button>
+        <button class="button modal-button modal-success">OK</button>
+        <button class="button modal-button modal-cancel">Cancel</button>
       </div>
     </div>
   </div>`;

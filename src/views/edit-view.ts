@@ -102,7 +102,7 @@ class EditView extends View {
               rows="5" cols="33" required>${film.description}</textarea>
           </li>
         </ul>
-        <button class="form-button" type="submit">Update film</button>
+        <button class="button form-button" type="submit">Update film</button>
       </form>
     `;
   }

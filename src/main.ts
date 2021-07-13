@@ -9,6 +9,7 @@ import { executeLogin } from './pages/login';
  */
 function run(): void {
   const route: Record<string, Function> = {
+    '/': executeIndex,
     '/index.html': executeIndex,
     '/login.html': executeLogin,
     '/film.html': executeFilm,

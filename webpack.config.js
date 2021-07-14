@@ -2,6 +2,7 @@ const path = require('path');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -31,7 +32,8 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new CopyPlugin({
-      patterns: [{ from: './src/pages/', to: './' }],
+      patterns: [{ from: './src/pages/*.html', to: '[name][ext]' }],
     }),
+    new HtmlMinimizerPlugin(),
   ],
 };

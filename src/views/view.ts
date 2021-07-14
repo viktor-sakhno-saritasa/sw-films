@@ -36,7 +36,7 @@ abstract class View {
     const element = document.createElement(tag);
 
     if (className) {
-      element.classList.add(className);
+      element.className = className;
     }
 
     return element;

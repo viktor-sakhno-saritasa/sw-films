@@ -39,7 +39,7 @@ class FilmView extends View {
   private createFilmPage(film: FilmDto): string {
     return `
         <main class="films">
-          <div class="wrapper">
+          <div class="container films-container">
             ${this.createCardTemplate(film)}
             <a class="button back-link" href=${PageUrls.Main}>Go to the main page</a>
           </div>
@@ -61,7 +61,6 @@ class FilmView extends View {
               <p>${film.description}</p>
             </div>
           </div>
-          <div class="card-img film-img">${film.episodeId}</div>
           <table class="card-details">
             <tr class="card-item">
               <th class="card-title">Episode</th>

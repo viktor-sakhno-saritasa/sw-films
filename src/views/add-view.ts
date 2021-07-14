@@ -41,66 +41,68 @@ class AddView extends View {
    */
   private createFormTemplate(collection: Object[]): string {
     return `
-      <form id="add-form" class="form">
-        <ul class="form-list">
-          <li class="form-item">
-            <label class="form-label" for="title">Title</label>
-            <input class="form-input" type="text" id="title"
-              name="title" minlength="5" maxlength="50" placeholder="50 shades of star wars" required>
-          </li>
-          <li class="form-item">
-            <label class="form-label" for="director">Director</label>
-            <input class="form-input" type="text" id="director"
-              name="director" minlength="5" maxlength="50" placeholder="George Lucas" required>
-          </li>
-          <li class="form-item">
-            <label class="form-label" for="producer">Producer</label>
-            <input class="form-input" type="text" id="producer"
-              name="producer" minlength="5" maxlength="50" placeholder="Rick McCallum" required>
-          </li>
-          <li class="form-item">
-            <label class="form-label" for="release-date">Release Date</label>
-            <input class="form-input" type="date" id="release-date"
-              name="release-date" required>
-          </li>
-          <li class="form-item">
-            <label class="form-label" for="characters">Characters</label>
-            <select id="characters" name="characters" multiple="multiple" size="5" required>
-            ${this.createOptionsTemplate(CollectionIndexes.Characters, collection)}
-            </select>
-          </li>
-          <li class="form-item">
-            <label class="form-label" for="planets">Planets</label>
-            <select id="planets" name="planets" multiple size="5" required>
-            ${this.createOptionsTemplate(CollectionIndexes.Planets, collection)}
-            </select>
-          </li>
-          <li class="form-item">
-          <label class="form-label" for="species">Species</label>
-            <select id="species" name="species" multiple size="5" required>
-            ${this.createOptionsTemplate(CollectionIndexes.Species, collection)}
-            </select>
-          </li>
-          <li class="form-item">
-          <label class="form-label" for="starships">Starships</label>
-            <select id="starships" name="starships" multiple size="5" required>
-            ${this.createOptionsTemplate(CollectionIndexes.Starships, collection)}
-            </select>
-          </li>
-          <li class="form-item">
-          <label class="form-label" for="vehicles">Vehicles</label>
-            <select id="vehicles" name="vehicles" multiple size="5" required>
-            ${this.createOptionsTemplate(CollectionIndexes.Vehicles, collection)}
-            </select>
-          </li>
-          <li class="form-item">
-            <label class="form-label" for="description">Description</label>
-            <textarea class="form-textarea" id="description" name="description"
-              rows="5" cols="33" placeholder="It was a dark and stormy night..." required></textarea>
-          </li>
-        </ul>
-        <button class="button form-button" type="submit">Add film</button>
-      </form>
+      <div class="container container-form">
+        <form id="add-form" class="form">
+          <ul class="form-list">
+            <li class="form-item">
+              <label class="form-label" for="title">Title</label>
+              <input class="form-input" type="text" id="title"
+                name="title" minlength="5" maxlength="50" placeholder="50 shades of star wars" required>
+            </li>
+            <li class="form-item">
+              <label class="form-label" for="director">Director</label>
+              <input class="form-input" type="text" id="director"
+                name="director" minlength="5" maxlength="50" placeholder="George Lucas" required>
+            </li>
+            <li class="form-item">
+              <label class="form-label" for="producer">Producer</label>
+              <input class="form-input" type="text" id="producer"
+                name="producer" minlength="5" maxlength="50" placeholder="Rick McCallum" required>
+            </li>
+            <li class="form-item">
+              <label class="form-label" for="release-date">Release Date</label>
+              <input class="form-input" type="date" id="release-date"
+                name="release-date" required>
+            </li>
+            <li class="form-item">
+              <label class="form-label" for="characters">Characters</label>
+              <select id="characters" name="characters" multiple="multiple" size="5" required>
+              ${this.createOptionsTemplate(CollectionIndexes.Characters, collection)}
+              </select>
+            </li>
+            <li class="form-item">
+              <label class="form-label" for="planets">Planets</label>
+              <select id="planets" name="planets" multiple size="5" required>
+              ${this.createOptionsTemplate(CollectionIndexes.Planets, collection)}
+              </select>
+            </li>
+            <li class="form-item">
+            <label class="form-label" for="species">Species</label>
+              <select id="species" name="species" multiple size="5" required>
+              ${this.createOptionsTemplate(CollectionIndexes.Species, collection)}
+              </select>
+            </li>
+            <li class="form-item">
+            <label class="form-label" for="starships">Starships</label>
+              <select id="starships" name="starships" multiple size="5" required>
+              ${this.createOptionsTemplate(CollectionIndexes.Starships, collection)}
+              </select>
+            </li>
+            <li class="form-item">
+            <label class="form-label" for="vehicles">Vehicles</label>
+              <select id="vehicles" name="vehicles" multiple size="5" required>
+              ${this.createOptionsTemplate(CollectionIndexes.Vehicles, collection)}
+              </select>
+            </li>
+            <li class="form-item">
+              <label class="form-label" for="description">Description</label>
+              <textarea class="form-textarea" id="description" name="description"
+              placeholder="It was a dark and stormy night..." required></textarea>
+            </li>
+          </ul>
+          <button class="button form-button" type="submit">Add film</button>
+        </form>
+      </div>
     `;
   }
 

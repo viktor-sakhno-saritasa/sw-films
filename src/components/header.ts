@@ -16,9 +16,9 @@ export default function createHeader(user: UserDto, handlers: HandlersType): HTM
 
   const logoutTemplate = (): string => `
     <div class="header-user">
-        <img src=${IconUrls.User} alt=${user.name}>
-        <span class="header-username">${user.name}</span>
-      </div>
+      <img class="header-user-icon" src=${IconUrls.User} alt=${user.name}>
+      <span class="header-username">${user.name}</span>
+    </div>
     <button type="button" id="sign-btn" class="button button-auth">Log out</button>`;
 
   const loginTemplate = (): string => '<button type="button" id="sign-btn" class="button button-auth">Sign in</button>';
@@ -26,9 +26,12 @@ export default function createHeader(user: UserDto, handlers: HandlersType): HTM
   const innerContent = user.name ? logoutTemplate() : loginTemplate();
 
   header.innerHTML = `
-      <h1 class="header-title">
-        <a class="header-link" href=${PageUrls.Main}>SW Films</a></h1>
-      <nav class="header-navigation">${innerContent}</nav>
+      <div class="container header-container">
+        <h1 class="header-title">
+          <a class="header-link" href=${PageUrls.Main}>SW Films</a>
+        </h1>
+        <nav class="header-navigation">${innerContent}</nav>
+      </div>
     `;
 
   const signButton = header.querySelector('#sign-btn');

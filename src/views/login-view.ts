@@ -67,7 +67,7 @@ class LoginView extends View {
 
     return `
       <main class="login">
-          <div class="wrapper login-wrapper">${innerContent}</div>
+          <div class="container login-container">${innerContent}</div>
       </main>
     `;
   }

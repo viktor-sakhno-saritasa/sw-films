@@ -60,6 +60,7 @@ class MainView extends View {
     addPagination(this.filmsList);
 
     const sortButton = this.getElement('.toolbar-sort');
+
     sortButton.addEventListener('click', () => this.sort(user, films, handlers));
 
     const searchField = this.getElement('.toolbar-search');
@@ -67,8 +68,10 @@ class MainView extends View {
       this.search(user, films, event, handlers);
     });
 
-    const addButton = this.getElement('.toolbar-add');
-    addButton.addEventListener('click', () => addFilmHandler());
+    if (user.name) {
+      const addButton = this.getElement('.toolbar-add');
+      addButton.addEventListener('click', () => addFilmHandler());
+    }
   }
 
   /**
@@ -118,17 +121,20 @@ class MainView extends View {
    */
   private createMainPage(user: UserDto, films: FilmDto[], handlers: HandlersType): void {
     const filmsContent = this.createElement('main', 'films');
-    const wrapper = this.createElement('div', 'wrapper');
+    const wrapper = this.createElement('div', 'container films-container');
 
     filmsContent.append(wrapper);
 
     wrapper.insertAdjacentHTML('beforeend', this.createToolBarTemplate(user));
 
+    const filmsListWrapper = this.createElement('div', 'films-list-wrapper');
+    wrapper.append(filmsListWrapper);
+
     const filmsList = FilmsList(user, films, handlers);
     filmsList.classList.add('films-list');
 
-    wrapper.append(filmsList);
-    wrapper.insertAdjacentHTML('beforeend', this.getPaginationTemplate());
+    filmsListWrapper.append(filmsList);
+    filmsListWrapper.insertAdjacentHTML('beforeend', this.getPaginationTemplate());
 
     this.root.append(filmsContent);
   }

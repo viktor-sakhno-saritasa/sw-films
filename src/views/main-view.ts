@@ -60,6 +60,7 @@ class MainView extends View {
     addPagination(this.filmsList);
 
     const sortButton = this.getElement('.toolbar-sort');
+
     sortButton.addEventListener('click', () => this.sort(user, films, handlers));
 
     const searchField = this.getElement('.toolbar-search');
@@ -67,8 +68,10 @@ class MainView extends View {
       this.search(user, films, event, handlers);
     });
 
-    const addButton = this.getElement('.toolbar-add');
-    addButton.addEventListener('click', () => addFilmHandler());
+    if (user.name) {
+      const addButton = this.getElement('.toolbar-add');
+      addButton.addEventListener('click', () => addFilmHandler());
+    }
   }
 
   /**

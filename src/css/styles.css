@@ -509,9 +509,7 @@ ul {
 
 .card-details {
   border-collapse: collapse;
-  width: 40%;
   text-align: left;
-  vertical-align: bottom;
 }
 
 .card-item {

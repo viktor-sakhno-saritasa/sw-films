@@ -225,7 +225,6 @@ ul {
   overflow-x: auto;
 }
 
-
 .films-list-wrapper::-webkit-scrollbar {
   display: none;
 }
@@ -241,7 +240,6 @@ ul {
   padding: 50px 15px;
 
   list-style: none;
-
 }
 
 .film-item {
@@ -314,7 +312,6 @@ ul {
   padding: 5px 10px;
   box-shadow: 0 0 10px 5px rgba(216, 216, 216, 0.5);
 }
-
 
 .button-details:hover,
 .button-details:focus {
@@ -509,9 +506,7 @@ ul {
 
 .card-details {
   border-collapse: collapse;
-  width: 40%;
   text-align: left;
-  vertical-align: bottom;
 }
 
 .card-item {
@@ -551,7 +546,6 @@ ul {
 }
 
 /** ONE FILM PAGE END */
-
 
 /** MODAL */
 .vmodal.open .modal-overlay {
@@ -667,7 +661,6 @@ ul {
   margin: 0 auto;
   margin-top: 50px;
   padding: 30px 0;
-
 }
 
 .form-list {

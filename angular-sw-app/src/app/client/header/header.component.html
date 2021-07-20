@@ -1,0 +1,28 @@
+<mat-toolbar class="header" color="primary">
+  <a mat-button routerLink="/">
+    <h1 class="header__title">
+      <mat-icon class="header__main-icon">videocam</mat-icon>
+      <span>SW Films</span>
+    </h1>
+  </a>
+
+  <div class="header__navigation" *ngIf="user; else unauthorized">
+    <div class="header__profile">
+      <mat-icon class="header__user-icon">account_circle</mat-icon>
+      <span class="header__user-name">{{ user.name }}</span>
+    </div>
+    <button class="header__button" mat-button>
+      <span>Logout</span>
+      <mat-icon class="header__auth-icon">logout</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<ng-template #unauthorized>
+  <div class="header__navigation">
+    <a class="header__button" mat-button routerLink="/login">
+      <span>Login</span>
+      <mat-icon class="header__auth-icon">login</mat-icon>
+    </a>
+  </div>
+</ng-template>

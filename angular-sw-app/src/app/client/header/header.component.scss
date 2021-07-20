@@ -1,0 +1,45 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 56px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+  }
+
+  &__main-icon {
+    margin-right: 5px;
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
+  }
+
+  &__navigation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+  }
+
+  &__user-icon {
+    margin-right: 5px;
+  }
+
+  &__auth-icon {
+    margin-left: 5px;
+  }
+
+  &__button {
+    margin-left: 10px;
+  }
+}

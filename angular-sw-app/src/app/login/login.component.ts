@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Location } from '@angular/common';
 
+import { Router } from '@angular/router';
+
 import { UserService } from '../core/services/user.service';
 
 /**
@@ -15,11 +17,14 @@ import { UserService } from '../core/services/user.service';
 export class LoginComponent implements OnInit {
 
   public constructor(
+    private route: Router,
     private userService: UserService,
     private location: Location,
   ) { }
 
-  ngOnInit(): void {
+  /** Init component. */
+  public ngOnInit(): void {
+    /** Init component. */
   }
 
   /**
@@ -33,7 +38,10 @@ export class LoginComponent implements OnInit {
    * Event handler for google auth button.
    */
   public login(): void {
-
+    this.userService.login()
+      .subscribe(() => {
+        this.route.navigate(['']);
+      });
   }
 
 }

@@ -8,13 +8,6 @@ const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
-
-    // children: [
-    //   {
-    //     path: 'index',
-    //     component: HeaderComponent,
-    //   },
-    // ],
   },
 ];
 

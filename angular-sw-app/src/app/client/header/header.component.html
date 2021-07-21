@@ -6,12 +6,12 @@
     </h1>
   </a>
 
-  <div class="header__navigation" *ngIf="user; else unauthorized">
+  <div class="header__navigation" *ngIf="user$ | async as user else unauthorized">
     <div class="header__profile">
       <mat-icon class="header__user-icon">account_circle</mat-icon>
-      <span class="header__user-name">{{ user.name }}</span>
+      <span class="header__user-name">{{ user.name }} </span>
     </div>
-    <button class="header__button" mat-button>
+    <button class="header__button" mat-button (click)="logout()">
       <span>Logout</span>
       <mat-icon class="header__auth-icon">logout</mat-icon>
     </button>

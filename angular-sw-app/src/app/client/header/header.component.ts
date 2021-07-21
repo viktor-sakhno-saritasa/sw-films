@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { User } from 'src/app/core/models/user';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -13,27 +14,22 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class HeaderComponent implements OnInit {
 
-  /** Current user. */
-  public user?: User;
+  /** Current user stream. */
+  public user$: Observable<User | null>;
 
-  public constructor(
-    private userService: UserService,
-  ) { }
-
-  /**
-   * Get user state after creating a component.
-   */
-  public ngOnInit(): void {
-    this.getUser();
+  public constructor(private userService: UserService) {
+    this.user$ = this.userService.getUserStream();
   }
 
   /**
-   * Initialize user state in header.
+   * Do things after creating a component.
    */
-  private getUser(): void {
-    this.userService.getUser()
-      .subscribe(user => {
-        this.user = user;
-      });
+  public ngOnInit(): void {
+    /** Init component. */
+  }
+
+  /** Event handler for logout button. */
+  public logout(): void {
+    this.userService.logout();
   }
 }

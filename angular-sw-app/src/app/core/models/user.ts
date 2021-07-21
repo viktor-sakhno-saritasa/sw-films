@@ -5,7 +5,4 @@ export interface User {
 
   /** User's name from Google account. */
   name: string;
-
-  /** User's token from Google Firebase auth. */
-  token: string;
 }

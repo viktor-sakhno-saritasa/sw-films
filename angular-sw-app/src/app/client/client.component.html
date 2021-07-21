@@ -1,2 +1,10 @@
 <app-header></app-header>
+
+<ul *ngIf="films$ | async as films; else spinner">
+  <li *ngFor="let film of films">{{ film.title }}</li>
+</ul>
 <router-outlet></router-outlet>
+
+<ng-template #spinner>
+  <mat-spinner></mat-spinner>
+</ng-template>

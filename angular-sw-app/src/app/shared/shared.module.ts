@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { MatCardModule } from '@angular/material/card';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 /**
  * Module for shared components and directives.
  */
@@ -20,12 +22,14 @@ import { MatCardModule } from '@angular/material/card';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatProgressSpinnerModule,
   ],
   exports: [
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class SharedModule { }

@@ -5,6 +5,7 @@ import { Film } from '../core/models/film';
 
 import { FilmsService } from '../core/services/films.service';
 
+
 /**
  * Main page component.
  */
@@ -19,6 +20,10 @@ export class ClientComponent implements OnInit {
   /** Current films stream. */
   public films$: Observable<Film[]>;
 
+  // public displayedColumns: string[] = ['id', 'title', 'director', 'releaseDate'];
+
+  // public dataSource = new MatTableDataSource(this.films$);
+
   public constructor(private filmsService: FilmsService) {
     this.films$ = this.filmsService.getFilmsStream();
   }
@@ -28,4 +33,9 @@ export class ClientComponent implements OnInit {
     /** Init component. */
   }
 
+
+  // public applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+  // }
 }

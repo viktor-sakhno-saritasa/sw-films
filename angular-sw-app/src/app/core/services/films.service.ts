@@ -33,10 +33,30 @@ export class FilmsService {
   }
 
   /**
+   * Fetch to firestore for get film by episode id.
+   * @param id Episode id of film.
+   * @returns Stream of film.
+   */
+  public getFilm(id: number): Observable<Film> {
+    return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref.where('fields.episode_id', '==', id))
+      .valueChanges()
+      .pipe(
+        map(films => {
+          if (films && Array.isArray(films)) {
+            return films[0];
+          }
+          return films;
+        }),
+        map(film => this.dtoToFilmModelMapper(film)),
+        catchError(this.handleError<Film>('getFilm')),
+      );
+  }
+
+  /**
    * Fetch films collection from firestore.
    */
   private fetchFilms(): Observable<Film[]> {
-    return this.firestore.collection(COLLECTION_KEY).valueChanges()
+    return this.firestore.collection<FilmDto>(COLLECTION_KEY).valueChanges()
       .pipe(
         catchError(this.handleError<Film[]>('fetchFilms', [])),
         map(films => films.map(film => this.dtoToFilmModelMapper(film as FilmDto))),

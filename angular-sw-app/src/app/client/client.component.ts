@@ -4,9 +4,15 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { Router } from '@angular/router';
+
 import { Film } from '../core/models/film';
 
+
 import { FilmsService } from '../core/services/films.service';
+import { UserService } from '../core/services/user.service';
 
 /**
  * Main page component.
@@ -26,11 +32,10 @@ export class ClientComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) public paginator!: MatPaginator;
 
   /** Columns of the table. */
-  public readonly displayedColumns: string[] = ['episodeId', 'title', 'director', 'releaseDate'];
+  public readonly displayedColumns: string[] = ['episodeId', 'title', 'director', 'releaseDate', 'actions'];
 
   /** Data source object. */
   public dataSource!: MatTableDataSource<Film>;
-
 
   /** Current films stream. */
   public films$: Observable<Film[]>;
@@ -39,6 +44,9 @@ export class ClientComponent implements OnInit, AfterViewInit {
   public constructor(
     private filmsService: FilmsService,
     private changeDetector: ChangeDetectorRef,
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private route: Router,
   ) {
     this.films$ = this.filmsService.getFilmsStream();
   }
@@ -74,5 +82,35 @@ export class ClientComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  /** Event handler for remove button. For the next task. */
+  public remove(): void {
+    /** Mock for remove button. */
+  }
+
+  /**
+   * Snack bar for information client about anything.
+   * @param message Message text.
+   * @param action Text for action.
+   */
+  public openSnackBar(message: string, action: string): void {
+    if (this.userService.currentUser) {
+      return;
+    }
+
+    this.snackBar.open(message, action);
+  }
+
+  /**
+   * Navigate to film page for details.
+   * If user is not logged, open snack bar for information.
+   * @param id Id of current film for check details.
+   */
+  public getDetails(id: number): void {
+    if (this.userService.currentUser) {
+      this.route.navigate(['/details/', id]);
+    }
+    this.openSnackBar('Need to login for check details.', 'OK');
   }
 }

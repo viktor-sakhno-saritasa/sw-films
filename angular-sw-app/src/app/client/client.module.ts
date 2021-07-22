@@ -5,14 +5,13 @@ import { SharedModule } from '../shared/shared.module';
 
 import { ClientComponent } from './client.component';
 import { ClientRoutingModule } from './client-routing.module';
-import { HeaderComponent } from '../shared/header/header.component';
 
 
 /**
  * Module for client part of app.
  */
 @NgModule({
-  declarations: [ClientComponent, HeaderComponent],
+  declarations: [ClientComponent],
   imports: [CommonModule, ClientRoutingModule, SharedModule],
 })
 export class ClientModule { }

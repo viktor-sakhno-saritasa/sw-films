@@ -20,11 +20,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+import { RouterModule } from '@angular/router';
+
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { HeaderComponent } from './header/header.component';
+
+
 /**
  * Module for shared components and directives.
  */
 @NgModule({
-  declarations: [],
+  declarations: [HeaderComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -37,6 +44,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatInputModule,
     MatSortModule,
     MatPaginatorModule,
+    RouterModule,
+    MatSnackBarModule,
   ],
   exports: [
     MatToolbarModule,
@@ -49,6 +58,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatInputModule,
     MatSortModule,
     MatPaginatorModule,
+    MatSnackBarModule,
+    HeaderComponent,
   ],
 })
 export class SharedModule { }

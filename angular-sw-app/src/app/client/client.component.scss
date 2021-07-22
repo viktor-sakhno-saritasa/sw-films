@@ -6,12 +6,16 @@
 
   max-width: 1024px;
   margin: 0 auto;
-  margin-top: 150px;
+  margin-top: 100px;
+  margin-bottom: 70px;
   padding: 15px 20px;
 }
 
 table {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .mat-form-field {
@@ -19,7 +23,8 @@ table {
   width: 80%;
 }
 
-td, th {
+td,
+th {
   width: 25%;
 }
 
@@ -29,4 +34,17 @@ td, th {
 
 .mat-column-title {
   font-weight: bold;
+}
+
+.mat-row {
+  &:hover,
+  &:focus {
+    background-color: rgba(103, 58, 183, 0.5);
+    color: #fff;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+  flex-direction: row;
 }

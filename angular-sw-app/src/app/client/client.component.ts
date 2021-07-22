@@ -46,6 +46,8 @@ export class ClientComponent implements OnInit, AfterViewInit {
   /** AfterView cycle hook. */
   /** Use detectChanges only after init data source and before init sort. */
   public ngAfterViewInit(): void {
+    /** After load films init data source and sort with paginator. */
+
     this.films$.subscribe(films => {
       this.dataSource = new MatTableDataSource(films);
 
@@ -58,8 +60,7 @@ export class ClientComponent implements OnInit, AfterViewInit {
 
   /** Init cycle hook. */
   public ngOnInit(): void {
-    /** After load films init data source and sort with paginator. */
-
+    /** Init cycle hook. */
   }
 
   /**

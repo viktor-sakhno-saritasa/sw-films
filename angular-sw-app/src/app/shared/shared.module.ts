@@ -17,6 +17,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { MatInputModule } from '@angular/material/input';
 
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 /**
  * Module for shared components and directives.
  */
@@ -32,6 +35,8 @@ import { MatInputModule } from '@angular/material/input';
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   exports: [
     MatToolbarModule,
@@ -42,6 +47,8 @@ import { MatInputModule } from '@angular/material/input';
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
 })
 export class SharedModule { }

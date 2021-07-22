@@ -1,3 +1,5 @@
+import { FilmArgs } from './film-args';
+
 /** Class for work with films. */
 export class Film {
 
@@ -40,7 +42,7 @@ export class Film {
   /** Id of the film. */
   public readonly pk: number;
 
-  public constructor(film: Film) {
+  public constructor(film: FilmArgs) {
     this.pk = film.pk;
     this.model = film.model;
     this.characters = film.characters;

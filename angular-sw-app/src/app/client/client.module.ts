@@ -5,7 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 
 import { ClientComponent } from './client.component';
 import { ClientRoutingModule } from './client-routing.module';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from '../shared/header/header.component';
 
 
 /**

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference, QueryDocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map, catchError, tap, distinctUntilChanged } from 'rxjs/operators';
+import { AngularFirestore, CollectionReference, Query, QueryDocumentSnapshot, QueryFn } from '@angular/fire/firestore';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import firebase from 'firebase/app';
 
@@ -24,6 +24,8 @@ const EPISODE_SORT = 'fields.episode_id';
 const DEFAULT_LIMIT = 3;
 
 const NAME_FILTER = 'fields.title';
+
+const PK = 'pk';
 
 /** Manages film's data. */
 @Injectable({
@@ -60,12 +62,43 @@ export class FilmsService {
     // this.films$ = this._filmsSubject$.asObservable();
   }
 
-  public page(request: PageRequest<FilmDto>, query: FilmQuery): Observable<Page<Film>> {
+  public page(request: PageRequest, query: FilmQuery): Observable<Page<Film>> {
 
-    const queryFn = (ref: CollectionReference) => {
-      return ref
+    const queryFn = (ref: CollectionReference): Query => {
+
+      let newQuery;
+
+      if (query.search.trim()) {
+        return this.applyFilterOption(ref, query.search.trim())
+          .orderBy('fields.title', request.sort.order)
+          .limit(request.size);
+      }
+
+      newQuery = ref
         .orderBy(request.sort.property, request.sort.order)
-        .limit(request.size)
+        .limit(request.size);
+
+      if (request.direction === 'next') {
+
+        if (this.firstEntryInResponse) {
+          this.firstEntryInPrevResponseStack.push(this.firstEntryInResponse);
+        }
+
+        return newQuery.startAfter(this.latestEntryInResponse)
+
+      } else if (request.direction === 'prev') {
+
+        return newQuery
+          .startAt(this.firstEntryInPrevResponseStack.pop())
+          .endBefore(this.firstEntryInResponse)
+
+      }
+
+      this.firstEntryInPrevResponseStack = [];
+      this.firstEntryInResponse = null;
+      this.latestEntryInResponse = null;
+
+      return newQuery;
     }
 
     return this.firestore.collection(COLLECTION_KEY, queryFn)
@@ -81,10 +114,23 @@ export class FilmsService {
         map(docs => docs.map(doc => {
           return this.dtoToFilmModelMapper(doc.data() as FilmDto);
         })),
-        map(films => {
-          console.log('ch', films);
-          return {content: films, number: request.page, size: films.length, totalElements: 7};
-        }),
+        switchMap(films => this.firestore.collection(COLLECTION_KEY, ref =>
+          this.applyFilterOption(ref, query.search.trim())).get()
+          .pipe(
+            distinctUntilChanged(),
+            map(snap => snap.size),
+            map(size => {
+              return {
+                content: films,
+                number: request.page,
+                size: request.size,
+                direction: request.direction,
+                totalElements: size,
+              }
+            }),
+            tap(args => console.log(args)),
+          ),
+        ),
       );
   }
 

@@ -1,49 +1,94 @@
-// import { DataSource } from "@angular/cdk/collections";
+import { DataSource } from "@angular/cdk/collections";
+import { BehaviorSubject, Observable, Subject, combineLatest } from "rxjs";
+import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, share, startWith, switchMap, take } from "rxjs/operators";
+import { indicate } from "./operators";
+import { Page, PaginatedEndpoint, Sort } from "./page";
 
-// /** Simple interface for Material DataSource. */
-// export interface SimpleDataSource<T> extends DataSource<T> {
-//   connect(): Observable<T[]>;
-//   disconnect(): void;
-// }
+/** Simple interface for Material DataSource. */
+export interface SimpleDataSource<T> extends DataSource<T> {
+  connect(): Observable<T[]>;
+  disconnect(): void;
+}
 
-// import { BehaviorSubject, Observable, Subject } from 'rxjs'
-// import { switchMap, startWith, map, shareReplay } from 'rxjs/operators';
-// import { Page, Sort, PaginationEndpoint } from './page';
 
-// export class PaginationDataSource<T> implements SimpleDataSource<T> {
-//   private pageNumber = new Subject<number>();
-//   private sort: BehaviorSubject<Sort<T>>;
+export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
+  private pageNumber: BehaviorSubject<number>;
+  private sort: BehaviorSubject<Sort>;
+  private query: BehaviorSubject<Q>;
+  private loading = new Subject<boolean>();
 
-//   public page$: Observable<Page<T>>;
+  public loading$ = this.loading.asObservable();
+  public page$: Observable<Page<T>>;
 
-//   constructor(
-//     endpoint: PaginationEndpoint<T>,
-//     initialSort: Sort<T>,
-//     size = 20) {
-//       this.sort = new BehaviorSubject<Sort<T>>(initialSort)
-//       this.page$ = this.sort.pipe(
-//         switchMap(sort => this.pageNumber.pipe(
-//           startWith(0),
-//           switchMap(page => endpoint({page, sort, size}))
-//         )),
-//         shareReplay(1)
-//       )
-//   }
+  private currentDirection: 'next' | 'prev' | '' = '';
 
-//   sortBy(sort: Partial<Sort<T>>): void {
-//     const lastSort = this.sort.getValue()
-//     const nextSort = {...lastSort, ...sort}
-//     this.sort.next(nextSort)
-//   }
+  constructor(
+    private endpoint: PaginatedEndpoint<T, Q>,
+    initialSort: Sort,
+    initialQuery: Q,
+    public pageSize = 2) {
 
-//   fetch(page: number): void {
-//     this.pageNumber.next(page);
-//   }
+    this.query = new BehaviorSubject<Q>(initialQuery);
+    this.sort = new BehaviorSubject<Sort>(initialSort);
+    this.pageNumber = new BehaviorSubject<number>(0);
 
-//   connect(): Observable<T[]> {
-//     return this.page$.pipe(map(page => page.content));
-//   }
+    const param$ = combineLatest([this.query.pipe(
+      debounceTime(500),
+      distinctUntilKeyChanged('search' as keyof Q),
+    ), this.sort]);
 
-//   disconnect(): void {}
+    this.page$ = param$.pipe(
+      switchMap(([query, sort]) => this.pageNumber.pipe
+      (
+        // startWith(0),
+        switchMap(page => this.endpoint({page, size: this.pageSize,
+          sort, direction: this.currentDirection}, query)
+            .pipe(
+              take(1),
+              indicate(this.loading))
+        )
+      )),
+      share(),
+    );
+  }
 
-// }
+  defineDirection(last: number, next: number): 'next' | 'prev' | '' {
+    return next > last ? 'next'
+      : last > next ? 'prev'
+      : '';
+  }
+
+  sortBy(sort: Partial<Sort>): void {
+    const lastSort = this.sort.getValue();
+    const nextSort = {...lastSort, ...sort};
+
+    this.reset();
+
+    this.sort.next(nextSort);
+  }
+
+  queryBy(query: Partial<Q>): void {
+    const lastQuery = this.query.getValue();
+    const nextQuery = {...lastQuery, ...query};
+
+    this.reset();
+
+    this.query.next(nextQuery);
+  }
+
+  fetch(page: number): void {
+    this.currentDirection = this.defineDirection(this.pageNumber.getValue(), page);
+    this.pageNumber.next(page);
+  }
+
+  connect(): Observable<T[]> {
+    return this.page$.pipe(map(page => page.content));
+  }
+
+  reset() {
+    this.pageNumber.next(0);
+    this.currentDirection = '';
+  }
+
+  disconnect(): void {}
+}

@@ -26,6 +26,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { HeaderComponent } from './header/header.component';
 
+import {MatSelectModule} from '@angular/material/select';
+
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 /**
  * Module for shared components and directives.
@@ -46,6 +49,8 @@ import { HeaderComponent } from './header/header.component';
     MatPaginatorModule,
     RouterModule,
     MatSnackBarModule,
+    MatSelectModule,
+    MatButtonToggleModule,
   ],
   exports: [
     MatToolbarModule,
@@ -60,6 +65,8 @@ import { HeaderComponent } from './header/header.component';
     MatPaginatorModule,
     MatSnackBarModule,
     HeaderComponent,
+    MatSelectModule,
+    MatButtonToggleModule,
   ],
 })
 export class SharedModule { }

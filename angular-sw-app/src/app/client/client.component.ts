@@ -20,8 +20,9 @@ import { UserService } from '../core/services/user.service';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { DataSource } from '@angular/cdk/collections';
 import { FilmsDataSource } from '../core/FilmsDataSource';
-import { PageRequest } from '../core/page';
+import { PageRequest, Sort } from '../core/page';
 import { FilmDto } from '../core/models/film-dto';
+import { PaginatedDataSource } from '../core/PaginatedDataSource';
 
 /**
  * Main page component.
@@ -35,19 +36,23 @@ import { FilmDto } from '../core/models/film-dto';
 export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** MatSort from html template. */
-  @ViewChild(MatSort)
-  public sort!: MatSort;
+  // @ViewChild(MatSort)
+  // public sort!: MatSort;
 
   /** MatPaginator from html template. */
-  @ViewChild(MatPaginator)
-  public paginator!: MatPaginator;
+  // @ViewChild(MatPaginator)
+  // public paginator!: MatPaginator;
 
-  @ViewChild('input') input!: ElementRef;
+  // @ViewChild('input') input!: ElementRef;
 
   private destroy: Subject<void> = new Subject<void>();
 
   /** Columns of the table. */
   public readonly displayedColumns: string[] = ['episodeId', 'title', 'director', 'releaseDate', 'actions'];
+
+  public readonly displayedColumns2 = ['episodeId', 'title', 'releaseDate'];
+  initialSort: Sort = {property: 'fields.episode_id', order: 'asc'};
+
 
   /** Current films stream. */
   // public films$: Observable<Film[]>;
@@ -55,6 +60,8 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
   public filmsLoading$: Observable<boolean> = of(false);
 
   public dataSource!: FilmsDataSource;
+
+  public data: PaginatedDataSource<Film, FilmQuery>;
 
   // public dataSource!: DataSource<Film>;
 
@@ -69,6 +76,13 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
     // this.films$ = this.filmsService.films$;
     // this.films$ = this.filmsService.getFilms();
     // this.filmsSize$ = this.filmsService.getSize();
+
+    this.data = new PaginatedDataSource<Film, FilmQuery> (
+      (request, query) => this.filmsService.page(request, query),
+      this.initialSort,
+      {search: ''},
+      2,
+    )
   }
 
   ngOnDestroy(): void {
@@ -91,33 +105,33 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
     //   this.dataSource.sort = this.sort;
     // });
 
-    fromEvent(this.input.nativeElement,'keyup')
-    .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        tap(() => {
-            this.paginator.pageIndex = 0;
-            this.dataSource.loadFilms(this.input.nativeElement.value, this.sort.direction || 'asc', '');
-        })
-    )
-    .subscribe();
+    // fromEvent(this.input.nativeElement,'keyup')
+    // .pipe(
+    //     debounceTime(400),
+    //     distinctUntilChanged(),
+    //     tap(() => {
+    //         this.paginator.pageIndex = 0;
+    //         this.dataSource.loadFilms(this.input.nativeElement.value, this.sort.direction || 'asc', '');
+    //     })
+    // )
+    // .subscribe();
 
-    this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0;
-      this.dataSource.loadFilms('', this.sort.direction || 'asc');
-    });
+    // this.sort.sortChange.subscribe(() => {
+    //   this.paginator.pageIndex = 0;
+    //   this.dataSource.loadFilms('', this.sort.direction || 'asc');
+    // });
 
-    this.paginator.page
-      .pipe(
-        takeUntil(this.destroy),
-        tap(paginationData => {
-          let direction = '';
+    // this.paginator.page
+    //   .pipe(
+    //     takeUntil(this.destroy),
+    //     tap(paginationData => {
+    //       let direction = '';
 
-          if (paginationData.previousPageIndex !== undefined) {
-            direction = paginationData.pageIndex > paginationData.previousPageIndex ? 'next'
-              : paginationData.previousPageIndex > paginationData.pageIndex ? 'prev'
-              : '';
-          }
+    //       if (paginationData.previousPageIndex !== undefined) {
+    //         direction = paginationData.pageIndex > paginationData.previousPageIndex ? 'next'
+    //           : paginationData.previousPageIndex > paginationData.pageIndex ? 'prev'
+    //           : '';
+    //       }
 
           // if (direction == '') {
           //   this.paginator.pageIndex = 0;
@@ -129,16 +143,16 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
 
           // })
 
-          this.dataSource.loadFilms('', this.sort.direction || 'asc', direction);
+          // this.dataSource.loadFilms('', this.sort.direction || 'asc', direction);
 
           console.log('CHECK AFTER')
           // this.films$ = this.filmsService.getFilms('', '', direction);
 
-        }),
-      )
-      .subscribe();
+        // }),
+      // )
+      // .subscribe();
 
-      console.log('AFTER VIEW INIT')
+      // console.log('AFTER VIEW INIT')
   }
 
   /** Init cycle hook. */
@@ -156,15 +170,16 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
     //   takeUntil(this.destroy),
     // );
 
-    const request: PageRequest<FilmDto> = {
-      page: 1,
-      size: 2,
-      sort: {property: 'fields.episode_id', order: 'asc'}
-    }
+    // const request: PageRequest = {
+    //   page: 1,
+    //   size: 2,
+    //   sort: {property: 'fields.episode_id', order: 'asc'},
+    //   direction: '',
+    // }
 
-    const query: FilmQuery = {search: ''};
+    // const query: FilmQuery = {search: ''};
 
-    this.filmsService.page(request, query).subscribe(data => console.log('PAGE', data));
+    // this.filmsService.page(request, query).subscribe(data => console.log('PAGE', data));
 
 
     console.log('Ng ON init')

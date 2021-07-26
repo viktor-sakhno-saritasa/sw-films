@@ -2,51 +2,51 @@
 export interface FilmDto {
 
   /** Object with info fields. */
-  fields: {
+  readonly fields: {
 
     /** Characters in number format. */
-    characters: number[];
+    readonly characters: number[];
 
     /** Created date. */
-    created: string;
+    readonly created: string;
 
     /** Director's name. */
-    director: string;
+    readonly director: string;
 
     /** Edited date. */
-    edited: string;
+    readonly edited: string;
 
     /** Episode of the film. */
-    episode_id: number;
+    readonly episode_id: number;
 
     /** Description of the film. */
-    opening_crawl: string;
+    readonly opening_crawl: string;
 
     /** Planets in number format. */
-    planets: number[];
+    readonly planets: number[];
 
     /** Producer's name. */
-    producer: string;
+    readonly producer: string;
 
     /** Release date. */
-    release_date: string;
+    readonly release_date: string;
 
     /** Species in number format. */
-    species: number[];
+    readonly species: number[];
 
     /** Starships in number format. */
-    starships: number[];
+    readonly starships: number[];
 
     /** Title of the film. */
-    title: string;
+    readonly title: string;
 
     /** Vehicles in number format. */
-    vehicles: number[];
+    readonly vehicles: number[];
   };
 
   /** Model of collection. */
-  model: string;
+  readonly model: string;
 
   /** Id of the film. */
-  pk: number;
+  readonly pk: number;
 }

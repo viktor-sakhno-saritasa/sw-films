@@ -1,31 +1,25 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference, Query, QueryDocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { AngularFirestore, CollectionReference, Query, QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { Observable, of } from 'rxjs';
 import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/operators';
-
 import firebase from 'firebase/app';
-
 import { Film } from '../models/film';
 import { FilmDto } from '../models/film-dto';
-import { SortDirection } from '@angular/material/sort';
 import { Page, PageRequest } from '../page';
+import { MappersService } from './mappers.service';
 
+/** Interface for query films. */
 export interface FilmQuery {
+
+  /** Search term. */
   search: string;
 }
 
 /** Key of the films collection. */
 const COLLECTION_KEY = 'films';
 
-/** Default key for sorting. */
-const EPISODE_SORT = 'fields.episode_id';
-
-/** Default limit for page size */
-const DEFAULT_LIMIT = 3;
-
+/** Property for name filter. */
 const NAME_FILTER = 'fields.title';
-
-const PK = 'pk';
 
 /** Manages film's data. */
 @Injectable({
@@ -33,92 +27,56 @@ const PK = 'pk';
 })
 export class FilmsService {
 
-  /** Local films Subject for trigger films observable. */
-  // private _filmsSubject$: BehaviorSubject<Film[]>;
-
-  /** Observable for subscribe in components. */
-  // public readonly films$: Observable<Film[]>;
-
   /** Latest  document in response for pagination. */
   private latestEntryInResponse: QueryDocumentSnapshot<unknown> | null = null;
 
   /** First document in response for pagination. */
   private firstEntryInResponse: QueryDocumentSnapshot<unknown> | null = null;
 
-  /** First document in previous response for previous pagination. */
-  private firstEntryInPrevResponse: QueryDocumentSnapshot<unknown> | undefined;
-
+  /** First document in previous response push in the stack for previous pagination. */
   private firstEntryInPrevResponseStack: QueryDocumentSnapshot<unknown>[] = [];
 
-  // private readonly films: Observable<Film[]>;
+  /** @constructor */
+  public constructor(private readonly firestore: AngularFirestore, private readonly mapper: MappersService) {}
 
   /**
-   * After fetch transform plain objects.
-   * @param firestore For work with firestore.
+   * Main method for films request.
+   * @param request Data for query information.
+   * @param query All search query properties.
+   * @returns Observable with <Page<Film>> objects.
    */
-  public constructor(private firestore: AngularFirestore) {
-    // this.films = this.fetchFilms();
-    // this._filmsSubject$ = new BehaviorSubject<Film[]>([]);
-    // this.films$ = this._filmsSubject$.asObservable();
-  }
-
   public page(request: PageRequest, query: FilmQuery): Observable<Page<Film>> {
 
+    /** Generate query for get collection. */
     const queryFn = (ref: CollectionReference): Query => {
-
-      let newQuery;
-
-      if (query.search.trim()) {
-        return this.applyFilterOption(ref, query.search.trim())
-          .orderBy('fields.title', request.sort.order)
-          .limit(request.size);
-      }
-
-      newQuery = ref
-        .orderBy(request.sort.property, request.sort.order)
-        .limit(request.size);
-
-      if (request.direction === 'next') {
-
-        if (this.firstEntryInResponse) {
-          this.firstEntryInPrevResponseStack.push(this.firstEntryInResponse);
-        }
-
-        return newQuery.startAfter(this.latestEntryInResponse)
-
-      } else if (request.direction === 'prev') {
-
-        return newQuery
-          .startAt(this.firstEntryInPrevResponseStack.pop())
-          .endBefore(this.firstEntryInResponse)
-
-      }
-
-      this.firstEntryInPrevResponseStack = [];
-      this.firstEntryInResponse = null;
-      this.latestEntryInResponse = null;
-
-      return newQuery;
+      return this.createQuery(ref, request, query);
     }
 
+    /** Get observable. */
     return this.firestore.collection(COLLECTION_KEY, queryFn)
       .snapshotChanges()
       .pipe(
+        /** Get raw docs for save in entries variables for cursor paginate. */
         map(actions => actions.map(action => {
           return action.payload.doc;
         })),
+        /** Save docs. */
         tap(docs => {
           this.firstEntryInResponse = this.getOneFromList(docs, true);
           this.latestEntryInResponse = this.getOneFromList(docs, false);
         }),
+        /** Map documents to domain model. */
         map(docs => docs.map(doc => {
-          return this.dtoToFilmModelMapper(doc.data() as FilmDto);
+          return this.mapper.dtoToFilmModelMapper(doc.data() as FilmDto);
         })),
+        /** Complete previous observable and get new for know size of docs. */
         switchMap(films => this.firestore.collection(COLLECTION_KEY, ref =>
+          /** If search field is not empty apply filter option. */
           this.applyFilterOption(ref, query.search.trim())).get()
           .pipe(
             distinctUntilChanged(),
             map(snap => snap.size),
+            /** Return Observable<Page<Film>> object to continue. */
             map(size => {
               return {
                 content: films,
@@ -128,31 +86,11 @@ export class FilmsService {
                 totalElements: size,
               }
             }),
-            tap(args => console.log('CLICK', args)),
           ),
         ),
-      );
+      )
+    ;
   }
-
-
-  public getFilms(
-    filter = '',
-    sortOrder: firebase.firestore.OrderByDirection = 'asc',
-    direction?: string,
-  ) {
-
-    if (direction) {
-      console.log('OOoop1')
-      return direction === 'next' ? this.next(filter, sortOrder)
-        : direction === 'prev' ? this.prev(filter, sortOrder)
-        : this.first(filter, sortOrder);
-    }
-    /** Add checks for direction. */
-    console.log('OOoop2')
-
-    return this.first(filter, sortOrder);
-  }
-
 
   /**
    * Fetch to firestore for get film by episode id.
@@ -163,103 +101,66 @@ export class FilmsService {
     return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref.where('fields.episode_id', '==', id))
       .valueChanges()
       .pipe(
-        map(films => {
-          if (films && Array.isArray(films)) {
-            return films[0];
-          }
-          return films;
-        }),
-        map(film => this.dtoToFilmModelMapper(film)),
+        map(films => this.getOneFromList(films, true)),
+        map(film => this.mapper.dtoToFilmModelMapper(film)),
         catchError(this.handleError<Film>('getFilm')),
       );
   }
 
   /**
-   * Initialize pagination in component.
-   * In first run init latest and first docs.
+   * Create query for firestore collection.
+   * @param ref Reference to the collection.
+   * @param request Request data from table.
+   * @param query All search fields.
+   * @returns Query for get the collection.
    */
-  public first(filter: string, sortOrder: firebase.firestore.OrderByDirection): Observable<Film[]> {
+  private createQuery(ref: CollectionReference, request: PageRequest, query: FilmQuery): Query {
+    let newQuery;
 
+    /** Firestore allow order by only same field as a search property. */
+    if (query.search.trim()) {
+      newQuery = this.applyFilterOption(ref, query.search.trim())
+        .orderBy(NAME_FILTER, request.sort.order)
+        .limit(request.size);
+    } else {
+      newQuery = ref
+        .orderBy(request.sort.property, request.sort.order)
+        .limit(request.size);
+    }
+
+    if (request.direction === 'next') {
+      /** Push document into stack for access to previous page. */
+      if (this.firstEntryInResponse) {
+        this.firstEntryInPrevResponseStack.push(this.firstEntryInResponse);
+      }
+      return newQuery.startAfter(this.latestEntryInResponse);
+
+    } else if (request.direction === 'prev') {
+      return newQuery
+        .startAt(this.firstEntryInPrevResponseStack.pop())
+        .endBefore(this.firstEntryInResponse);
+    }
+
+    /** If function run to this place, it's mean pagination need to reset. */
+    this.resetPagination();
+
+    return newQuery;
+  }
+
+  /** Reset documents state because of pagination's reset. */
+  private resetPagination(): void {
     this.firstEntryInPrevResponseStack = [];
     this.firstEntryInResponse = null;
     this.latestEntryInResponse = null;
-
-    console.log('OOP!')
-
-    return this.getFilmsCollection(ref => {
-      if (filter) {
-        return this.applyFilterOption(ref, filter).limit(DEFAULT_LIMIT).orderBy(NAME_FILTER, sortOrder);
-      }
-      return ref.limit(DEFAULT_LIMIT).orderBy(EPISODE_SORT, sortOrder);
-    })
-    // .subscribe(films => {
-    //   this._filmsSubject$.next(films);
-    // });
-  }
-
-  public next(filter: string, sortOrder: firebase.firestore.OrderByDirection): Observable<Film[]> {
-    if (this.firstEntryInResponse) {
-      this.firstEntryInPrevResponseStack.push(this.firstEntryInResponse);
-    }
-
-    return this.getFilmsCollection(ref => ref
-      .orderBy(EPISODE_SORT, sortOrder)
-      .startAfter(this.latestEntryInResponse)
-      .limit(DEFAULT_LIMIT))
-      // .subscribe(films => {
-      //   this._filmsSubject$.next(films);
-      // })
-  }
-
-  public prev(filter: string, sortOrder: firebase.firestore.OrderByDirection): Observable<Film[]> {
-    return this.getFilmsCollection(ref => ref
-      .orderBy(EPISODE_SORT, sortOrder)
-      .startAt(this.firstEntryInPrevResponseStack.pop())
-      .endBefore(this.firstEntryInResponse)
-      .limit(DEFAULT_LIMIT))
-      // .subscribe(films => {
-      //   this._filmsSubject$.next(films);
-      // })
-  }
-
-  public getSize(filter = ''): Observable<number> {
-    return this.firestore.collection(COLLECTION_KEY, ref => {
-      return this.applyFilterOption(ref)
-    }).get()
-      .pipe(
-        distinctUntilChanged(),
-        map(snap => snap.size),
-      );
   }
 
   /**
-   * Get films collection and also save last and first docs in request for pagination.
-   * @param queryFn Query function for request collection from firestore.
-   * @returns Observable for subscribe.
+   * Applies search terms by name.
+   * Unfortunately, firestore don't have 'contains' method for strings.
+   * @param ref Document reference.
+   * @param text Search text.
+   * @returns Query for firestore request.
    */
-  private getFilmsCollection(queryFn?: QueryFn): Observable<Film[]> {
-    return this.firestore.collection(COLLECTION_KEY, queryFn).snapshotChanges()
-      .pipe(
-        map(actions => actions.map(action => {
-          return action.payload.doc;
-        })),
-        tap(docs => {
-          this.firstEntryInResponse = this.getOneFromList(docs, true);
-          this.latestEntryInResponse = this.getOneFromList(docs, false);
-        }),
-        map(docs => docs.map(doc => {
-          return this.dtoToFilmModelMapper(doc.data() as FilmDto);
-        })),
-      );
-  }
-
-  private applyOrderOption(ref: firebase.firestore.CollectionReference, sortOrder: SortDirection) {
-    if (sortOrder) {
-      return ref.orderBy(EPISODE_SORT, sortOrder);
-    }
-    return ref;
-  }
-
   private applyFilterOption(ref: firebase.firestore.CollectionReference, text?: string): firebase.firestore.Query {
     if (text) {
       return ref.where(NAME_FILTER, '>=', text).where(NAME_FILTER, '<', this.getEndCodeForFirestoreQuery(text));
@@ -276,46 +177,18 @@ export class FilmsService {
     return text.replace(/.$/, symbol => String.fromCharCode(symbol.charCodeAt(0) + 1));
   }
 
+  /**
+   * Safely get item from list.
+   * @param list List of items.
+   * @param getFirst Take first or last element. False - last.
+   * @returns Item from the list.
+   */
   private getOneFromList<T>(list: T[] | T, getFirst: boolean): T {
     if (list && Array.isArray(list)) {
       return getFirst ? list[0] : list[list.length - 1];
     }
+    /** If it is not list. */
     return list;
-  }
-
-  /**
-   * Fetch films collection from firestore.
-   */
-  // private fetchFilms(): Observable<Film[]> {
-  //   return this.firestore.collection<FilmDto>(COLLECTION_KEY).valueChanges()
-  //     .pipe(
-  //       catchError(this.handleError<Film[]>('fetchFilms', [])),
-  //       map(films => films.map(film => this.dtoToFilmModelMapper(film as FilmDto))),
-  //     );
-  // }
-
-  /**
-   * Transform plain object to domain model.
-   * @param dto Plain object from firestore.
-   * @returns Film domain.
-   */
-  private dtoToFilmModelMapper(dto: FilmDto): Film {
-    const { fields } = dto;
-    return new Film({
-      characters: fields.characters,
-      director: fields.director,
-      planets: fields.planets,
-      producer: fields.producer,
-      species: fields.species,
-      starships: fields.starships,
-      title: fields.title,
-      vehicles: fields.vehicles,
-      episodeId: fields.episode_id,
-      description: fields.opening_crawl,
-      pk: dto.pk,
-      model: dto.model,
-      releaseDate: new Date(fields.release_date) as Date,
-    });
   }
 
   /**

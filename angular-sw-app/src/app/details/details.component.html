@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div class="container" *ngIf="film; else spinner">
+<div class="container" *ngIf="film$ | async as film; else spinner">
   <div class="card-wrapper">
     <mat-card class="card">
       <mat-card-header class="card__header">
@@ -13,16 +13,17 @@
           </mat-card-subtitle>
         </div>
       </mat-card-header>
-      <img mat-card-image src="../../assets/yoda.jpg" alt="Photo of Yoda" />
+      <img mat-card-image src="/assets/yoda.jpg" alt="Photo of Yoda" />
       <mat-card-content>
         <p>{{ film.description }}</p>
       </mat-card-content>
       <mat-card-actions class="card__actions">
         <button
+          type="button"
           class="card__button"
           mat-raised-button
           color="primary"
-          (click)="goBack()"
+          (click)="onBackClick()"
         >
           <mat-icon class="card__icon">arrow_back</mat-icon>
           <span>Go back</span>
@@ -31,8 +32,6 @@
     </mat-card>
   </div>
 </div>
-
-<router-outlet></router-outlet>
 
 <ng-template #spinner>
   <div class="card__spinner">

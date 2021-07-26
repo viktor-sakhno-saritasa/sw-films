@@ -1,45 +1,42 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-
 import { Film } from '../core/models/film';
 import { FilmsService } from '../core/services/films.service';
+import { Observable } from 'rxjs';
 
 /** Component for details page film. */
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsComponent implements OnInit {
 
   /** Current film. */
-  @Input() public film?: Film;
+  public film$!: Observable<Film>;
 
+  /** @constructor */
   public constructor(
-    private route: ActivatedRoute,
-    private filmService: FilmsService,
-    private location: Location,
-  ) { }
+    private readonly route: ActivatedRoute,
+    private readonly filmService: FilmsService,
+    private readonly location: Location,
+  ) {}
 
-  /** Init cycle hook. */
+  /** @inheritdoc */
   public ngOnInit(): void {
-    /** Init cycle hook. */
     this.getFilm();
   }
 
-  /** Subscribe to stream for take film from param id. */
+  /** Update observable film from param id. */
   public getFilm(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.filmService.getFilm(id)
-      .subscribe(film => {
-        this.film = film;
-      });
+    this.film$ = this.filmService.getFilm(id);
   }
 
   /** Event handler for go back button. */
-  public goBack(): void {
+  public onBackClick(): void {
     this.location.back();
   }
-
 }

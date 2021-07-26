@@ -1,8 +1,7 @@
 /**
- * Interface for work with user authorized from Google Firebase.
+ * User interface for use in components.
  */
 export interface User {
-
   /** User's name from Google account. */
-  name: string;
+  readonly name: string;
 }

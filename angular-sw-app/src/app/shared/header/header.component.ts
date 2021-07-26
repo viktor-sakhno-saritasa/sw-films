@@ -4,38 +4,26 @@ import { Observable } from 'rxjs';
 import { User } from 'src/app/core/models/user';
 import { UserService } from 'src/app/core/services/user.service';
 
-/**
- * Header of an application.
- */
+/** Header of an application. */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  /** Current user stream. */
-  public user$: Observable<User | null>;
+  /** Current user observable. */
+  public readonly user$: Observable<User | null>;
 
-  public constructor(
-    private userService: UserService,
-    private route: Router,
-  ) {
-    this.user$ = this.userService.getUserStream();
-  }
-
-  /**
-   * Do things after creating a component.
-   */
-  public ngOnInit(): void {
-    /** Init component. */
+  /** @constructor */
+  public constructor(private readonly userService: UserService, private readonly route: Router) {
+    this.user$ = this.userService.getUser();
   }
 
   /** Event handler for logout button. */
-  public logout(): void {
+  public onLogoutClick(): void {
     this.userService.logout();
     this.route.navigate(['/']);
-    console.log("LOGOUT")
   }
 }

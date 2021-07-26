@@ -1,24 +1,48 @@
 import { Observable } from "rxjs";
 
-
+/** Sort interface. */
 export interface Sort {
-  property: 'fields.episode_id' | 'fields.title';
-  order: 'asc' | 'desc';
+
+  /** Properties for sort table data. */
+  readonly property: 'fields.episode_id' | 'fields.title';
+
+  /** Ascending order. */
+  readonly order: 'asc' | 'desc';
 }
 
+/** Interface for page request data. */
 export interface PageRequest {
-  page: number;
-  size: number;
-  sort: Sort;
-  direction: 'next' | 'prev' | '';
+
+  /** Page index provided mat-pagination. */
+  readonly page: number;
+
+  /** Size of elements in a page. */
+  readonly size: number;
+
+  /** Sort object. */
+  readonly sort: Sort;
+
+  /** Direction of the pagination. '' is equal reset pagination. */
+  readonly direction: 'next' | 'prev' | '';
 }
 
+/** Interface for full page data. */
 export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  size: number;
-  number: number;
-  direction: 'next' | 'prev' | '';
+
+  /** Main content. */
+  readonly content: T[];
+
+  /** Total elements of  */
+  readonly totalElements: number;
+
+  /** Size of elements in a page. */
+  readonly size: number;
+
+  /** Page index provided mat-pagination. */
+  readonly number: number;
+
+  /** Direction of the pagination. '' is equal reset pagination. */
+  readonly direction: 'next' | 'prev' | '';
 }
 
 export type PaginatedEndpoint<T, Q> = (req: PageRequest, query: Q) => Observable<Page<T>>;

@@ -1,32 +1,30 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-
 import { AuthPipe, canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
-
 import { AuthGuardService } from './core/services/auth-guard.service';
+import { ClientComponent } from './client/client.component';
+import { LoginComponent } from './login/login.component';
+import { DetailsComponent } from './details/details.component';
 
 /** Custom guard from Auth Guard pipes for logged. */
 const redirectLoggedInToMain = (): AuthPipe => redirectLoggedInTo(['']);
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./client/client.module').then(m => m.ClientModule) },
+  { path: '', component: ClientComponent},
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+    component: LoginComponent,
     ...canActivate(redirectLoggedInToMain),
   },
   {
     path: 'details/:id',
-    loadChildren: () => import('./details/details.module').then(m => m.DetailsModule),
+    component: DetailsComponent,
     canActivate: [AuthGuardService],
   },
   { path: '**', redirectTo: '' },
 ];
 
-/**
- * Module for routing in application.
- */
+/** Module for routing in application. */
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

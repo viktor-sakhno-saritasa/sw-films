@@ -15,10 +15,9 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './login/login.module';
 import { ClientModule } from './client/client.module';
+import { DetailsModule } from './details/details.module';
 
-/**
- * Root module for an application.
- */
+/** Root module for an application. */
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -31,6 +30,7 @@ import { ClientModule } from './client/client.module';
     LoginModule,
     BrowserAnimationsModule,
     ClientModule,
+    DetailsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

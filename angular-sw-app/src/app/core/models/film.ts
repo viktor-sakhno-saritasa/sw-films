@@ -1,5 +1,3 @@
-import { FilmArgs } from './film-args';
-
 /** Class for work with films. */
 export class Film {
 
@@ -57,4 +55,56 @@ export class Film {
     this.title = film.title;
     this.vehicles = film.vehicles;
   }
+}
+
+
+/**
+ * Interface for film args ctor.
+ */
+ export interface FilmArgs {
+
+  /** Characters in number format. */
+  readonly characters: number[];
+
+  /** Director's name. */
+  readonly director: string;
+
+  /** Episode of the film. */
+  readonly episodeId: number;
+
+  /** Description of the film. */
+  readonly description: string;
+
+  /** Planets in number format. */
+  readonly planets: number[];
+
+  /** Producer's name. */
+  readonly producer: string;
+
+  /** Release date. */
+  readonly releaseDate: Date;
+
+  /** Species in number format. */
+  readonly species: number[];
+
+  /** Starships in number format. */
+  readonly starships: number[];
+
+  /** Title of the film. */
+  readonly title: string;
+
+  /** Vehicles in number format. */
+  readonly vehicles: number[];
+
+  /** Model of collection. */
+  readonly model: string;
+
+  /** Id of the film. */
+  readonly pk: number;
+
+  /** Created date. */
+  readonly created?: Date;
+
+  /** Edited date. */
+  readonly edited?: Date;
 }

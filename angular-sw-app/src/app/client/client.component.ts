@@ -40,8 +40,8 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
   // public sort!: MatSort;
 
   /** MatPaginator from html template. */
-  // @ViewChild(MatPaginator)
-  // public paginator!: MatPaginator;
+  @ViewChild(MatPaginator)
+  public paginator!: MatPaginator;
 
   // @ViewChild('input') input!: ElementRef;
 

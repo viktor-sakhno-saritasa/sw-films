@@ -78,20 +78,21 @@
 <button (click)="prev()">PREV</button>
 <button (click)="next()">NEXT</button> -->
 
-<h2>Users</h2>
+<div class="mat-elevation-z8 container">
+<h2>Films</h2>
 <div class="toolbar">
 	<mat-form-field class="search">
 		<mat-icon matPrefix>search</mat-icon>
-		<input #in (input)="data.queryBy({search: in.value})" type="text" matInput placeholder="Search">
+		<input #in (input)="data.queryBy({search: in.value})" type="text" matInput placeholder="Search" [disabled]="data.loading$ | async">
   </mat-form-field>
   <mat-form-field class="property">
     <mat-label>Order by</mat-label>
-    <mat-select value="fields.episode_id" (selectionChange)="data.sortBy({property: $event.value})">
+    <mat-select value="fields.episode_id" (selectionChange)="data.sortBy({property: $event.value})" [disabled]="data.loading$ | async">
       <mat-option value="fields.episode_id">Episode</mat-option>
       <mat-option value="fields.title">Title</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-button-toggle-group value="asc" (change)="data.sortBy({order: $event.value})">
+  <mat-button-toggle-group value="asc" (change)="data.sortBy({order: $event.value})" [disabled]="data.loading$ | async">
     <mat-button-toggle value="asc"><mat-icon>arrow_upward</mat-icon></mat-button-toggle>
     <mat-button-toggle value="desc"><mat-icon>arrow_downward</mat-icon></mat-button-toggle>
   </mat-button-toggle-group>
@@ -117,10 +118,10 @@
 	<tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
 	<tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
 </table>
-<mat-paginator *ngIf="data.page$ | async as page" [length]="page.totalElements" [pageSize]="page.size"
+<mat-paginator [disabled]="data.loading$ | async" *ngIf="data.page$ | async as page" [length]="page.totalElements" [pageSize]="page.size"
 	[pageIndex]="page.number" [hidePageSize]="true" (page)="data.fetch($event.pageIndex)">
 </mat-paginator>
-
+</div>
 <router-outlet></router-outlet>
 
 <ng-template #spinner>

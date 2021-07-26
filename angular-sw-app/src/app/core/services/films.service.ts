@@ -128,7 +128,7 @@ export class FilmsService {
                 totalElements: size,
               }
             }),
-            tap(args => console.log(args)),
+            tap(args => console.log('CLICK', args)),
           ),
         ),
       );

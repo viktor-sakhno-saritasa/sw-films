@@ -1,6 +1,6 @@
 import { DataSource } from "@angular/cdk/collections";
 import { BehaviorSubject, Observable, Subject, combineLatest } from "rxjs";
-import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, share, startWith, switchMap, take } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, share, startWith, switchMap, take, tap } from "rxjs/operators";
 import { indicate } from "./operators";
 import { Page, PaginatedEndpoint, Sort } from "./page";
 
@@ -12,7 +12,8 @@ export interface SimpleDataSource<T> extends DataSource<T> {
 
 
 export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
-  private pageNumber: BehaviorSubject<number>;
+  private pageNumber = new Subject<number>();
+  private previousPageNumber = 0;
   private sort: BehaviorSubject<Sort>;
   private query: BehaviorSubject<Q>;
   private loading = new Subject<boolean>();
@@ -30,7 +31,6 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
 
     this.query = new BehaviorSubject<Q>(initialQuery);
     this.sort = new BehaviorSubject<Sort>(initialSort);
-    this.pageNumber = new BehaviorSubject<number>(0);
 
     const param$ = combineLatest([this.query.pipe(
       debounceTime(500),
@@ -38,9 +38,13 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
     ), this.sort]);
 
     this.page$ = param$.pipe(
+      tap(() => {
+        this.currentDirection = '';
+        this.previousPageNumber = 0;
+      }),
       switchMap(([query, sort]) => this.pageNumber.pipe
       (
-        // startWith(0),
+        startWith(0),
         switchMap(page => this.endpoint({page, size: this.pageSize,
           sort, direction: this.currentDirection}, query)
             .pipe(
@@ -62,7 +66,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
     const lastSort = this.sort.getValue();
     const nextSort = {...lastSort, ...sort};
 
-    this.reset();
+    // this.reset();
 
     this.sort.next(nextSort);
   }
@@ -71,13 +75,13 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
     const lastQuery = this.query.getValue();
     const nextQuery = {...lastQuery, ...query};
 
-    this.reset();
+    // this.reset();
 
     this.query.next(nextQuery);
   }
 
   fetch(page: number): void {
-    this.currentDirection = this.defineDirection(this.pageNumber.getValue(), page);
+    this.currentDirection = this.defineDirection(this.previousPageNumber, page);
     this.pageNumber.next(page);
   }
 

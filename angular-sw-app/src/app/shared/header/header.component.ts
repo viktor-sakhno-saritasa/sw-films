@@ -36,5 +36,6 @@ export class HeaderComponent implements OnInit {
   public logout(): void {
     this.userService.logout();
     this.route.navigate(['/']);
+    console.log("LOGOUT")
   }
 }

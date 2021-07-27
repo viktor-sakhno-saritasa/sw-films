@@ -19,12 +19,6 @@ export class ClientComponent {
   /** Data for data source. */
   public readonly data: PaginatedDataSource<Film, FilmQuery>;
 
-  public readonly documents: RequestDocuments = {
-    latestEntryInResponse: null,
-    firstEntryInResponse: null,
-    firstEntryInPrevResponseStack: []
-  };
-
   /** @constructor */
   public constructor(private readonly filmsService: FilmsService) {
     this.data = new PaginatedDataSource<Film, FilmQuery> (

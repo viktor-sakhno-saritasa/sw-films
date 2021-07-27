@@ -125,7 +125,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
    * @param next New page index.
    * @returns Direction of the pagination.
    */
-    private defineDirection(last: number, next: number): 'next' | 'prev' | '' {
-      return next > last ? 'next' : last > next ? 'prev' : '';
+  private defineDirection(last: number, next: number): 'next' | 'prev' | '' {
+    return next > last ? 'next' : last > next ? 'prev' : '';
   }
 }

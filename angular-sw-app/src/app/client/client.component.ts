@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component} from '@angular/core';
 import { Film } from '../core/models/film';
 import { FilmQuery, FilmsService } from '../core/services/films.service';
 import { PaginatedDataSource } from '../core/PaginatedDataSource';
+import { PaginationDocumentsService } from '../core/services/pagination-documents.service';
+import { RequestDocuments } from '../core/page';
 
 /** Main page component. */
 @Component({
@@ -9,6 +11,7 @@ import { PaginatedDataSource } from '../core/PaginatedDataSource';
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [PaginationDocumentsService],
 })
 export class ClientComponent {
 
@@ -18,12 +21,19 @@ export class ClientComponent {
   /** Data for data source. */
   public readonly data: PaginatedDataSource<Film, FilmQuery>;
 
+  public readonly documents: RequestDocuments = {
+    latestEntryInResponse: null,
+    firstEntryInResponse: null,
+    firstEntryInPrevResponseStack: []
+  };
+
   /** @constructor */
   public constructor(private readonly filmsService: FilmsService) {
     this.data = new PaginatedDataSource<Film, FilmQuery> (
-      (request, query) => this.filmsService.page(request, query),
+      (request, query, documents) => this.filmsService.getPage(request, query, documents),
       {property: 'fields.episode_id', order: 'asc'},
       {search: ''},
+      {latestEntryInResponse: null, firstEntryInResponse: null, firstEntryInPrevResponseStack: []},
       3,
     )
   }

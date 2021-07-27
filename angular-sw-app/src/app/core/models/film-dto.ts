@@ -5,7 +5,7 @@ export interface FilmDto {
   readonly fields: {
 
     /** Characters in number format. */
-    readonly characters: number[];
+    readonly characters: readonly number[];
 
     /** Created date. */
     readonly created: string;
@@ -23,7 +23,7 @@ export interface FilmDto {
     readonly opening_crawl: string;
 
     /** Planets in number format. */
-    readonly planets: number[];
+    readonly planets: readonly number[];
 
     /** Producer's name. */
     readonly producer: string;
@@ -32,16 +32,16 @@ export interface FilmDto {
     readonly release_date: string;
 
     /** Species in number format. */
-    readonly species: number[];
+    readonly species: readonly number[];
 
     /** Starships in number format. */
-    readonly starships: number[];
+    readonly starships: readonly number[];
 
     /** Title of the film. */
     readonly title: string;
 
     /** Vehicles in number format. */
-    readonly vehicles: number[];
+    readonly vehicles: readonly number[];
   };
 
   /** Model of collection. */

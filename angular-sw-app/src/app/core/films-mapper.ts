@@ -1,26 +1,12 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
-import firebase from 'firebase/app';
-import { FilmDto } from '../models/film-dto';
-import { Film } from '../models/film';
+import { Film } from './models/film';
+import { FilmDto } from './models/film-dto';
 
 /** Service for map dto in domain model and back. */
 @Injectable({
   providedIn: 'root'
 })
-export class MappersService {
-  /** @constructor */
-  public constructor() { }
-
-  /**
-   * Map data no user modal.
-   * @param userDto Plain Firebase User data.
-   * @returns User model.
-   */
-  public dtoToUserModelMapper(userDto: firebase.User): User {
-    return { name: userDto.displayName || 'Anonymous' };
-  }
-
+export class FilmsMapper {
   /**
    * Transform plain object to domain model.
    * @param dto Plain object from firestore.

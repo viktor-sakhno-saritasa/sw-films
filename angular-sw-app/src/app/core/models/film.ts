@@ -2,7 +2,7 @@
 export class Film {
 
   /** Characters in number format. */
-  public readonly characters: number[];
+  public readonly characters: readonly number[];
 
   /** Director's name. */
   public readonly director: string;
@@ -14,7 +14,7 @@ export class Film {
   public readonly description: string;
 
   /** Planets in number format. */
-  public readonly planets: number[];
+  public readonly planets: readonly number[];
 
   /** Producer's name. */
   public readonly producer: string;
@@ -23,16 +23,16 @@ export class Film {
   public readonly releaseDate: Date;
 
   /** Species in number format. */
-  public readonly species: number[];
+  public readonly species: readonly number[];
 
   /** Starships in number format. */
-  public readonly starships: number[];
+  public readonly starships: readonly number[];
 
   /** Title of the film. */
   public readonly title: string;
 
   /** Vehicles in number format. */
-  public readonly vehicles: number[];
+  public readonly vehicles: readonly number[];
 
   /** Model of collection. */
   public readonly model: string;
@@ -64,7 +64,7 @@ export class Film {
  export interface FilmArgs {
 
   /** Characters in number format. */
-  readonly characters: number[];
+  readonly characters: readonly number[];
 
   /** Director's name. */
   readonly director: string;
@@ -76,7 +76,7 @@ export class Film {
   readonly description: string;
 
   /** Planets in number format. */
-  readonly planets: number[];
+  readonly planets: readonly number[];
 
   /** Producer's name. */
   readonly producer: string;
@@ -85,16 +85,16 @@ export class Film {
   readonly releaseDate: Date;
 
   /** Species in number format. */
-  readonly species: number[];
+  readonly species: readonly number[];
 
   /** Starships in number format. */
-  readonly starships: number[];
+  readonly starships: readonly number[];
 
   /** Title of the film. */
   readonly title: string;
 
   /** Vehicles in number format. */
-  readonly vehicles: number[];
+  readonly vehicles: readonly number[];
 
   /** Model of collection. */
   readonly model: string;

@@ -12,25 +12,17 @@ import { Observable } from 'rxjs';
   styleUrls: ['./details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent {
 
   /** Current film. */
-  public film$!: Observable<Film>;
+  public readonly film$: Observable<Film>;
 
   /** @constructor */
   public constructor(
     private readonly route: ActivatedRoute,
     private readonly filmService: FilmsService,
     private readonly location: Location,
-  ) {}
-
-  /** @inheritdoc */
-  public ngOnInit(): void {
-    this.getFilm();
-  }
-
-  /** Update observable film from param id. */
-  public getFilm(): void {
+  ) {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.film$ = this.filmService.getFilm(id);
   }

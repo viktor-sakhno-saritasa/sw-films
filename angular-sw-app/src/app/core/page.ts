@@ -1,3 +1,4 @@
+import { QueryDocumentSnapshot } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 
 /** Sort interface. */
@@ -8,6 +9,18 @@ export interface Sort {
 
   /** Ascending order. */
   readonly order: 'asc' | 'desc';
+}
+
+/** Interface for state firestore documents for use pagination. */
+export interface RequestDocuments {
+  /** Latest  document in response for pagination. */
+  latestEntryInResponse: QueryDocumentSnapshot<unknown> | null;
+
+  /** First document in response for pagination. */
+  firstEntryInResponse: QueryDocumentSnapshot<unknown> | null;
+
+  /** First document in previous response push in the stack for previous pagination. */
+  firstEntryInPrevResponseStack: QueryDocumentSnapshot<unknown>[];
 }
 
 /** Interface for page request data. */
@@ -45,4 +58,4 @@ export interface Page<T> {
   readonly direction: 'next' | 'prev' | '';
 }
 
-export type PaginatedEndpoint<T, Q> = (req: PageRequest, query: Q) => Observable<Page<T>>;
+export type PaginatedEndpoint<T, Q> = (req: PageRequest, query: Q, documents: RequestDocuments) => Observable<Page<T>>;

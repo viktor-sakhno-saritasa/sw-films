@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { User } from '../models/user';
-import { MappersService } from './mappers.service';
+import { UserMapper } from '../user-mapper';
 
 
 /** Manage user's data. */
@@ -14,7 +14,7 @@ import { MappersService } from './mappers.service';
 export class UserService {
 
   /** @constructor */
-  public constructor(private readonly auth: AngularFireAuth, private readonly mapper: MappersService) {}
+  public constructor(private readonly auth: AngularFireAuth, private readonly mapper: UserMapper) {}
 
   /**
    * Create user observable.

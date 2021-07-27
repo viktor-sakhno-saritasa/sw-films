@@ -2,7 +2,7 @@ import { DataSource } from "@angular/cdk/collections";
 import { BehaviorSubject, Observable, Subject, combineLatest } from "rxjs";
 import { map, share, startWith, switchMap, take, tap } from "rxjs/operators";
 import { indicate } from "./operators";
-import { Page, PaginatedEndpoint, Sort } from "./page";
+import { Page, PaginatedEndpoint, RequestDocuments, Sort } from "./page";
 
 /** Simple interface for Material DataSource. */
 export interface SimpleDataSource<T> extends DataSource<T> {
@@ -54,6 +54,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
     private endpoint: PaginatedEndpoint<T, Q>,
     initialSort: Sort,
     initialQuery: Q,
+    documents: RequestDocuments,
     public pageSize = 2) {
 
     this.query = new BehaviorSubject<Q>(initialQuery);
@@ -68,7 +69,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
       }),
       switchMap(([query, sort]) => this.pageNumber.pipe(
         startWith(0),
-        switchMap(page => this.endpoint({page, size: this.pageSize, sort, direction: this.currentDirection}, query)
+        switchMap(page => this.endpoint({page, size: this.pageSize, sort, direction: this.currentDirection}, query, documents)
           .pipe(
             take(1),
             indicate(this.loading),

@@ -5,12 +5,11 @@ import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/oper
 import firebase from 'firebase/app';
 import { Film } from '../models/film';
 import { FilmDto } from '../models/film-dto';
-import { Page, PageRequest } from '../page';
-import { MappersService } from './mappers.service';
+import { Page, PageRequest, RequestDocuments } from '../page';
+import { FilmsMapper } from '../films-mapper';
 
 /** Interface for query films. */
 export interface FilmQuery {
-
   /** Search term. */
   search: string;
 }
@@ -26,30 +25,21 @@ const NAME_FILTER = 'fields.title';
   providedIn: 'root',
 })
 export class FilmsService {
-
-  /** Latest  document in response for pagination. */
-  private latestEntryInResponse: QueryDocumentSnapshot<unknown> | null = null;
-
-  /** First document in response for pagination. */
-  private firstEntryInResponse: QueryDocumentSnapshot<unknown> | null = null;
-
-  /** First document in previous response push in the stack for previous pagination. */
-  private firstEntryInPrevResponseStack: QueryDocumentSnapshot<unknown>[] = [];
-
   /** @constructor */
-  public constructor(private readonly firestore: AngularFirestore, private readonly mapper: MappersService) {}
+  public constructor(private readonly firestore: AngularFirestore, private readonly mapper: FilmsMapper) {}
 
   /**
    * Main method for films request.
    * @param request Data for query information.
    * @param query All search query properties.
+   * @param documents Documents state for pagination.
    * @returns Observable with <Page<Film>> objects.
    */
-  public page(request: PageRequest, query: FilmQuery): Observable<Page<Film>> {
+  public getPage(request: PageRequest, query: FilmQuery, documents: RequestDocuments): Observable<Page<Film>> {
 
     /** Generate query for get collection. */
     const queryFn = (ref: CollectionReference): Query => {
-      return this.createQuery(ref, request, query);
+      return this.createQuery(ref, request, query, documents);
     }
 
     /** Get observable. */
@@ -57,18 +47,14 @@ export class FilmsService {
       .snapshotChanges()
       .pipe(
         /** Get raw docs for save in entries variables for cursor paginate. */
-        map(actions => actions.map(action => {
-          return action.payload.doc;
-        })),
+        map(actions => actions.map(action => action.payload.doc)),
         /** Save docs. */
         tap(docs => {
-          this.firstEntryInResponse = this.getOneFromList(docs, true);
-          this.latestEntryInResponse = this.getOneFromList(docs, false);
+          documents.firstEntryInResponse = this.getOneFromList(docs, true);
+          documents.latestEntryInResponse = this.getOneFromList(docs, false);
         }),
         /** Map documents to domain model. */
-        map(docs => docs.map(doc => {
-          return this.mapper.dtoToFilmModelMapper(doc.data() as FilmDto);
-        })),
+        map(docs => docs.map(doc => this.mapper.dtoToFilmModelMapper(doc.data() as FilmDto))),
         /** Complete previous observable and get new for know size of docs. */
         switchMap(films => this.firestore.collection(COLLECTION_KEY, ref =>
           /** If search field is not empty apply filter option. */
@@ -114,7 +100,7 @@ export class FilmsService {
    * @param query All search fields.
    * @returns Query for get the collection.
    */
-  private createQuery(ref: CollectionReference, request: PageRequest, query: FilmQuery): Query {
+  private createQuery(ref: CollectionReference, request: PageRequest, query: FilmQuery, documents: RequestDocuments): Query {
     let newQuery;
 
     /** Firestore allow order by only same field as a search property. */
@@ -130,28 +116,28 @@ export class FilmsService {
 
     if (request.direction === 'next') {
       /** Push document into stack for access to previous page. */
-      if (this.firstEntryInResponse) {
-        this.firstEntryInPrevResponseStack.push(this.firstEntryInResponse);
+      if (documents.firstEntryInResponse) {
+        documents.firstEntryInPrevResponseStack.push(documents.firstEntryInResponse);
       }
-      return newQuery.startAfter(this.latestEntryInResponse);
+      return newQuery.startAfter(documents.latestEntryInResponse);
 
     } else if (request.direction === 'prev') {
       return newQuery
-        .startAt(this.firstEntryInPrevResponseStack.pop())
-        .endBefore(this.firstEntryInResponse);
+        .startAt(documents.firstEntryInPrevResponseStack.pop())
+        .endBefore(documents.firstEntryInResponse);
     }
 
     /** If function run to this place, it's mean pagination need to reset. */
-    this.resetPagination();
+    this.resetPagination(documents);
 
     return newQuery;
   }
 
   /** Reset documents state because of pagination's reset. */
-  private resetPagination(): void {
-    this.firstEntryInPrevResponseStack = [];
-    this.firstEntryInResponse = null;
-    this.latestEntryInResponse = null;
+  private resetPagination(documents: RequestDocuments): void {
+    documents.firstEntryInPrevResponseStack = [];
+    documents.firstEntryInResponse = null;
+    documents.latestEntryInResponse = null;
   }
 
   /**

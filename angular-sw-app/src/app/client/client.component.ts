@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component} from '@angular/core';
 import { Film } from '../core/models/film';
 import { FilmQuery, FilmsService } from '../core/services/films.service';
 import { PaginatedDataSource } from '../core/PaginatedDataSource';
-import { PaginationDocumentsService } from '../core/services/pagination-documents.service';
 import { RequestDocuments } from '../core/page';
 
 /** Main page component. */
@@ -11,7 +10,6 @@ import { RequestDocuments } from '../core/page';
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PaginationDocumentsService],
 })
 export class ClientComponent {
 

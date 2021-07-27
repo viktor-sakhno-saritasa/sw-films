@@ -51,11 +51,11 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
 
   /** @constructor */
   public constructor(
-    private endpoint: PaginatedEndpoint<T, Q>,
+    private readonly endpoint: PaginatedEndpoint<T, Q>,
     initialSort: Sort,
     initialQuery: Q,
-    documents: RequestDocuments,
-    public pageSize = 2) {
+    private readonly documents: RequestDocuments,
+    public readonly pageSize = 2) {
 
     this.query = new BehaviorSubject<Q>(initialQuery);
     this.sort = new BehaviorSubject<Sort>(initialSort);
@@ -69,7 +69,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
       }),
       switchMap(([query, sort]) => this.pageNumber.pipe(
         startWith(0),
-        switchMap(page => this.endpoint({page, size: this.pageSize, sort, direction: this.currentDirection}, query, documents)
+        switchMap(page => this.endpoint({page, size: this.pageSize, sort, direction: this.currentDirection}, query, this.documents)
           .pipe(
             take(1),
             indicate(this.loading),

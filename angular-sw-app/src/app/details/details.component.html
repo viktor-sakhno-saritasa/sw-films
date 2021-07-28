@@ -1,0 +1,40 @@
+<app-header></app-header>
+
+<div class="container" *ngIf="film$ | async as film; else spinner">
+  <div class="card-wrapper">
+    <mat-card class="card">
+      <mat-card-header class="card__header">
+        <div mat-card-avatar class="card__id">{{ film.episodeId }}</div>
+        <div class="card__info">
+          <mat-card-title>{{ film.title }}</mat-card-title>
+          <mat-card-subtitle class="card__subtitle">
+            <span><b>Director</b> {{ film.director }}</span>
+            <span><b>Release Date</b> {{ film.releaseDate | date }}</span>
+          </mat-card-subtitle>
+        </div>
+      </mat-card-header>
+      <img mat-card-image src="/assets/yoda.jpg" alt="Photo of Yoda" />
+      <mat-card-content>
+        <p>{{ film.description }}</p>
+      </mat-card-content>
+      <mat-card-actions class="card__actions">
+        <button
+          type="button"
+          class="card__button"
+          mat-raised-button
+          color="primary"
+          (click)="onBackClick()"
+        >
+          <mat-icon class="card__icon">arrow_back</mat-icon>
+          <span>Go back</span>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #spinner>
+  <div class="card__spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

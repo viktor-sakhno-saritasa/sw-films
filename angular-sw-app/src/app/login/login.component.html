@@ -1,0 +1,32 @@
+<div class="container">
+  <mat-card class="card">
+    <mat-card-header>
+      <div mat-card-avatar class="card__image"></div>
+      <mat-card-title>Sign in</mat-card-title>
+      <mat-card-subtitle>Hello, anonymous</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="/assets/corgis.gif" alt="Photo of a Corgis" />
+    <mat-card-actions class="card__actions">
+      <button
+        type="button"
+        class="card__button"
+        mat-raised-button
+        color="warn"
+        (click)="onLoginClick()"
+      >
+        <mat-icon class="card__icon">login</mat-icon>
+        <span>Sign in with Google</span>
+      </button>
+      <button
+        type="button"
+        class="card__button"
+        mat-raised-button
+        color="primary"
+        (click)="onBackClick()"
+      >
+        <mat-icon class="card__icon">arrow_back</mat-icon>
+        <span>Go back</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

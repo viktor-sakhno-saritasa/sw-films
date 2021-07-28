@@ -1,0 +1,33 @@
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  max-width: 350px;
+}
+
+.card__image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.card__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card__button {
+  width: 100%;
+}
+
+.card__button:last-child {
+  margin-top: 10px;
+}
+
+.card__icon {
+  margin-right: 5px;
+}

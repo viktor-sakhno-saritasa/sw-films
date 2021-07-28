@@ -1,0 +1,45 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 56px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.header__title {
+  display: flex;
+  align-items: center;
+}
+
+.header__main-icon {
+  margin-right: 5px;
+}
+
+.header__spacer {
+  flex: 1 1 auto;
+}
+
+.header__navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.header__profile {
+  display: flex;
+  align-items: center;
+}
+
+.header__user-icon {
+  margin-right: 5px;
+}
+
+.header__auth-icon {
+  margin-left: 5px;
+}
+
+.header__button {
+  margin-left: 10px;
+}

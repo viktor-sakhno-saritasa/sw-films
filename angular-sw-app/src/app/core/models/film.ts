@@ -1,3 +1,5 @@
+import { RelatedWithName, RelatedWithPK } from "./film-dto";
+
 /** Class for work with films. */
 export class Film {
 
@@ -40,6 +42,7 @@ export class Film {
   /** Id of the film. */
   public readonly pk: number;
 
+  /** @constructor */
   public constructor(film: FilmArgs) {
     this.pk = film.pk;
     this.model = film.model;
@@ -54,6 +57,64 @@ export class Film {
     this.starships = film.starships;
     this.title = film.title;
     this.vehicles = film.vehicles;
+  }
+
+  /** Method for collect data in get one item. */
+  protected getProperties(): FilmArgs {
+    return {
+      pk: this.pk,
+      model: this.model,
+      characters: this.characters,
+      director: this.director,
+      episodeId: this.episodeId,
+      description: this.description,
+      planets: this.planets,
+      producer: this.producer,
+      releaseDate: this.releaseDate,
+      species: this.species,
+      starships: this.starships,
+      title: this.title,
+      vehicles: this.vehicles,
+    }
+  }
+}
+
+/** Detailed version of film for details page. */
+export class DetailedFilm {
+
+  /** Film preview version. Composition. */
+  public readonly filmPreview: Film;
+
+  /** List of planets names. */
+  public readonly planetsList: string[];
+
+  /** List of characters names. */
+  public readonly charactersList: string[];
+
+  /** List of species names. */
+  public readonly speciesList: string[];
+
+  /** List of starships primary keys. */
+  public readonly starshipsList: number[];
+
+  /** List of vehicles primary keys. */
+  public readonly vehiclesList: number[];
+
+  /** @constructor */
+  public constructor(
+    filmPreview: Film,
+    planetsList: string[],
+    charactersList: string[],
+    speciesList: string[],
+    starshipsList: number[],
+    vehiclesList: number[],
+  ) {
+    this.filmPreview = filmPreview;
+    this.planetsList = planetsList;
+    this.charactersList = charactersList;
+    this.speciesList = speciesList;
+    this.starshipsList = starshipsList;
+    this.vehiclesList = vehiclesList;
   }
 }
 

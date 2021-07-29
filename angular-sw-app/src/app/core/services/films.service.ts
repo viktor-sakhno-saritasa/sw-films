@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference, Query, QueryDocumentSnapshot } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
+import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/app';
-import { Film } from '../models/film';
-import { FilmDto } from '../models/film-dto';
+import { DetailedFilm, Film } from '../models/film';
+import { FilmDto, RelatedWithName, RelatedWithPK } from '../models/film-dto';
 import { Page, PageRequest, RequestDocuments } from '../page';
 import { FilmsMapper } from '../films-mapper';
 
@@ -91,6 +91,74 @@ export class FilmsService {
         map(film => film ? this.mapper.dtoToFilmModelMapper(film) : null),
         catchError(this.handleError<Film>('getFilm')),
       );
+  }
+
+  /**
+   * Fetch to firestore for get film by episode id with related info.
+   * @param id Episode id of film.
+   * @returns Observable with detailed film.
+   */
+  public getFilmWithRelated(id: number): Observable<DetailedFilm> {
+
+    return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref.where('fields.episode_id', '==', id))
+      .valueChanges()
+      .pipe(
+        map(films => this.getOneFromList(films, true)),
+        map(film => this.mapper.dtoToFilmModelMapper(film)),
+        switchMap(film => {
+          return combineLatest(
+            of(film),
+            this.getRelatedInfoWithName(film.planets, 'planets'),
+            this.getRelatedInfoWithName(film.characters, 'people'),
+            this.getRelatedInfoWithName(film.species, 'species'),
+            this.getRelatedInfoWithPK(film.starships, 'starships'),
+            this.getRelatedInfoWithPK(film.vehicles, 'vehicles'),
+          )
+        }),
+        map(([film, planets, characters, species, starships, vehicles]) => {
+          return new DetailedFilm(film, planets, characters, species, starships, vehicles);
+        }),
+        catchError(this.handleError<DetailedFilm>('getFilm')),
+      );
+  }
+
+  /**
+   * Get related data with field name.
+   * @param ids Ids of collection entities.
+   * @param collection Collection's name.
+   * @returns Observable with list with names.
+   */
+  public getRelatedInfoWithName(ids: readonly number[], collection: string): Observable<string[]> {
+    const observables = (ids.map(id => {
+      return this.firestore.collection<RelatedWithName>(collection, ref => ref.where('pk', '==', id))
+        .valueChanges()
+        .pipe(
+          map(items => this.getOneFromList(items, true)),
+          map(item => item.fields.name),
+        )
+    }))
+
+    return combineLatest(observables);
+  }
+
+  /**
+   * Get related data without name field.
+   * @param ids Ids of collection entities.
+   * @param collection Collection's name.
+   * @returns Observable with list with primary keys.
+   */
+  public getRelatedInfoWithPK(ids: readonly number[], collection: string): Observable<number[]> {
+
+    const observables = (ids.map(id => {
+      return this.firestore.collection<RelatedWithPK>(collection, ref => ref.where('pk', '==', id))
+        .valueChanges()
+        .pipe(
+          map(items => this.getOneFromList(items, true)),
+          map(item => item.pk),
+        )
+    }))
+
+    return combineLatest(observables);
   }
 
   /**

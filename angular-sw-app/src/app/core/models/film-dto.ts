@@ -50,3 +50,15 @@ export interface FilmDto {
   /** Id of the film. */
   readonly pk: number;
 }
+
+/** Interface for related data with name field. */
+export interface RelatedWithName {
+  readonly fields: {
+    readonly name: string;
+  }
+}
+
+/** Interface for related data without string fields. */
+export interface RelatedWithPK {
+  readonly pk: number;
+}

@@ -4,9 +4,10 @@ import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/app';
 import { DetailedFilm, Film } from '../models/film';
-import { FilmDto, RelatedWithName, RelatedWithPK } from '../models/film-dto';
+import { FilmDto, RelatedStarhips, RelatedVehicles, RelatedWithName } from '../models/film-dto';
 import { Page, PageRequest, RequestDocuments } from '../page';
 import { FilmsMapper } from '../films-mapper';
+import { FilmFormData } from '../models/film-form-data';
 
 /** Interface for query films. */
 export interface FilmQuery {
@@ -93,6 +94,17 @@ export class FilmsService {
       );
   }
 
+  public addFilm(filmFormData: FilmFormData) {
+    /**
+     * @TODO
+     * [] Realize add film to firestore.
+     *   [] Request episode for new film
+     *   [] Mapper from form data to dto.
+     *   [] Save in collection and return Observable.
+     *   [] In component navigate to main page after complete.
+     */
+  }
+
   /**
    * Fetch to firestore for get film by episode id with related info.
    * @param id Episode id of film.
@@ -108,11 +120,11 @@ export class FilmsService {
         switchMap(film => {
           return combineLatest(
             of(film),
-            this.getRelatedInfoWithName(film.planets, 'planets'),
-            this.getRelatedInfoWithName(film.characters, 'people'),
-            this.getRelatedInfoWithName(film.species, 'species'),
-            this.getRelatedInfoWithPK(film.starships, 'starships'),
-            this.getRelatedInfoWithPK(film.vehicles, 'vehicles'),
+            this.getRelatedInfoWithName(film.planets, 'planets', false),
+            this.getRelatedInfoWithName(film.characters, 'people', false),
+            this.getRelatedInfoWithName(film.species, 'species', false),
+            this.getRelatedStarships(film.starships, 'starships', false),
+            this.getRelatedVehicle(film.vehicles, 'vehicles', false),
           )
         }),
         map(([film, planets, characters, species, starships, vehicles]) => {
@@ -126,15 +138,25 @@ export class FilmsService {
    * Get related data with field name.
    * @param ids Ids of collection entities.
    * @param collection Collection's name.
+   * @param all If true, it is mean get all entities.
    * @returns Observable with list with names.
    */
-  public getRelatedInfoWithName(ids: readonly number[], collection: string): Observable<string[]> {
+  public getRelatedInfoWithName(ids: readonly number[], collection: string, all: boolean): Observable<RelatedWithName[]> {
+
+    if (all) {
+      return this.firestore.collection<RelatedWithName>(collection)
+      .valueChanges()
+      .pipe(
+        map(items => items),
+      )
+    }
+
     const observables = (ids.map(id => {
       return this.firestore.collection<RelatedWithName>(collection, ref => ref.where('pk', '==', id))
         .valueChanges()
         .pipe(
           map(items => this.getOneFromList(items, true)),
-          map(item => item.fields.name),
+          map(item => item),
         )
     }))
 
@@ -145,21 +167,59 @@ export class FilmsService {
    * Get related data without name field.
    * @param ids Ids of collection entities.
    * @param collection Collection's name.
+   * @param all If true, it is mean get all entities.
    * @returns Observable with list with primary keys.
    */
-  public getRelatedInfoWithPK(ids: readonly number[], collection: string): Observable<number[]> {
+  public getRelatedStarships(ids: readonly number[], collection: string, all: boolean): Observable<RelatedStarhips[]> {
+
+    if (all) {
+      return this.firestore.collection<RelatedStarhips>(collection)
+      .valueChanges()
+      .pipe(
+        map(items => items),
+      )
+    }
 
     const observables = (ids.map(id => {
-      return this.firestore.collection<RelatedWithPK>(collection, ref => ref.where('pk', '==', id))
+      return this.firestore.collection<RelatedStarhips>(collection, ref => ref.where('pk', '==', id))
         .valueChanges()
         .pipe(
           map(items => this.getOneFromList(items, true)),
-          map(item => item.pk),
+          map(item => item),
         )
     }))
 
     return combineLatest(observables);
   }
+
+    /**
+   * Get related data without name field.
+   * @param ids Ids of collection entities.
+   * @param collection Collection's name.
+   * @param all If true, it is mean get all entities.
+   * @returns Observable with list with primary keys.
+   */
+     public getRelatedVehicle(ids: readonly number[], collection: string, all: boolean): Observable<RelatedVehicles[]> {
+
+      if (all) {
+        return this.firestore.collection<RelatedVehicles>(collection)
+        .valueChanges()
+        .pipe(
+          map(items => items),
+        )
+      }
+
+      const observables = (ids.map(id => {
+        return this.firestore.collection<RelatedVehicles>(collection, ref => ref.where('pk', '==', id))
+          .valueChanges()
+          .pipe(
+            map(items => this.getOneFromList(items, true)),
+            map(item => item),
+          )
+      }))
+
+      return combineLatest(observables);
+    }
 
   /**
    * Create query for firestore collection.

@@ -1,0 +1,69 @@
+<app-header></app-header>
+
+<div class="container">
+  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <div class="container-form">
+      <mat-form-field>
+          <input matInput type="text" placeholder="Title" formControlName="title">
+          <mat-hint *ngIf="addForm.controls.title.errors">Title is required</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+          <input matInput type="text" placeholder="Director" formControlName="director">
+          <mat-hint *ngIf="addForm.controls.director.errors">Director is required</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Producer" formControlName="producer">
+        <mat-hint *ngIf="addForm.controls.producer.errors">Producer is required</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="date" formControlName="releaseDate">
+        <mat-hint *ngIf="addForm.controls.releaseDate.errors">Date is required</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Characters</mat-label>
+        <mat-select multiple formControlName="characters">
+          <mat-option *ngFor="let item of characters$ | async" [value]="item.pk">
+            {{ item.fields.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Planets</mat-label>
+        <mat-select multiple formControlName="planets">
+          <mat-option *ngFor="let item of planets$ | async" [value]="item.pk">
+            {{ item.fields.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Species</mat-label>
+        <mat-select multiple formControlName="species">
+          <mat-option *ngFor="let item of species$ | async" [value]="item.pk">
+            {{ item.fields.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Starships</mat-label>
+        <mat-select multiple formControlName="starships">
+          <mat-option *ngFor="let item of starships$ | async" [value]="item.pk">
+            {{ item.fields.starship_class }} | {{ item.fields.MGLT }} | {{ item.fields.hyperdrive_rating }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Vehicles</mat-label>
+        <mat-select multiple formControlName="vehicles">
+          <mat-option *ngFor="let char of vehicles$ | async" [value]="char.pk">
+            {{ char.fields.vehicle_class }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Write a description...</mat-label>
+        <textarea formControlName="description" matInput placeholder="Ex. It makes me feel..."></textarea>
+      </mat-form-field>
+      <button mat-flat-button color="primary" [disabled]="!addForm.valid" type="submit">Add</button>
+    </div>
+</form>
+</div>

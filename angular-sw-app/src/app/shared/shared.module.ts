@@ -15,6 +15,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from './header/header.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 /** Module for shared components and directives. */
 @NgModule({
@@ -35,6 +36,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatSnackBarModule,
     MatSelectModule,
     MatButtonToggleModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     MatToolbarModule,
@@ -51,6 +54,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     HeaderComponent,
     MatSelectModule,
     MatButtonToggleModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class SharedModule { }

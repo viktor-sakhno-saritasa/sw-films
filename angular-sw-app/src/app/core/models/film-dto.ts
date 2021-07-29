@@ -56,9 +56,23 @@ export interface RelatedWithName {
   readonly fields: {
     readonly name: string;
   }
+  readonly pk: number;
 }
 
-/** Interface for related data without string fields. */
-export interface RelatedWithPK {
+/** Interface for related starships data. */
+export interface RelatedStarhips {
   readonly pk: number;
+  readonly fields: {
+    readonly starship_class: string;
+    readonly MGLT: string;
+    readonly hyperdrive_rating: string;
+  }
+}
+
+/** Interface for related vehicles data. */
+export interface RelatedVehicles {
+  readonly pk: number;
+  readonly fields: {
+    readonly vehicle_class: string;
+  }
 }

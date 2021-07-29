@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { DetailedFilm, Film } from '../core/models/film';
+import { DetailedFilm } from '../core/models/film';
 import { FilmsService } from '../core/services/films.service';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { RelatedWithName } from '../core/models/film-dto';
 
 /** Component for details page film. */
 @Component({

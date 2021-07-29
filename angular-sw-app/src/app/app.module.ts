@@ -16,6 +16,7 @@ import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './login/login.module';
 import { ClientModule } from './client/client.module';
 import { DetailsModule } from './details/details.module';
+import { AddFilmModule } from './add-film/add-film.module';
 
 /** Root module for an application. */
 @NgModule({
@@ -31,6 +32,7 @@ import { DetailsModule } from './details/details.module';
     BrowserAnimationsModule,
     ClientModule,
     DetailsModule,
+    AddFilmModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

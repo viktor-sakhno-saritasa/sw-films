@@ -1,4 +1,4 @@
-import { RelatedWithName, RelatedWithPK } from "./film-dto";
+import { RelatedStarhips, RelatedVehicles, RelatedWithName } from "./film-dto";
 
 /** Class for work with films. */
 export class Film {
@@ -86,28 +86,28 @@ export class DetailedFilm {
   public readonly filmPreview: Film;
 
   /** List of planets names. */
-  public readonly planetsList: string[];
+  public readonly planetsList: RelatedWithName[];
 
   /** List of characters names. */
-  public readonly charactersList: string[];
+  public readonly charactersList: RelatedWithName[];
 
   /** List of species names. */
-  public readonly speciesList: string[];
+  public readonly speciesList: RelatedWithName[];
 
   /** List of starships primary keys. */
-  public readonly starshipsList: number[];
+  public readonly starshipsList: RelatedStarhips[];
 
   /** List of vehicles primary keys. */
-  public readonly vehiclesList: number[];
+  public readonly vehiclesList: RelatedVehicles[];
 
   /** @constructor */
   public constructor(
     filmPreview: Film,
-    planetsList: string[],
-    charactersList: string[],
-    speciesList: string[],
-    starshipsList: number[],
-    vehiclesList: number[],
+    planetsList: RelatedWithName[],
+    charactersList: RelatedWithName[],
+    speciesList: RelatedWithName[],
+    starshipsList: RelatedStarhips[],
+    vehiclesList: RelatedVehicles[],
   ) {
     this.filmPreview = filmPreview;
     this.planetsList = planetsList;

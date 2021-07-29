@@ -5,6 +5,7 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { ClientComponent } from './client/client.component';
 import { LoginComponent } from './login/login.component';
 import { DetailsComponent } from './details/details.component';
+import { FilmsGuardService } from './core/services/films-guard.service';
 
 /** Custom guard from Auth Guard pipes for logged. */
 const redirectLoggedInToMain = (): AuthPipe => redirectLoggedInTo(['']);
@@ -19,7 +20,7 @@ const routes: Routes = [
   {
     path: 'details/:id',
     component: DetailsComponent,
-    canActivate: [AuthGuardService],
+    canActivate: [AuthGuardService, FilmsGuardService],
   },
   { path: '**', redirectTo: '' },
 ];

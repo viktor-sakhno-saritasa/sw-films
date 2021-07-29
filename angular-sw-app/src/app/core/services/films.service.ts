@@ -83,12 +83,12 @@ export class FilmsService {
    * @param id Episode id of film.
    * @returns Stream of film.
    */
-  public getFilm(id: number): Observable<Film> {
+  public getFilm(id: number): Observable<Film | null> {
     return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref.where('fields.episode_id', '==', id))
       .valueChanges()
       .pipe(
         map(films => this.getOneFromList(films, true)),
-        map(film => this.mapper.dtoToFilmModelMapper(film)),
+        map(film => film ? this.mapper.dtoToFilmModelMapper(film) : null),
         catchError(this.handleError<Film>('getFilm')),
       );
   }
@@ -169,7 +169,7 @@ export class FilmsService {
    * @param getFirst Take first or last element. False - last.
    * @returns Item from the list.
    */
-  private getOneFromList<T>(list: T[] | T, getFirst: boolean): T {
+  private getOneFromList<T>(list: T[] | T | T, getFirst: boolean): T {
     if (list && Array.isArray(list)) {
       return getFirst ? list[0] : list[list.length - 1];
     }

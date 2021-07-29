@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { Film } from '../core/models/film';
 import { FilmsService } from '../core/services/films.service';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 /** Component for details page film. */
 @Component({
@@ -15,7 +16,7 @@ import { Observable } from 'rxjs';
 export class DetailsComponent {
 
   /** Current film. */
-  public readonly film$: Observable<Film>;
+  public readonly film$: Observable<Film | null>;
 
   /** @constructor */
   public constructor(
@@ -23,8 +24,12 @@ export class DetailsComponent {
     private readonly filmService: FilmsService,
     private readonly location: Location,
   ) {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.film$ = this.filmService.getFilm(id);
+    this.film$ = this.route.paramMap.pipe(
+      switchMap(params => {
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        return this.filmService.getFilm(id);
+      })
+    )
   }
 
   /** Event handler for go back button. */

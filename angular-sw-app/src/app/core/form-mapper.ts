@@ -13,9 +13,9 @@ export class FormMapper {
     const dto: FilmDto = {
       fields: {
         characters: formData.characters,
-        created: Date.now().toLocaleString(),
+        created: new Date().toISOString(),
         director: formData.director,
-        edited: Date.now().toLocaleString(),
+        edited: new Date().toISOString(),
         episode_id: episode,
         opening_crawl: formData.description,
         planets: formData.planets,

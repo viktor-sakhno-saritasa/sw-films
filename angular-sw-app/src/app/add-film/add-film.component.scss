@@ -6,8 +6,6 @@
   padding: 15px 20px;
 }
 
-
-
 .container-form {
   display: flex;
   flex-direction: column;
@@ -19,4 +17,11 @@
 .container-form > * {
   width: 40%;
   margin-bottom: 10px;
+}
+
+.add-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }

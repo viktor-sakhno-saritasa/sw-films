@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Remove film</h1>
+<div mat-dialog-content>
+  <p>Do you really want to remove the film?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Remove</button>
+</div>

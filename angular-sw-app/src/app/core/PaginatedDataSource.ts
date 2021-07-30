@@ -52,6 +52,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
   /** @constructor */
   public constructor(
     private readonly endpoint: PaginatedEndpoint<T, Q>,
+    private readonly deletePoint: (id: number) => Observable<void>,
     initialSort: Sort,
     initialQuery: Q,
     private readonly documents: RequestDocuments,

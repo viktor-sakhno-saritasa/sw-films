@@ -21,13 +21,13 @@ export class DetailsComponent {
   /** @constructor */
   public constructor(
     private readonly route: ActivatedRoute,
-    private readonly filmService: FilmsService,
+    private readonly filmsService: FilmsService,
     private readonly location: Location,
   ) {
     this.film$ = this.route.paramMap.pipe(
       switchMap(params => {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        return this.filmService.getFilmWithRelated(id);
+        return this.filmsService.getFilmWithRelated(id);
       })
     )
   }

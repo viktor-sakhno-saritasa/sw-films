@@ -16,10 +16,13 @@ import { HeaderComponent } from './header/header.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { DeleteDialogOverviewComponent } from './delete-dialog-overview/delete-dialog-overview.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 /** Module for shared components and directives. */
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent, DeleteDialogComponent, DeleteDialogOverviewComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -38,6 +41,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatButtonToggleModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDialogModule,
   ],
   exports: [
     MatToolbarModule,
@@ -52,10 +56,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatPaginatorModule,
     MatSnackBarModule,
     HeaderComponent,
+    DeleteDialogComponent,
+    DeleteDialogOverviewComponent,
     MatSelectModule,
     MatButtonToggleModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDialogModule,
   ],
 })
 export class SharedModule { }

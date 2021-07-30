@@ -8,6 +8,7 @@ import { FilmDto, RelatedStarhips, RelatedVehicles, RelatedWithName } from '../m
 import { Page, PageRequest, RequestDocuments } from '../page';
 import { FilmsMapper } from '../films-mapper';
 import { FilmFormData } from '../models/film-form-data';
+import {FormMapper} from "../form-mapper";
 
 /** Interface for query films. */
 export interface FilmQuery {
@@ -27,7 +28,11 @@ const NAME_FILTER = 'fields.title';
 })
 export class FilmsService {
   /** @constructor */
-  public constructor(private readonly firestore: AngularFirestore, private readonly mapper: FilmsMapper) {}
+  public constructor(
+    private readonly firestore: AngularFirestore,
+    private readonly mapper: FilmsMapper,
+    private readonly formMapper: FormMapper,
+  ) {}
 
   /**
    * Main method for films request.
@@ -94,12 +99,37 @@ export class FilmsService {
       );
   }
 
+  public delete(id: number): Observable<void> {
+    return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
+      .where('fields.episode_id', '==', id))
+      .get()
+      .pipe(
+        map(data => data.docs.forEach(doc => {
+          return of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(doc.id).delete())
+        })),
+      );
+  }
+
   public addFilm(filmFormData: FilmFormData) {
+    return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
+      .orderBy('fields.episode_id', 'desc')
+      .limit(1))
+      .get()
+      .pipe(
+        map(data => this.getOneFromList(data.docs, true)),
+        map(film => film.data()),
+        map(film => film.fields.episode_id + 1),
+        map(episode => this.formMapper.addFormDataToFilmDto(filmFormData, episode)),
+        switchMap((filmDto) => {
+          return this.firestore.collection<FilmDto>(COLLECTION_KEY).add(filmDto);
+        }),
+      );
+
     /**
      * @TODO
      * [] Realize add film to firestore.
-     *   [] Request episode for new film
-     *   [] Mapper from form data to dto.
+     *   [x] Request episode for new film
+     *   [x] Mapper from form data to dto.
      *   [] Save in collection and return Observable.
      *   [] In component navigate to main page after complete.
      */

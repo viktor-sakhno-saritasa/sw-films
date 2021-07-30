@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mapTo, take } from 'rxjs/operators';
 import { RelatedStarhips, RelatedVehicles, RelatedWithName } from '../core/models/film-dto';
@@ -8,7 +9,8 @@ import { FilmsService } from '../core/services/films.service';
 @Component({
   selector: 'app-add-film',
   templateUrl: './add-film.component.html',
-  styleUrls: ['./add-film.component.scss']
+  styleUrls: ['./add-film.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddFilmComponent {
 
@@ -26,9 +28,10 @@ export class AddFilmComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly filmsService: FilmsService,
+    private readonly route: Router,
   ) {
 
-    this.loading = new BehaviorSubject<boolean>(true);
+    this.loading = new BehaviorSubject<boolean>(false);
     this.loading$ = this.loading.asObservable();
 
     this.characters$ = filmsService.getRelatedInfoWithName([], 'people', true);
@@ -55,10 +58,13 @@ export class AddFilmComponent {
     if(this.addForm.invalid) {
       return;
     }
-    console.log(this.addForm.value);
-  }
 
-  private setLoading() {
+    this.loading.next(true);
 
+    this.filmsService.addFilm((this.addForm.value))
+      .subscribe(() => {
+        this.loading.next(false);
+        this.route.navigate(['/'])
+      });
   }
 }

@@ -63,7 +63,9 @@
         <mat-label>Write a description...</mat-label>
         <textarea formControlName="description" matInput placeholder="Ex. It makes me feel..."></textarea>
       </mat-form-field>
-      <button mat-flat-button color="primary" [disabled]="!addForm.valid" type="submit">Add</button>
+      <button class="add-button" mat-flat-button color="primary" [disabled]="!addForm.valid || (loading$ | async)" type="submit">
+        <span>{{ (loading$ | async) ? 'Waiting...' : 'Add'}}</span>
+      </button>
     </div>
 </form>
 </div>

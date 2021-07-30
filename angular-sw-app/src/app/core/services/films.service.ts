@@ -124,15 +124,6 @@ export class FilmsService {
           return this.firestore.collection<FilmDto>(COLLECTION_KEY).add(filmDto);
         }),
       );
-
-    /**
-     * @TODO
-     * [] Realize add film to firestore.
-     *   [x] Request episode for new film
-     *   [x] Mapper from form data to dto.
-     *   [] Save in collection and return Observable.
-     *   [] In component navigate to main page after complete.
-     */
   }
 
   /**

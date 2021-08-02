@@ -3,12 +3,11 @@ import {
   ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
-  CanLoad,
   Router,
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Film } from '../models/film';
+
 import { FilmsService } from './films.service';
 
 /** Guard for authorization.*/
@@ -17,7 +16,6 @@ import { FilmsService } from './films.service';
 })
 export class FilmsGuardService implements CanActivate, CanActivateChild {
 
-  /** @constructor */
   public constructor(private readonly filmsService: FilmsService, private readonly router: Router) {}
 
   /**
@@ -43,7 +41,7 @@ export class FilmsGuardService implements CanActivate, CanActivateChild {
           this.goToMainPage();
           return false;
         }),
-      )
+      );
   }
 
   /** Redirect user to main page. */

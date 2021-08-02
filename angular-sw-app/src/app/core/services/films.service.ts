@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference, Query, QueryDocumentSnapshot } from '@angular/fire/firestore';
-import { combineLatest, forkJoin, Observable, of } from 'rxjs';
+import { AngularFirestore, CollectionReference, DocumentReference, Query } from '@angular/fire/firestore';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/app';
+
 import { DetailedFilm, Film } from '../models/film';
 import { FilmDto, RelatedStarhips, RelatedVehicles, RelatedWithName } from '../models/film-dto';
 import { Page, PageRequest, RequestDocuments } from '../page';
 import { FilmsMapper } from '../films-mapper';
 import { FilmFormData } from '../models/film-form-data';
-import {FormMapper} from "../form-mapper";
+import { FormMapper } from '../form-mapper';
 
 /** Interface for query films. */
 export interface FilmQuery {
+
   /** Search term. */
   search: string;
 }
@@ -27,7 +29,6 @@ const NAME_FILTER = 'fields.title';
   providedIn: 'root',
 })
 export class FilmsService {
-  /** @constructor */
   public constructor(
     private readonly firestore: AngularFirestore,
     private readonly mapper: FilmsMapper,
@@ -43,45 +44,49 @@ export class FilmsService {
    */
   public getPage(request: PageRequest, query: FilmQuery, documents: RequestDocuments): Observable<Page<Film>> {
 
-    /** Generate query for get collection. */
-    const queryFn = (ref: CollectionReference): Query => {
-      return this.createQuery(ref, request, query, documents);
-    }
+    /**
+     * Generate query for get collection.
+     * @param ref Collection reference of firestore.
+     * @returns Query function for get collection.
+     */
+    const queryFn = (ref: CollectionReference): Query => this.createQuery(ref, request, query, documents);
 
     /** Get observable. */
     return this.firestore.collection(COLLECTION_KEY, queryFn)
       .snapshotChanges()
       .pipe(
+
         /** Get raw docs for save in entries variables for cursor paginate. */
         map(actions => actions.map(action => action.payload.doc)),
+
         /** Save docs. */
         tap(docs => {
           documents.firstEntryInResponse = this.getOneFromList(docs, true);
           documents.latestEntryInResponse = this.getOneFromList(docs, false);
         }),
+
         /** Map documents to domain model. */
         map(docs => docs.map(doc => this.mapper.dtoToFilmModelMapper(doc.data() as FilmDto))),
+
         /** Complete previous observable and get new for know size of docs. */
         switchMap(films => this.firestore.collection(COLLECTION_KEY, ref =>
+
           /** If search field is not empty apply filter option. */
           this.applyFilterOption(ref, query.search.trim())).get()
           .pipe(
             distinctUntilChanged(),
             map(snap => snap.size),
+
             /** Return Observable<Page<Film>> object to continue. */
-            map(size => {
-              return {
+            map(size => ({
                 content: films,
                 number: request.page,
                 size: request.size,
                 direction: request.direction,
                 totalElements: size,
-              }
-            }),
-          ),
-        ),
-      )
-    ;
+            })),
+          )),
+      );
   }
 
   /**
@@ -99,31 +104,45 @@ export class FilmsService {
       );
   }
 
+  /**
+   * Delete film from the firestore.
+   * @param id Id of film.
+   * @returns Observable for get status of delete operation.
+   */
   public delete(id: number): Observable<void> {
     return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
       .where('fields.episode_id', '==', id))
       .get()
       .pipe(
-        map(data => data.docs.forEach(doc => {
-          return of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(doc.id).delete())
-        })),
+        map(data => data.docs.forEach(doc => of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(doc.id)
+          .delete()))),
       );
   }
 
-  public update(id: number, filmFormData: FilmFormData) {
+  /**
+   * Update film in firestore.
+   * @param id Id of film.
+   * @param filmFormData Data from the form.
+   * @returns Observable for get status of update operation.
+   */
+  public update(id: number, filmFormData: FilmFormData): Observable<Promise<void>> {
     return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
       .where('fields.episode_id', '==', id))
       .get()
       .pipe(
         map(data => this.getOneFromList(data.docs, true)),
-        map(doc => ({doc, dto: this.formMapper.editFormDataToFilmDto(filmFormData, this.mapper.dtoToFilmModelMapper(doc.data()))})),
-        switchMap((data) => {
-          return of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(data.doc.id).set(data.dto));
-        })
+        map(doc => ({ doc, dto: this.formMapper.editFormDataToFilmDto(filmFormData, this.mapper.dtoToFilmModelMapper(doc.data())) })),
+        switchMap(data => of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(data.doc.id)
+          .set(data.dto))),
       );
   }
 
-  public addFilm(filmFormData: FilmFormData) {
+  /**
+   * Add film in the firestore.
+   * @param filmFormData Data from the form.
+   * @returns Observable for get status of add operation.
+   */
+  public addFilm(filmFormData: FilmFormData): Observable<DocumentReference> {
     return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
       .orderBy('fields.episode_id', 'desc')
       .limit(1))
@@ -133,9 +152,7 @@ export class FilmsService {
         map(film => film.data()),
         map(film => film.fields.episode_id + 1),
         map(episode => this.formMapper.addFormDataToFilmDto(filmFormData, episode)),
-        switchMap((filmDto) => {
-          return this.firestore.collection<FilmDto>(COLLECTION_KEY).add(filmDto);
-        }),
+        switchMap(filmDto => this.firestore.collection<FilmDto>(COLLECTION_KEY).add(filmDto)),
       );
   }
 
@@ -151,18 +168,17 @@ export class FilmsService {
       .pipe(
         map(films => this.getOneFromList(films, true)),
         map(film => this.mapper.dtoToFilmModelMapper(film)),
-        switchMap(film => {
-          return combineLatest(
+        switchMap(film => combineLatest(
             of(film),
             this.getRelatedInfoWithName(film.planets, 'planets', false),
             this.getRelatedInfoWithName(film.characters, 'people', false),
             this.getRelatedInfoWithName(film.species, 'species', false),
             this.getRelatedStarships(film.starships, 'starships', false),
             this.getRelatedVehicle(film.vehicles, 'vehicles', false),
-          )
-        }),
+        )),
         map(([film, planets, characters, species, starships, vehicles]) => {
-          return new DetailedFilm(film, planets, characters, species, starships, vehicles);
+          const detailedFilm = new DetailedFilm(film, planets, characters, species, starships, vehicles);
+          return detailedFilm;
         }),
         catchError(this.handleError<DetailedFilm>('getFilm')),
       );
@@ -179,20 +195,18 @@ export class FilmsService {
 
     if (all) {
       return this.firestore.collection<RelatedWithName>(collection)
-      .valueChanges()
-      .pipe(
-        map(items => items),
-      )
-    }
-
-    const observables = (ids.map(id => {
-      return this.firestore.collection<RelatedWithName>(collection, ref => ref.where('pk', '==', id))
         .valueChanges()
         .pipe(
+          map(items => items),
+        );
+    }
+
+    const observables = (ids.map(id => this.firestore.collection<RelatedWithName>(collection, ref => ref.where('pk', '==', id))
+      .valueChanges()
+      .pipe(
           map(items => this.getOneFromList(items, true)),
           map(item => item),
-        )
-    }))
+      )));
 
     return combineLatest(observables);
   }
@@ -208,58 +222,55 @@ export class FilmsService {
 
     if (all) {
       return this.firestore.collection<RelatedStarhips>(collection)
-      .valueChanges()
-      .pipe(
-        map(items => items),
-      )
-    }
-
-    const observables = (ids.map(id => {
-      return this.firestore.collection<RelatedStarhips>(collection, ref => ref.where('pk', '==', id))
         .valueChanges()
         .pipe(
+          map(items => items),
+        );
+    }
+
+    const observables = (ids.map(id => this.firestore.collection<RelatedStarhips>(collection, ref => ref.where('pk', '==', id))
+      .valueChanges()
+      .pipe(
           map(items => this.getOneFromList(items, true)),
           map(item => item),
-        )
-    }))
+      )));
 
     return combineLatest(observables);
   }
 
-    /**
+  /**
    * Get related data without name field.
    * @param ids Ids of collection entities.
    * @param collection Collection's name.
    * @param all If true, it is mean get all entities.
    * @returns Observable with list with primary keys.
    */
-     public getRelatedVehicle(ids: readonly number[], collection: string, all: boolean): Observable<RelatedVehicles[]> {
+  public getRelatedVehicle(ids: readonly number[], collection: string, all: boolean): Observable<RelatedVehicles[]> {
 
-      if (all) {
-        return this.firestore.collection<RelatedVehicles>(collection)
+    if (all) {
+      return this.firestore.collection<RelatedVehicles>(collection)
         .valueChanges()
         .pipe(
           map(items => items),
-        )
-      }
+        );
+    }
 
-      const observables = (ids.map(id => {
-        return this.firestore.collection<RelatedVehicles>(collection, ref => ref.where('pk', '==', id))
-          .valueChanges()
-          .pipe(
+    const observables = (ids.map(id => this.firestore.collection<RelatedVehicles>(collection, ref => ref.where('pk', '==', id))
+      .valueChanges()
+      .pipe(
             map(items => this.getOneFromList(items, true)),
             map(item => item),
-          )
-      }))
+      )));
 
-      return combineLatest(observables);
-    }
+    return combineLatest(observables);
+  }
 
   /**
    * Create query for firestore collection.
    * @param ref Reference to the collection.
    * @param request Request data from table.
    * @param query All search fields.
+   * @param documents List of documents for pagination.
    * @returns Query for get the collection.
    */
   private createQuery(ref: CollectionReference, request: PageRequest, query: FilmQuery, documents: RequestDocuments): Query {
@@ -295,7 +306,10 @@ export class FilmsService {
     return newQuery;
   }
 
-  /** Reset documents state because of pagination's reset. */
+  /**
+   * Reset documents state because of pagination's reset.
+   * @param documents List of documents for pagination.
+   */
   private resetPagination(documents: RequestDocuments): void {
     documents.firstEntryInPrevResponseStack = [];
     documents.firstEntryInResponse = null;
@@ -319,7 +333,7 @@ export class FilmsService {
   /**
    * Replace end symbol of text for query.
    * @param text Text for query.
-   * @returns End char code
+   * @returns End char code.
    */
   private getEndCodeForFirestoreQuery(text: string): string {
     return text.replace(/.$/, symbol => String.fromCharCode(symbol.charCodeAt(0) + 1));
@@ -335,6 +349,7 @@ export class FilmsService {
     if (list && Array.isArray(list)) {
       return getFirst ? list[0] : list[list.length - 1];
     }
+
     /** If it is not list. */
     return list;
   }
@@ -346,9 +361,9 @@ export class FilmsService {
    * @param result Optional value to return as the observable result.
    */
   private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+    return (error: unknown): Observable<T> => {
 
-      console.error(`${operation} failed: ${error.message}`);
+      console.error(`${operation} failed: ${error}`);
       console.error(error);
 
       // Let the app keep running by returning an empty result.

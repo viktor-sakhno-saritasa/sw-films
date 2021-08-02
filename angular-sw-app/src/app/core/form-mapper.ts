@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
+
 import { Film } from './models/film';
 import { FilmDto } from './models/film-dto';
 import { FilmFormData } from './models/film-form-data';
 
 /** Service for map dto in domain model and back. */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FormMapper {
 
-  public addFormDataToFilmDto(formData: FilmFormData, episode: number) {
+  /**
+   * Map add form data to film dto.
+   * @param formData Data from add form.
+   * @param episode Episode of next film.
+   * @returns FilmDto for film that need to add.
+   */
+  public addFormDataToFilmDto(formData: FilmFormData, episode: number): FilmDto {
     const dto: FilmDto = {
       fields: {
         characters: formData.characters,
@@ -28,16 +35,22 @@ export class FormMapper {
       },
       model: 'resources.film',
       pk: episode,
-    }
+    };
 
     return dto;
   }
 
-  public editFormDataToFilmDto(formData: FilmFormData, film: Film) {
+  /**
+   * Map edit form data to film dto.
+   * @param formData Data from edit form.
+   * @param film Film that need to update.
+   * @returns FilmDto for film that need to edit.
+   */
+  public editFormDataToFilmDto(formData: FilmFormData, film: Film): FilmDto {
     const dto: FilmDto = {
       fields: {
         characters: formData.characters,
-        created: film.created?.toISOString() || new Date().toISOString(),
+        created: film.created?.toISOString() ?? new Date().toISOString(),
         director: formData.director,
         edited: new Date().toISOString(),
         episode_id: film.episodeId,
@@ -52,11 +65,10 @@ export class FormMapper {
       },
       model: 'resources.film',
       pk: film.episodeId,
-    }
+    };
 
     return dto;
   }
-
 
   /**
    * Transform plain object to domain model.

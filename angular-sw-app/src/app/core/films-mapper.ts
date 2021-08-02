@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+
 import { Film } from './models/film';
 import { FilmDto } from './models/film-dto';
 
 /** Service for map dto in domain model and back. */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FilmsMapper {
   /**

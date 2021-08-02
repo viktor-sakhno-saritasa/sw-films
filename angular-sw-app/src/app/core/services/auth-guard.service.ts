@@ -7,7 +7,9 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 import { User } from '../models/user';
+
 import { UserService } from './user.service';
 
 /** Guard for authorization.*/
@@ -18,7 +20,6 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
 
   private readonly user$: Observable<User | null>;
 
-  /** @constructor */
   public constructor(private readonly userService: UserService, private readonly router: Router) {
     this.user$ = userService.getUser();
   }
@@ -34,7 +35,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
 
       this.goToMainPage();
       return false;
-    }))
+    }));
   }
 
   /**
@@ -54,7 +55,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
       }
       this.goToMainPage();
       return false;
-    }))
+    }));
   }
 
   /** Redirect user to main page. */

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
+
 import { User } from './models/user';
 
 /** Service for map dto in domain model and back. */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserMapper {
   /**
@@ -13,6 +14,6 @@ export class UserMapper {
    * @returns User model.
    */
   public dtoToUserModelMapper(userDto: firebase.User): User {
-    return { name: userDto.displayName || 'Anonymous' };
+    return { name: userDto.displayName ?? 'Anonymous' };
   }
 }

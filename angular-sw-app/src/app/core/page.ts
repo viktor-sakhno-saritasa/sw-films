@@ -1,5 +1,5 @@
-import { QueryDocumentSnapshot } from "@angular/fire/firestore";
-import { Observable } from "rxjs";
+import { QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 /** Sort interface. */
 export interface Sort {
@@ -13,6 +13,7 @@ export interface Sort {
 
 /** Interface for state firestore documents for use pagination. */
 export interface RequestDocuments {
+
   /** Latest  document in response for pagination. */
   latestEntryInResponse: QueryDocumentSnapshot<unknown> | null;
 
@@ -45,7 +46,7 @@ export interface Page<T> {
   /** Main content. */
   readonly content: T[];
 
-  /** Total elements of  */
+  /** Total elements of films. */
   readonly totalElements: number;
 
   /** Size of elements in a page. */

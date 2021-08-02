@@ -43,8 +43,8 @@ app-delete-dialog {
   width: 100%;
 }
 
-.card__button:last-child {
-  margin-top: 10px;
+button.card__button {
+  margin-bottom: 10px;
 }
 
 .card__icon {

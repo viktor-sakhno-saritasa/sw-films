@@ -24,6 +24,12 @@ export class Film {
   /** Release date. */
   public readonly releaseDate: Date;
 
+  /** Created date. */
+  public readonly created?: Date;
+
+  /** Edited date. */
+  public readonly edited?: Date;
+
   /** Species in number format. */
   public readonly species: readonly number[];
 
@@ -57,6 +63,8 @@ export class Film {
     this.starships = film.starships;
     this.title = film.title;
     this.vehicles = film.vehicles;
+    this.created = film.created;
+    this.edited = film.edited;
   }
 
   /** Method for collect data in get one item. */

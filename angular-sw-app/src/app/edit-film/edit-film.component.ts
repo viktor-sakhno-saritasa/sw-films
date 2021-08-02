@@ -11,7 +11,7 @@ import { FilmsService } from '../core/services/films.service';
   templateUrl: './edit-film.component.html',
   styleUrls: ['./edit-film.component.scss']
 })
-export class EditFilmComponent {
+export class EditFilmComponent implements OnInit {
 
   public readonly editForm: FormGroup;
   private readonly loading: BehaviorSubject<boolean>;
@@ -38,8 +38,6 @@ export class EditFilmComponent {
 
     this.currentFilm$ = filmsService.getFilm(Number(this.route.snapshot.paramMap.get('id')));
 
-    this.currentFilm$.subscribe(data => console.log(data));
-
     this.characters$ = filmsService.getRelatedInfoWithName([], 'people', true);
     this.planets$ = filmsService.getRelatedInfoWithName([], 'planets', true);
     this.species$ = filmsService.getRelatedInfoWithName([], 'species', true);
@@ -60,6 +58,16 @@ export class EditFilmComponent {
     })
   }
 
+  public ngOnInit(): void {
+    this.currentFilm$.subscribe(film => {
+      this.editForm.patchValue({
+        ...film,
+        releaseDate: `${film?.releaseDate.toISOString().split('T')[0]}`
+      })
+    })
+  }
+
+
   public onSubmit(): void {
     if(this.editForm.invalid) {
       return;
@@ -67,11 +75,11 @@ export class EditFilmComponent {
 
     this.loading.next(true);
 
-    // this.filmsService.updateFilm((id, this.editForm.value))
-    //   .subscribe(() => {
-    //     this.loading.next(false);
-    //     this.router.navigate(['/'])
-    //   });
+    this.filmsService.update(Number(this.route.snapshot.paramMap.get('id')), this.editForm.value)
+      .subscribe(() => {
+        this.loading.next(false);
+        this.router.navigate(['/'])
+      });
   }
 
 }

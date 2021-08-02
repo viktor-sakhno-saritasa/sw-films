@@ -110,6 +110,19 @@ export class FilmsService {
       );
   }
 
+  public update(id: number, filmFormData: FilmFormData) {
+    return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
+      .where('fields.episode_id', '==', id))
+      .get()
+      .pipe(
+        map(data => this.getOneFromList(data.docs, true)),
+        map(doc => ({doc, dto: this.formMapper.editFormDataToFilmDto(filmFormData, this.mapper.dtoToFilmModelMapper(doc.data()))})),
+        switchMap((data) => {
+          return of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(data.doc.id).set(data.dto));
+        })
+      );
+  }
+
   public addFilm(filmFormData: FilmFormData) {
     return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
       .orderBy('fields.episode_id', 'desc')

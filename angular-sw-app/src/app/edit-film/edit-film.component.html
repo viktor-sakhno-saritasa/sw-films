@@ -4,7 +4,7 @@
   <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
     <div class="container-form" *ngIf="currentFilm$ | async as film">
       <mat-form-field>
-          <input matInput type="text" placeholder="Title" formControlName="title" [value]="film.title">
+          <input matInput type="text" placeholder="Title" formControlName="title">
           <mat-hint *ngIf="editForm.controls.title.errors">Title is required</mat-hint>
       </mat-form-field>
       <mat-form-field>

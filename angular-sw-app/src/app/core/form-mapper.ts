@@ -33,6 +33,30 @@ export class FormMapper {
     return dto;
   }
 
+  public editFormDataToFilmDto(formData: FilmFormData, film: Film) {
+    const dto: FilmDto = {
+      fields: {
+        characters: formData.characters,
+        created: film.created?.toISOString() || new Date().toISOString(),
+        director: formData.director,
+        edited: new Date().toISOString(),
+        episode_id: film.episodeId,
+        opening_crawl: formData.description,
+        planets: formData.planets,
+        producer: formData.producer,
+        release_date: formData.releaseDate,
+        species: formData.species,
+        starships: formData.starships,
+        title: formData.title,
+        vehicles: formData.vehicles,
+      },
+      model: 'resources.film',
+      pk: film.episodeId,
+    }
+
+    return dto;
+  }
+
 
   /**
    * Transform plain object to domain model.

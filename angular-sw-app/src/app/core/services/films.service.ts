@@ -178,18 +178,26 @@ export class FilmsService {
       .valueChanges()
       .pipe(
         map(films => this.getOneFromList(films, true)),
-        map(film => this.mapper.dtoToFilmModelMapper(film)),
-        switchMap(film => combineLatest(
-            of(film),
-            this.getRelatedInfoWithName(film.planets, 'planets', false),
-            this.getRelatedInfoWithName(film.characters, 'people', false),
-            this.getRelatedInfoWithName(film.species, 'species', false),
-            this.getRelatedStarships(film.starships, 'starships', false),
-            this.getRelatedVehicle(film.vehicles, 'vehicles', false),
-        )),
-        map(([film, planets, characters, species, starships, vehicles]) => {
-          const detailedFilm = new DetailedFilm(film, planets, characters, species, starships, vehicles);
-          return detailedFilm;
+        switchMap(item => {
+          if (item) {
+            return of(item)
+              .pipe(
+                map(film => this.mapper.dtoToFilmModelMapper(film)),
+                switchMap(film => combineLatest(
+                    of(film),
+                    this.getRelatedInfoWithName(film.planets, 'planets', false),
+                    this.getRelatedInfoWithName(film.characters, 'people', false),
+                    this.getRelatedInfoWithName(film.species, 'species', false),
+                    this.getRelatedStarships(film.starships, 'starships', false),
+                    this.getRelatedVehicle(film.vehicles, 'vehicles', false),
+                )),
+                map(([film, planets, characters, species, starships, vehicles]) => {
+                  const detailedFilm = new DetailedFilm(film, planets, characters, species, starships, vehicles);
+                  return detailedFilm;
+                }),
+              );
+          }
+          return of(item);
         }),
         catchError(this.handleError<DetailedFilm>('getFilm')),
       );

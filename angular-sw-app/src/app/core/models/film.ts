@@ -1,4 +1,4 @@
-import { RelatedStarhips, RelatedVehicles, RelatedWithName } from "./film-dto";
+import { RelatedStarhips, RelatedVehicles, RelatedWithName } from './film-dto';
 
 /** Class for work with films. */
 export class Film {
@@ -48,7 +48,6 @@ export class Film {
   /** Id of the film. */
   public readonly pk: number;
 
-  /** @constructor */
   public constructor(film: FilmArgs) {
     this.pk = film.pk;
     this.model = film.model;
@@ -83,7 +82,7 @@ export class Film {
       starships: this.starships,
       title: this.title,
       vehicles: this.vehicles,
-    }
+    };
   }
 }
 
@@ -108,7 +107,6 @@ export class DetailedFilm {
   /** List of vehicles primary keys. */
   public readonly vehiclesList: RelatedVehicles[];
 
-  /** @constructor */
   public constructor(
     filmPreview: Film,
     planetsList: RelatedWithName[],
@@ -126,11 +124,10 @@ export class DetailedFilm {
   }
 }
 
-
 /**
  * Interface for film args ctor.
  */
- export interface FilmArgs {
+export interface FilmArgs {
 
   /** Characters in number format. */
   readonly characters: readonly number[];

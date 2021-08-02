@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/core/models/user';
@@ -16,7 +16,6 @@ export class HeaderComponent {
   /** Current user observable. */
   public readonly user$: Observable<User | null>;
 
-  /** @constructor */
   public constructor(private readonly userService: UserService, private readonly route: Router) {
     this.user$ = this.userService.getUser();
   }

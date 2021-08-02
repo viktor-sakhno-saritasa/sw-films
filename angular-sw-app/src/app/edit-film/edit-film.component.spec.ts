@@ -6,11 +6,11 @@ describe('EditFilmComponent', () => {
   let component: EditFilmComponent;
   let fixture: ComponentFixture<EditFilmComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     await TestBed.configureTestingModule({
-      declarations: [ EditFilmComponent ]
+      declarations: [EditFilmComponent],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

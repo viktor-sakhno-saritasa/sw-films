@@ -1,19 +1,18 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogData } from '../delete-dialog/delete-dialog.component';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
+/** Overview delete dialog. */
 @Component({
   selector: 'app-delete-dialog-overview',
   templateUrl: './delete-dialog-overview.component.html',
-  styleUrls: ['./delete-dialog-overview.component.scss']
+  styleUrls: ['./delete-dialog-overview.component.scss'],
 })
 export class DeleteDialogOverviewComponent {
 
-  constructor(
-    public dialogRef: MatDialogRef<DeleteDialogOverviewComponent>,
-  ) {}
+  public constructor(public readonly dialogRef: MatDialogRef<DeleteDialogOverviewComponent>) {}
 
-  onNoClick(): void {
+  /** Cancel handler. */
+  public onNoClick(): void {
     this.dialogRef.close();
   }
 }

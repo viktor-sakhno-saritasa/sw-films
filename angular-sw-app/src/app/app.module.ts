@@ -17,7 +17,6 @@ import { LoginModule } from './login/login.module';
 import { ClientModule } from './client/client.module';
 import { DetailsModule } from './details/details.module';
 import { AddFilmModule } from './add-film/add-film.module';
-import { DeleteDialogOverviewComponent } from './shared/delete-dialog-overview/delete-dialog-overview.component';
 import { EditFilmComponent } from './edit-film/edit-film.component';
 
 /** Root module for an application. */

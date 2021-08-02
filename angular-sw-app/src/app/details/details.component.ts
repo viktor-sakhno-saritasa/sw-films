@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+
+import { Observable } from 'rxjs';
+
+import { switchMap } from 'rxjs/operators';
+
 import { DetailedFilm } from '../core/models/film';
 import { FilmsService } from '../core/services/films.service';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 /** Component for details page film. */
 @Component({
@@ -18,18 +21,17 @@ export class DetailsComponent {
   /** Current film. */
   public readonly film$: Observable<DetailedFilm>;
 
-  /** @constructor */
   public constructor(
     private readonly route: ActivatedRoute,
     private readonly filmsService: FilmsService,
     private readonly location: Location,
   ) {
     this.film$ = this.route.paramMap.pipe(
-      switchMap(params => {
+      switchMap(() => {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         return this.filmsService.getFilmWithRelated(id);
-      })
-    )
+      }),
+    );
   }
 
   /** Event handler for go back button. */

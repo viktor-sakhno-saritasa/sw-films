@@ -29,11 +29,22 @@ const NAME_FILTER = 'fields.title';
   providedIn: 'root',
 })
 export class FilmsService {
+
+  /** Items from the film collection for realtime updates check. */
+  private readonly items$: Observable<FilmDto[]>;
+
   public constructor(
     private readonly firestore: AngularFirestore,
     private readonly mapper: FilmsMapper,
     private readonly formMapper: FormMapper,
-  ) {}
+  ) {
+    this.items$ = this.firestore.collection<FilmDto>(COLLECTION_KEY).valueChanges();
+  }
+
+  /** Getter for items collection. */
+  public get items(): Observable<FilmDto[]> {
+    return this.items$;
+  }
 
   /**
    * Main method for films request.

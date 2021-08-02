@@ -1,36 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { DetailedFilm, Film } from '../core/models/film';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Film } from '../core/models/film';
 import { RelatedStarhips, RelatedVehicles, RelatedWithName } from '../core/models/film-dto';
 import { FilmsService } from '../core/services/films.service';
 
+/** Edit form page component. */
 @Component({
   selector: 'app-edit-film',
   templateUrl: './edit-film.component.html',
-  styleUrls: ['./edit-film.component.scss']
+  styleUrls: ['./edit-film.component.scss'],
 })
-export class EditFilmComponent implements OnInit {
+export class EditFilmComponent implements OnInit, OnDestroy {
 
-  public readonly editForm: FormGroup;
-  private readonly loading: BehaviorSubject<boolean>;
-  public readonly loading$: Observable<boolean>;
-
+  /** Current film for update. */
   public readonly currentFilm$: Observable<Film | null>;
 
+  /** Characters state. */
   public readonly characters$: Observable<RelatedWithName[]>;
+
+  /** Planets state. */
   public readonly planets$: Observable<RelatedWithName[]>;
+
+  /** Species state. */
   public readonly species$: Observable<RelatedWithName[]>;
+
+  /** Starship state. */
   public readonly starships$: Observable<RelatedStarhips[]>;
+
+  /** Vehicles state. */
   public readonly vehicles$: Observable<RelatedVehicles[]>;
 
+  /** Loading state. */
+  public readonly loading$: Observable<boolean>;
 
-  constructor(
+  /** Edit form group. */
+  public readonly editForm: FormGroup;
+
+  /** Loading subject change loading state. */
+  private readonly loading: BehaviorSubject<boolean>;
+
+  /** Subject for destroy all subscribes. */
+  private readonly destroy = new Subject<void>();
+
+
+  public constructor(
     private readonly formBuilder: FormBuilder,
     private readonly filmsService: FilmsService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
   ) {
 
     this.loading = new BehaviorSubject<boolean>(false);
@@ -55,21 +76,32 @@ export class EditFilmComponent implements OnInit {
       starships: new FormControl([], [Validators.required]),
       vehicles: new FormControl([], [Validators.required]),
       description: new FormControl(null, [Validators.required, Validators.minLength(10)]),
-    })
+    });
   }
 
+  /** @inheritdoc */
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+  }
+
+  /** @inheritdoc */
   public ngOnInit(): void {
-    this.currentFilm$.subscribe(film => {
+    this.currentFilm$
+      .pipe(
+        takeUntil(this.destroy),
+      )
+      .subscribe(film => {
       this.editForm.patchValue({
         ...film,
-        releaseDate: `${film?.releaseDate.toISOString().split('T')[0]}`
-      })
-    })
+        releaseDate: `${film?.releaseDate.toISOString().split('T')[0]}`,
+      });
+    });
   }
 
-
+  /** On Submit button handler. */
   public onSubmit(): void {
-    if(this.editForm.invalid) {
+    if (this.editForm.invalid) {
       return;
     }
 
@@ -78,8 +110,7 @@ export class EditFilmComponent implements OnInit {
     this.filmsService.update(Number(this.route.snapshot.paramMap.get('id')), this.editForm.value)
       .subscribe(() => {
         this.loading.next(false);
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
       });
   }
-
 }

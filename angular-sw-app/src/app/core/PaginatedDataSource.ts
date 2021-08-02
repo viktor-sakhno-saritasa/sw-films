@@ -2,6 +2,8 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 import { map, share, startWith, switchMap, take, tap } from 'rxjs/operators';
 
+import { FilmDto } from './models/film-dto';
+
 import { indicate } from './operators';
 import { Page, PaginatedEndpoint, RequestDocuments, Sort } from './page';
 
@@ -54,7 +56,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
 
   public constructor(
     private readonly endpoint: PaginatedEndpoint<T, Q>,
-    private readonly deletePoint: (id: number) => Observable<void>,
+    private readonly items: Observable<FilmDto[]>,
     initialSort: Sort,
     initialQuery: Q,
     private readonly documents: RequestDocuments,
@@ -66,7 +68,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
     this.query = new BehaviorSubject<Q>(initialQuery);
     this.sort = new BehaviorSubject<Sort>(initialSort);
 
-    const param$ = combineLatest([this.query, this.sort]);
+    const param$ = combineLatest([this.query, this.sort, this.items]);
 
     this.page$ = param$.pipe(
       tap(() => {

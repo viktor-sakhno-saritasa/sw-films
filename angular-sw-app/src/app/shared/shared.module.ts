@@ -12,13 +12,16 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { RouterModule } from '@angular/router';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { HeaderComponent } from './header/header.component';
-import {MatSelectModule} from '@angular/material/select';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { DeleteDialogOverviewComponent } from './delete-dialog-overview/delete-dialog-overview.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { HeaderComponent } from './header/header.component';
 
 /** Module for shared components and directives. */
 @NgModule({

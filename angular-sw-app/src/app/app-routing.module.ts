@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthPipe, canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
+
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { ClientComponent } from './client/client.component';
 import { LoginComponent } from './login/login.component';
@@ -13,7 +14,7 @@ import { EditFilmComponent } from './edit-film/edit-film.component';
 const redirectLoggedInToMain = (): AuthPipe => redirectLoggedInTo(['']);
 
 const routes: Routes = [
-  { path: '', component: ClientComponent},
+  { path: '', component: ClientComponent },
   {
     path: 'login',
     component: LoginComponent,

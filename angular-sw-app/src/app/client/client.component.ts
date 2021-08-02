@@ -22,7 +22,7 @@ export class ClientComponent {
   public constructor(private readonly filmsService: FilmsService) {
     this.data = new PaginatedDataSource<Film, FilmQuery>(
       (request, query, documents) => this.filmsService.getPage(request, query, documents),
-      id => this.filmsService.delete(id),
+      filmsService.items,
       { property: 'fields.episode_id', order: 'asc' },
       { search: '' },
       { latestEntryInResponse: null, firstEntryInResponse: null, firstEntryInPrevResponseStack: [] },

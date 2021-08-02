@@ -6,11 +6,11 @@ describe('DeleteDialogOverviewComponent', () => {
   let component: DeleteDialogOverviewComponent;
   let fixture: ComponentFixture<DeleteDialogOverviewComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     await TestBed.configureTestingModule({
-      declarations: [ DeleteDialogOverviewComponent ]
+      declarations: [DeleteDialogOverviewComponent],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

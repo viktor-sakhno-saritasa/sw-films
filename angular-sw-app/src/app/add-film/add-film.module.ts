@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddFilmComponent } from './add-film.component';
+
 import { SharedModule } from '../shared/shared.module';
 
+import { AddFilmComponent } from './add-film.component';
+
+/** Module for add form page. */
 @NgModule({
-  declarations: [
-    AddFilmComponent
-  ],
+  declarations: [AddFilmComponent],
   imports: [
     CommonModule,
     SharedModule,
-  ]
+  ],
 })
 export class AddFilmModule { }

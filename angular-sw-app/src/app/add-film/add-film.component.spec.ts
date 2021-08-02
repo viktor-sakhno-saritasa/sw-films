@@ -6,11 +6,11 @@ describe('AddFilmComponent', () => {
   let component: AddFilmComponent;
   let fixture: ComponentFixture<AddFilmComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     await TestBed.configureTestingModule({
-      declarations: [ AddFilmComponent ]
+      declarations: [AddFilmComponent],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

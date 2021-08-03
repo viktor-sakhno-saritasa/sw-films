@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -65,17 +65,17 @@ export class EditFilmComponent implements OnInit, OnDestroy {
     this.starships$ = filmsService.getRelatedStarships([], 'starships', true);
     this.vehicles$ = filmsService.getRelatedVehicle([], 'vehicles', true);
 
-    this.editForm = new FormGroup({
-      title: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
-      director: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
-      producer: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]),
-      releaseDate: new FormControl(null, [Validators.required]),
-      characters: new FormControl([], [Validators.required]),
-      planets: new FormControl([], [Validators.required]),
-      species: new FormControl([], [Validators.required]),
-      starships: new FormControl([], [Validators.required]),
-      vehicles: new FormControl([], [Validators.required]),
-      description: new FormControl(null, [Validators.required, Validators.minLength(10)]),
+    this.editForm = formBuilder.group({
+      title: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
+      director: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
+      producer: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
+      releaseDate: [null, [Validators.required]],
+      characters: [[], [Validators.required]],
+      planets: [[], [Validators.required]],
+      species: [[], [Validators.required]],
+      starships: [[], [Validators.required]],
+      vehicles: [[], [Validators.required]],
+      description: [null, [Validators.required, Validators.minLength(10)]],
     });
   }
 

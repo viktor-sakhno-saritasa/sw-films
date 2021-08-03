@@ -39,7 +39,7 @@
     <mat-spinner *ngIf="data.loading$ | async" diameter="32"></mat-spinner>
   </div>
 
-  <button mat-raised-button routerLink="/add" class="add-button" type="button">Add film</button>
+  <a mat-raised-button routerLink="/add" class="add-button">Add film</a>
 
   <table mat-table [dataSource]="data" class="mat-elevation-z1">
 

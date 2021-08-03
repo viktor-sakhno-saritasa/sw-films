@@ -31,18 +31,21 @@ const NAME_FILTER = 'fields.title';
 export class FilmsService {
 
   /** Items from the film collection for realtime updates check. */
-  private readonly items$: Observable<FilmDto[]>;
+  private readonly items$: Observable<Film[]>;
 
   public constructor(
     private readonly firestore: AngularFirestore,
     private readonly mapper: FilmsMapper,
     private readonly filmFormMapper: FilmFormMapper,
   ) {
-    this.items$ = this.firestore.collection<FilmDto>(COLLECTION_KEY).valueChanges();
+    this.items$ = this.firestore.collection<FilmDto>(COLLECTION_KEY).valueChanges()
+      .pipe(
+        map(films => films.map(this.mapper.dtoToFilmModelMapper)),
+      );
   }
 
   /** Getter for items collection. */
-  public get items(): Observable<FilmDto[]> {
+  public get items(): Observable<Film[]> {
     return this.items$;
   }
 

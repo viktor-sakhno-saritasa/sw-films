@@ -2,8 +2,6 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 import { map, share, startWith, switchMap, take, tap } from 'rxjs/operators';
 
-import { FilmDto } from './models/film-dto';
-
 import { indicate } from './operators';
 import { Page, PaginatedEndpoint, RequestDocuments, Sort } from './page';
 
@@ -56,7 +54,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
 
   public constructor(
     private readonly endpoint: PaginatedEndpoint<T, Q>,
-    private readonly items$: Observable<FilmDto[]>,
+    private readonly items$: Observable<T[]>,
     initialSort: Sort,
     initialQuery: Q,
     private readonly documents: RequestDocuments,

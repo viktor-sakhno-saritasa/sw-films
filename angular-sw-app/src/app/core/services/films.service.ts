@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference, DocumentReference, Query } from '@angular/fire/firestore';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, from, Observable, of } from 'rxjs';
 import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/app';
 
@@ -139,14 +139,14 @@ export class FilmsService {
    * @param filmFormData Data from the form.
    * @returns Observable for get status of update operation.
    */
-  public update(id: number, filmFormData: FilmFormData): Observable<Promise<void>> {
+  public update(id: number, filmFormData: FilmFormData): Observable<void> {
     return this.firestore.collection<FilmDto>(COLLECTION_KEY, ref => ref
       .where('fields.episode_id', '==', id))
       .get()
       .pipe(
         map(data => this.getOneFromList(data.docs, true)),
         map(doc => ({ doc, dto: this.filmFormMapper.editFormDataToFilmDto(filmFormData, this.mapper.dtoToFilmModelMapper(doc.data())) })),
-        switchMap(data => of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(data.doc.id)
+        switchMap(data => from(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(data.doc.id)
           .set(data.dto))),
       );
   }

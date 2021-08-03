@@ -1,4 +1,4 @@
-import { RelatedStarhips, RelatedVehicles, RelatedWithName } from './film-dto';
+import { RelatedStarhips, RelatedVehicles, RelatedWithName } from './film-form-data';
 
 /** Class for work with films. */
 export class Film {

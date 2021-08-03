@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { RelatedStarhips, RelatedVehicles, RelatedWithName } from '../core/models/film-dto';
+import { RelatedStarhips, RelatedVehicles, RelatedWithName } from '../core/models/film-form-data';
+
 import { FilmsService } from '../core/services/films.service';
 
 /** Add form component. */
@@ -30,14 +31,14 @@ export class AddFilmComponent implements OnDestroy {
   /** Vehicles state. */
   public readonly vehicles$: Observable<RelatedVehicles[]>;
 
-  /** Loading state. */
+  /** Loading$ state. */
   public readonly loading$: Observable<boolean>;
 
   /** Add form group. */
   public readonly addForm: FormGroup;
 
-  /** Loading subject change loading state. */
-  private readonly loading: BehaviorSubject<boolean>;
+  /** Loading$ subject change loading$ state. */
+  private readonly _loading$: BehaviorSubject<boolean>;
 
   /** Subject for destroy all subscribes. */
   private readonly destroy = new Subject<void>();
@@ -47,8 +48,8 @@ export class AddFilmComponent implements OnDestroy {
     private readonly route: Router,
   ) {
 
-    this.loading = new BehaviorSubject<boolean>(false);
-    this.loading$ = this.loading.asObservable();
+    this._loading$ = new BehaviorSubject<boolean>(false);
+    this.loading$ = this._loading$.asObservable();
 
     this.characters$ = filmsService.getRelatedInfoWithName([], 'people', true);
     this.planets$ = filmsService.getRelatedInfoWithName([], 'planets', true);
@@ -82,14 +83,14 @@ export class AddFilmComponent implements OnDestroy {
       return;
     }
 
-    this.loading.next(true);
+    this._loading$.next(true);
 
     this.filmsService.addFilm((this.addForm.value))
       .pipe(
         takeUntil(this.destroy),
       )
       .subscribe(() => {
-        this.loading.next(false);
+        this._loading$.next(false);
         this.route.navigate(['/']);
       });
   }

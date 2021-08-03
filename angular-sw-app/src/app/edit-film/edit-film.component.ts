@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Film } from '../core/models/film';
-import { RelatedStarhips, RelatedVehicles, RelatedWithName } from '../core/models/film-dto';
+import { RelatedStarhips, RelatedVehicles, RelatedWithName } from '../core/models/film-form-data';
 import { FilmsService } from '../core/services/films.service';
 
 /** Edit form page component. */
@@ -41,7 +41,7 @@ export class EditFilmComponent implements OnInit, OnDestroy {
   public readonly editForm: FormGroup;
 
   /** Loading subject change loading state. */
-  private readonly loading: BehaviorSubject<boolean>;
+  private readonly _loading$: BehaviorSubject<boolean>;
 
   /** Subject for destroy all subscribes. */
   private readonly destroy = new Subject<void>();
@@ -54,8 +54,8 @@ export class EditFilmComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
   ) {
 
-    this.loading = new BehaviorSubject<boolean>(false);
-    this.loading$ = this.loading.asObservable();
+    this._loading$ = new BehaviorSubject<boolean>(false);
+    this.loading$ = this._loading$.asObservable();
 
     this.currentFilm$ = filmsService.getFilm(Number(this.route.snapshot.paramMap.get('id')));
 
@@ -105,11 +105,11 @@ export class EditFilmComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading.next(true);
+    this._loading$.next(true);
 
     this.filmsService.update(Number(this.route.snapshot.paramMap.get('id')), this.editForm.value)
       .subscribe(() => {
-        this.loading.next(false);
+        this._loading$.next(false);
         this.router.navigate(['/']);
       });
   }

@@ -8,7 +8,7 @@ import { FilmFormData } from './models/film-form-data';
 @Injectable({
   providedIn: 'root',
 })
-export class FormMapper {
+export class FilmFormMapper {
 
   /**
    * Map add form data to film dto.

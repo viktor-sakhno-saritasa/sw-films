@@ -16,7 +16,7 @@ import { UserService } from '../core/services/user.service';
 })
 export class LoginComponent implements OnDestroy {
 
-  private readonly destroy = new Subject();
+  private readonly destroy$ = new Subject();
 
   public constructor(
     private readonly route: Router,
@@ -33,7 +33,7 @@ export class LoginComponent implements OnDestroy {
   public onLoginClick(): void {
     this.userService.login()
       .pipe(
-        takeUntil(this.destroy),
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.route.navigate(['']);
@@ -42,7 +42,7 @@ export class LoginComponent implements OnDestroy {
 
   /** @inheritdoc */
   public ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

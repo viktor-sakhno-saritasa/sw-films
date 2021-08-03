@@ -5,11 +5,11 @@ import { map, catchError, tap, distinctUntilChanged, switchMap } from 'rxjs/oper
 import firebase from 'firebase/app';
 
 import { DetailedFilm, Film } from '../models/film';
-import { FilmDto, RelatedStarhips, RelatedVehicles, RelatedWithName } from '../models/film-dto';
+import { FilmDto } from '../models/film-dto';
 import { Page, PageRequest, RequestDocuments } from '../page';
 import { FilmsMapper } from '../films-mapper';
-import { FilmFormData } from '../models/film-form-data';
-import { FormMapper } from '../form-mapper';
+import { FilmFormData, RelatedStarhips, RelatedVehicles, RelatedWithName } from '../models/film-form-data';
+import { FilmFormMapper } from '../film-form-mapper';
 
 /** Interface for query films. */
 export interface FilmQuery {
@@ -36,7 +36,7 @@ export class FilmsService {
   public constructor(
     private readonly firestore: AngularFirestore,
     private readonly mapper: FilmsMapper,
-    private readonly formMapper: FormMapper,
+    private readonly filmFormMapper: FilmFormMapper,
   ) {
     this.items$ = this.firestore.collection<FilmDto>(COLLECTION_KEY).valueChanges();
   }
@@ -142,7 +142,7 @@ export class FilmsService {
       .get()
       .pipe(
         map(data => this.getOneFromList(data.docs, true)),
-        map(doc => ({ doc, dto: this.formMapper.editFormDataToFilmDto(filmFormData, this.mapper.dtoToFilmModelMapper(doc.data())) })),
+        map(doc => ({ doc, dto: this.filmFormMapper.editFormDataToFilmDto(filmFormData, this.mapper.dtoToFilmModelMapper(doc.data())) })),
         switchMap(data => of(this.firestore.collection<FilmDto>(COLLECTION_KEY).doc(data.doc.id)
           .set(data.dto))),
       );
@@ -162,7 +162,7 @@ export class FilmsService {
         map(data => this.getOneFromList(data.docs, true)),
         map(film => film.data()),
         map(film => film.fields.episode_id + 1),
-        map(episode => this.formMapper.addFormDataToFilmDto(filmFormData, episode)),
+        map(episode => this.filmFormMapper.addFormDataToFilmDto(filmFormData, episode)),
         switchMap(filmDto => this.firestore.collection<FilmDto>(COLLECTION_KEY).add(filmDto)),
       );
   }
@@ -180,22 +180,20 @@ export class FilmsService {
         map(films => this.getOneFromList(films, true)),
         switchMap(item => {
           if (item) {
-            return of(item)
-              .pipe(
-                map(film => this.mapper.dtoToFilmModelMapper(film)),
-                switchMap(film => combineLatest(
-                    of(film),
-                    this.getRelatedInfoWithName(film.planets, 'planets', false),
-                    this.getRelatedInfoWithName(film.characters, 'people', false),
-                    this.getRelatedInfoWithName(film.species, 'species', false),
-                    this.getRelatedStarships(film.starships, 'starships', false),
-                    this.getRelatedVehicle(film.vehicles, 'vehicles', false),
-                )),
-                map(([film, planets, characters, species, starships, vehicles]) => {
-                  const detailedFilm = new DetailedFilm(film, planets, characters, species, starships, vehicles);
-                  return detailedFilm;
-                }),
-              );
+            const filmModel = this.mapper.dtoToFilmModelMapper(item);
+            return combineLatest([
+              of(filmModel),
+              this.getRelatedInfoWithName(filmModel.planets, 'planets', false),
+              this.getRelatedInfoWithName(filmModel.characters, 'people', false),
+              this.getRelatedInfoWithName(filmModel.species, 'species', false),
+              this.getRelatedStarships(filmModel.starships, 'starships', false),
+              this.getRelatedVehicle(filmModel.vehicles, 'vehicles', false),
+            ]).pipe(
+              map(([film, planets, characters, species, starships, vehicles]) => {
+                const detailedFilm = new DetailedFilm(film, planets, characters, species, starships, vehicles);
+                return detailedFilm;
+              }),
+            );
           }
           return of(item);
         }),

@@ -22,7 +22,7 @@ export class DetailsComponent implements OnDestroy {
   public readonly film$: Observable<DetailedFilm>;
 
   /** Subject for unsubscribe. */
-  private readonly destroy = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -33,7 +33,7 @@ export class DetailsComponent implements OnDestroy {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.film$ = this.filmsService.getFilmWithRelated(id);
 
-    this.film$.pipe(takeUntil(this.destroy)).subscribe(film => {
+    this.film$.pipe(takeUntil(this.destroy$)).subscribe(film => {
       if (film) {
         return;
       }
@@ -43,8 +43,8 @@ export class DetailsComponent implements OnDestroy {
 
   /** @inheritdoc */
   public ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /** Event handler for go back button. */

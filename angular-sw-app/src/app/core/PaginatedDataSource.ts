@@ -37,50 +37,50 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
   public readonly page$: Observable<Page<T>>;
 
   /** Subject for manage current page number. */
-  private readonly pageNumber = new Subject<number>();
+  private readonly pageNumber$ = new Subject<number>();
 
   /** State for previous page number let know what is direction of pagination. */
   private previousPageNumber = 0;
 
   /** Subject for manage sort options. */
-  private readonly sort: BehaviorSubject<Sort>;
+  private readonly sort$: BehaviorSubject<Sort>;
 
   /** Subject for manage query options. */
-  private readonly query: BehaviorSubject<Q>;
+  private readonly query$: BehaviorSubject<Q>;
 
   /** Subject for manage loading state. */
-  private readonly loading = new Subject<boolean>();
+  private readonly _loading$ = new Subject<boolean>();
 
   /** Direction of pagination to put in PageRequest. */
   private currentDirection: 'next' | 'prev' | '' = '';
 
   public constructor(
     private readonly endpoint: PaginatedEndpoint<T, Q>,
-    private readonly items: Observable<FilmDto[]>,
+    private readonly items$: Observable<FilmDto[]>,
     initialSort: Sort,
     initialQuery: Q,
     private readonly documents: RequestDocuments,
     public readonly pageSize = 2,
   ) {
 
-    this.loading$ = this.loading.asObservable();
+    this.loading$ = this._loading$.asObservable();
 
-    this.query = new BehaviorSubject<Q>(initialQuery);
-    this.sort = new BehaviorSubject<Sort>(initialSort);
+    this.query$ = new BehaviorSubject<Q>(initialQuery);
+    this.sort$ = new BehaviorSubject<Sort>(initialSort);
 
-    const param$ = combineLatest([this.query, this.sort, this.items]);
+    const param$ = combineLatest([this.query$, this.sort$, this.items$]);
 
     this.page$ = param$.pipe(
       tap(() => {
         this.currentDirection = '';
         this.previousPageNumber = 0;
       }),
-      switchMap(([query, sort]) => this.pageNumber.pipe(
+      switchMap(([query, sort]) => this.pageNumber$.pipe(
         startWith(0),
         switchMap(page => this.endpoint({ page, size: this.pageSize, sort, direction: this.currentDirection }, query, this.documents)
           .pipe(
             take(1),
-            indicate(this.loading),
+            indicate(this._loading$),
           )),
       )),
       share(),
@@ -92,9 +92,9 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
    * @param sort Data from selection change event.
    */
   public onOrderChangeClick(sort: Partial<Sort>): void {
-    const lastSort = this.sort.getValue();
+    const lastSort = this.sort$.getValue();
     const nextSort = { ...lastSort, ...sort };
-    this.sort.next(nextSort);
+    this.sort$.next(nextSort);
   }
 
   /**
@@ -102,9 +102,9 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
    * @param query Data from search input.
    */
   public onQueryInput(query: Partial<Q>): void {
-    const lastQuery = this.query.getValue();
+    const lastQuery = this.query$.getValue();
     const nextQuery = { ...lastQuery, ...query };
-    this.query.next(nextQuery);
+    this.query$.next(nextQuery);
   }
 
   /**
@@ -114,7 +114,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
   public fetch(page: number): void {
     this.currentDirection = this.defineDirection(this.previousPageNumber, page);
     this.previousPageNumber = page;
-    this.pageNumber.next(page);
+    this.pageNumber$.next(page);
   }
 
   /** @inheritdoc */
@@ -124,10 +124,10 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
 
   /** @inheritdoc */
   public disconnect(): void {
-    this.pageNumber.complete();
-    this.query.complete();
-    this.sort.complete();
-    this.loading.complete();
+    this.pageNumber$.complete();
+    this.query$.complete();
+    this.sort$.complete();
+    this._loading$.complete();
   }
 
   /**

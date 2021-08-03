@@ -93,4 +93,14 @@ export class AddFilmComponent implements OnDestroy {
         this.route.navigate(['/']);
       });
   }
+
+  /**
+   * Function for ngForTrackBy.
+   * @param index Index of list item.
+   * @param item Entity.
+   * @returns Primary key of entity.
+   */
+  public trackByFn(index: number, item: RelatedVehicles | RelatedStarhips | RelatedWithName): number {
+    return item.pk;
+  }
 }

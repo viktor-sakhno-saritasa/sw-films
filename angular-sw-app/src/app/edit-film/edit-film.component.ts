@@ -113,4 +113,14 @@ export class EditFilmComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       });
   }
+
+  /**
+   * Function for ngForTrackBy.
+   * @param index Index of list item.
+   * @param item Entity.
+   * @returns Primary key of entity.
+   */
+  public trackByFn(index: number, item: RelatedVehicles | RelatedStarhips | RelatedWithName): number {
+    return item.pk;
+  }
 }

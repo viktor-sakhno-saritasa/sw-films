@@ -5,63 +5,76 @@
     <div class="container-form">
       <mat-form-field>
           <input matInput type="text" placeholder="Title" formControlName="title">
-          <mat-hint *ngIf="addForm.controls.title.errors">Title is required</mat-hint>
+          <mat-hint *ngIf="addForm.controls.title.hasError('required')">Title is required</mat-hint>
+          <mat-hint *ngIf="addForm.controls.title.hasError('minlength')">Title can't be less than 6 characters</mat-hint>
+          <mat-hint *ngIf="addForm.controls.title.hasError('maxlength')">Title can't be more than 50 characters</mat-hint>
       </mat-form-field>
       <mat-form-field>
           <input matInput type="text" placeholder="Director" formControlName="director">
-          <mat-hint *ngIf="addForm.controls.director.errors">Director is required</mat-hint>
+          <mat-hint *ngIf="addForm.controls.director.hasError('required')">Director is required</mat-hint>
+          <mat-hint *ngIf="addForm.controls.director.hasError('minlength')">Director can't be less than 6 characters</mat-hint>
+          <mat-hint *ngIf="addForm.controls.director.hasError('maxlength')">Director can't be more than 50 characters</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" placeholder="Producer" formControlName="producer">
-        <mat-hint *ngIf="addForm.controls.producer.errors">Producer is required</mat-hint>
+        <mat-hint *ngIf="addForm.controls.producer.hasError('required')">Producer is required</mat-hint>
+        <mat-hint *ngIf="addForm.controls.producer.hasError('minlength')">Producer can't be less than 6 characters</mat-hint>
+        <mat-hint *ngIf="addForm.controls.producer.hasError('maxlength')">Producer can't be more than 50 characters</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="date" formControlName="releaseDate">
-        <mat-hint *ngIf="addForm.controls.releaseDate.errors">Date is required</mat-hint>
+        <mat-hint *ngIf="addForm.controls.releaseDate.hasError('required')">Date is required</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Characters</mat-label>
         <mat-select multiple formControlName="characters">
-          <mat-option *ngFor="let item of characters$ | async" [value]="item.pk">
+          <mat-option *ngFor="let item of characters$ | async; trackBy:trackByFn" [value]="item.pk">
             {{ item.fields.name }}
           </mat-option>
         </mat-select>
+        <mat-hint *ngIf="addForm.controls.characters.hasError('required')">Characters is required</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Planets</mat-label>
         <mat-select multiple formControlName="planets">
-          <mat-option *ngFor="let item of planets$ | async" [value]="item.pk">
+          <mat-option *ngFor="let item of planets$ | async; trackBy:trackByFn" [value]="item.pk">
             {{ item.fields.name }}
           </mat-option>
         </mat-select>
+        <mat-hint *ngIf="addForm.controls.planets.hasError('required')">Planets is required</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Species</mat-label>
         <mat-select multiple formControlName="species">
-          <mat-option *ngFor="let item of species$ | async" [value]="item.pk">
+          <mat-option *ngFor="let item of species$ | async; trackBy:trackByFn" [value]="item.pk">
             {{ item.fields.name }}
           </mat-option>
         </mat-select>
+        <mat-hint *ngIf="addForm.controls.species.hasError('required')">Species is required</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Starships</mat-label>
         <mat-select multiple formControlName="starships">
-          <mat-option *ngFor="let item of starships$ | async" [value]="item.pk">
+          <mat-option *ngFor="let item of starships$ | async; trackBy:trackByFn" [value]="item.pk">
             {{ item.fields.starship_class }} | {{ item.fields.MGLT }} | {{ item.fields.hyperdrive_rating }}
           </mat-option>
         </mat-select>
+        <mat-hint *ngIf="addForm.controls.starships.hasError('required')">Starships is required</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Vehicles</mat-label>
         <mat-select multiple formControlName="vehicles">
-          <mat-option *ngFor="let char of vehicles$ | async" [value]="char.pk">
+          <mat-option *ngFor="let char of vehicles$ | async; trackBy:trackByFn" [value]="char.pk">
             {{ char.fields.vehicle_class }}
           </mat-option>
         </mat-select>
+        <mat-hint *ngIf="addForm.controls.vehicles.hasError('required')">Vehicles is required</mat-hint>
       </mat-form-field>
       <mat-form-field class="example-full-width">
         <mat-label>Write a description...</mat-label>
         <textarea formControlName="description" matInput placeholder="Ex. It makes me feel..."></textarea>
+        <mat-hint *ngIf="addForm.controls.description.hasError('required')">Description is required</mat-hint>
+        <mat-hint *ngIf="addForm.controls.description.hasError('minlength')">Description can't be less than 10 characters</mat-hint>
       </mat-form-field>
       <button class="add-button" mat-flat-button color="primary" [disabled]="!addForm.valid || (loading$ | async)" type="submit">
         <span>{{ (loading$ | async) ? 'Waiting...' : 'Add'}}</span>

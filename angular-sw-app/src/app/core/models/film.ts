@@ -1,4 +1,4 @@
-import { RelatedStarhips, RelatedVehicles, RelatedWithName } from './film-form-data';
+import { RelatedData } from './film-form-data';
 
 /** Class for work with films. */
 export class Film {
@@ -65,25 +65,6 @@ export class Film {
     this.created = film.created;
     this.edited = film.edited;
   }
-
-  /** Method for collect data in get one item. */
-  protected getProperties(): FilmArgs {
-    return {
-      pk: this.pk,
-      model: this.model,
-      characters: this.characters,
-      director: this.director,
-      episodeId: this.episodeId,
-      description: this.description,
-      planets: this.planets,
-      producer: this.producer,
-      releaseDate: this.releaseDate,
-      species: this.species,
-      starships: this.starships,
-      title: this.title,
-      vehicles: this.vehicles,
-    };
-  }
 }
 
 /** Detailed version of film for details page. */
@@ -93,27 +74,27 @@ export class DetailedFilm {
   public readonly filmPreview: Film;
 
   /** List of planets names. */
-  public readonly planetsList: RelatedWithName[];
+  public readonly planetsList: readonly RelatedData[];
 
   /** List of characters names. */
-  public readonly charactersList: RelatedWithName[];
+  public readonly charactersList: readonly RelatedData[];
 
   /** List of species names. */
-  public readonly speciesList: RelatedWithName[];
+  public readonly speciesList: readonly RelatedData[];
 
   /** List of starships primary keys. */
-  public readonly starshipsList: RelatedStarhips[];
+  public readonly starshipsList: readonly RelatedData[];
 
   /** List of vehicles primary keys. */
-  public readonly vehiclesList: RelatedVehicles[];
+  public readonly vehiclesList: readonly RelatedData[];
 
   public constructor(
     filmPreview: Film,
-    planetsList: RelatedWithName[],
-    charactersList: RelatedWithName[],
-    speciesList: RelatedWithName[],
-    starshipsList: RelatedStarhips[],
-    vehiclesList: RelatedVehicles[],
+    planetsList: RelatedData[],
+    charactersList: RelatedData[],
+    speciesList: RelatedData[],
+    starshipsList: RelatedData[],
+    vehiclesList: RelatedData[],
   ) {
     this.filmPreview = filmPreview;
     this.planetsList = planetsList;

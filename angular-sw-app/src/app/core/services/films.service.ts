@@ -8,7 +8,7 @@ import { DetailedFilm, Film } from '../models/film';
 import { FilmDto } from '../models/film-dto';
 import { Page, PageRequest, RequestDocuments } from '../page';
 import { FilmsMapper } from '../films-mapper';
-import { FilmFormData, RelatedStarhips, RelatedVehicles, RelatedWithName } from '../models/film-form-data';
+import { FilmFormData, RelatedData } from '../models/film-form-data';
 import { FilmFormMapper } from '../film-form-mapper';
 
 /** Interface for query films. */
@@ -186,11 +186,11 @@ export class FilmsService {
             const filmModel = this.mapper.dtoToFilmModelMapper(item);
             return combineLatest([
               of(filmModel),
-              this.getRelatedInfoWithName(filmModel.planets, 'planets', false),
-              this.getRelatedInfoWithName(filmModel.characters, 'people', false),
-              this.getRelatedInfoWithName(filmModel.species, 'species', false),
-              this.getRelatedStarships(filmModel.starships, 'starships', false),
-              this.getRelatedVehicle(filmModel.vehicles, 'vehicles', false),
+              this.getRelated(filmModel.planets, 'planets', false),
+              this.getRelated(filmModel.characters, 'people', false),
+              this.getRelated(filmModel.species, 'species', false),
+              this.getRelated(filmModel.starships, 'starships', false),
+              this.getRelated(filmModel.vehicles, 'vehicles', false),
             ]).pipe(
               map(([film, planets, characters, species, starships, vehicles]) => {
                 const detailedFilm = new DetailedFilm(film, planets, characters, species, starships, vehicles);
@@ -205,81 +205,27 @@ export class FilmsService {
   }
 
   /**
-   * Get related data with field name.
+   * Get related data.
    * @param ids Ids of collection entities.
    * @param collection Collection's name.
    * @param all If true, it is mean get all entities.
-   * @returns Observable with list with names.
+   * @returns Observable with entities.
    */
-  public getRelatedInfoWithName(ids: readonly number[], collection: string, all: boolean): Observable<RelatedWithName[]> {
+  public getRelated(ids: readonly number[], collection: string, all: boolean): Observable<RelatedData[]> {
 
     if (all) {
-      return this.firestore.collection<RelatedWithName>(collection)
+      return this.firestore.collection<RelatedData>(collection)
         .valueChanges()
         .pipe(
           map(items => items),
         );
     }
 
-    const observables = (ids.map(id => this.firestore.collection<RelatedWithName>(collection, ref => ref.where('pk', '==', id))
+    const observables = (ids.map(id => this.firestore.collection<RelatedData>(collection, ref => ref.where('pk', '==', id))
       .valueChanges()
       .pipe(
           map(items => this.getOneFromList(items, true)),
           map(item => item),
-      )));
-
-    return combineLatest(observables);
-  }
-
-  /**
-   * Get related data without name field.
-   * @param ids Ids of collection entities.
-   * @param collection Collection's name.
-   * @param all If true, it is mean get all entities.
-   * @returns Observable with list with primary keys.
-   */
-  public getRelatedStarships(ids: readonly number[], collection: string, all: boolean): Observable<RelatedStarhips[]> {
-
-    if (all) {
-      return this.firestore.collection<RelatedStarhips>(collection)
-        .valueChanges()
-        .pipe(
-          map(items => items),
-        );
-    }
-
-    const observables = (ids.map(id => this.firestore.collection<RelatedStarhips>(collection, ref => ref.where('pk', '==', id))
-      .valueChanges()
-      .pipe(
-          map(items => this.getOneFromList(items, true)),
-          map(item => item),
-      )));
-
-    return combineLatest(observables);
-  }
-
-  /**
-   * Get related data without name field.
-   * @param ids Ids of collection entities.
-   * @param collection Collection's name.
-   * @param all If true, it is mean get all entities.
-   * @returns Observable with list with primary keys.
-   */
-  public getRelatedVehicle(ids: readonly number[], collection: string, all: boolean): Observable<RelatedVehicles[]> {
-
-    if (all) {
-      return this.firestore.collection<RelatedVehicles>(collection)
-        .valueChanges()
-        .pipe(
-          map(items => items),
-        );
-    }
-
-    const observables = (ids.map(id => this.firestore.collection<RelatedVehicles>(collection, ref => ref.where('pk', '==', id))
-      .valueChanges()
-      .pipe(
-            map(items => this.getOneFromList(items, true)),
-            map(item => item),
       )));
 
     return combineLatest(observables);

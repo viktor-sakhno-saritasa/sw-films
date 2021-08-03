@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { RelatedStarhips, RelatedVehicles, RelatedWithName } from '../core/models/film-form-data';
+import { RelatedData } from '../core/models/film-form-data';
 
 import { FilmsService } from '../core/services/films.service';
 
@@ -17,19 +17,19 @@ import { FilmsService } from '../core/services/films.service';
 })
 export class AddFilmComponent implements OnDestroy {
   /** Characters state. */
-  public readonly characters$: Observable<RelatedWithName[]>;
+  public readonly characters$: Observable<RelatedData[]>;
 
   /** Planets state. */
-  public readonly planets$: Observable<RelatedWithName[]>;
+  public readonly planets$: Observable<RelatedData[]>;
 
   /** Species state. */
-  public readonly species$: Observable<RelatedWithName[]>;
+  public readonly species$: Observable<RelatedData[]>;
 
   /** Starship state. */
-  public readonly starships$: Observable<RelatedStarhips[]>;
+  public readonly starships$: Observable<RelatedData[]>;
 
   /** Vehicles state. */
-  public readonly vehicles$: Observable<RelatedVehicles[]>;
+  public readonly vehicles$: Observable<RelatedData[]>;
 
   /** Loading$ state. */
   public readonly loading$: Observable<boolean>;
@@ -52,11 +52,11 @@ export class AddFilmComponent implements OnDestroy {
     this._loading$ = new BehaviorSubject<boolean>(false);
     this.loading$ = this._loading$.asObservable();
 
-    this.characters$ = filmsService.getRelatedInfoWithName([], 'people', true);
-    this.planets$ = filmsService.getRelatedInfoWithName([], 'planets', true);
-    this.species$ = filmsService.getRelatedInfoWithName([], 'species', true);
-    this.starships$ = filmsService.getRelatedStarships([], 'starships', true);
-    this.vehicles$ = filmsService.getRelatedVehicle([], 'vehicles', true);
+    this.characters$ = filmsService.getRelated([], 'people', true);
+    this.planets$ = filmsService.getRelated([], 'planets', true);
+    this.species$ = filmsService.getRelated([], 'species', true);
+    this.starships$ = filmsService.getRelated([], 'starships', true);
+    this.vehicles$ = filmsService.getRelated([], 'vehicles', true);
 
     this.addForm = formBuilder.group({
       title: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
@@ -102,7 +102,7 @@ export class AddFilmComponent implements OnDestroy {
    * @param item Entity.
    * @returns Primary key of entity.
    */
-  public trackByFn(index: number, item: RelatedVehicles | RelatedStarhips | RelatedWithName): number {
+  public trackByFn(index: number, item: RelatedData): number {
     return item.pk;
   }
 }

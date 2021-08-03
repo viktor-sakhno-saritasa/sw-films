@@ -4,6 +4,13 @@ import { Film } from '../core/models/film';
 import { FilmQuery, FilmsService } from '../core/services/films.service';
 import { PaginatedDataSource } from '../core/PaginatedDataSource';
 
+/** Interface for query films. */
+export interface VehicleQuery {
+
+  /** Search term. */
+  fint: string;
+}
+
 /** Main page component. */
 @Component({
   selector: 'app-client',

@@ -42,7 +42,7 @@ export class AddFilmComponent implements OnDestroy {
   private readonly _loading$: BehaviorSubject<boolean>;
 
   /** Subject for destroy all subscribes. */
-  private readonly destroy = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   public constructor(
     private readonly filmsService: FilmsService,
@@ -59,7 +59,7 @@ export class AddFilmComponent implements OnDestroy {
     this.starships$ = filmsService.getRelatedEntities(Collections.Starships);
     this.vehicles$ = filmsService.getRelatedEntities(Collections.Vehicles);
 
-    this.addForm = formBuilder.group({
+    this.addForm = this.formBuilder.group({
       title: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       director: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       producer: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
@@ -75,8 +75,8 @@ export class AddFilmComponent implements OnDestroy {
 
   /** @inheritdoc */
   public ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /** @inheritdoc */
@@ -87,7 +87,7 @@ export class AddFilmComponent implements OnDestroy {
 
     this.filmsService.addFilm((this.addForm.value))
       .pipe(
-        takeUntil(this.destroy),
+        takeUntil(this.destroy$),
         indicate(this._loading$),
       )
       .subscribe(() => {

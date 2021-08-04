@@ -47,7 +47,7 @@ export class EditFilmComponent implements OnInit, OnDestroy {
   private readonly _loading$: BehaviorSubject<boolean>;
 
   /** Subject for destroy all subscribes. */
-  private readonly destroy = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
 
   public constructor(
@@ -68,7 +68,7 @@ export class EditFilmComponent implements OnInit, OnDestroy {
     this.starships$ = filmsService.getRelatedEntities(Collections.Starships);
     this.vehicles$ = filmsService.getRelatedEntities(Collections.Vehicles);
 
-    this.editForm = formBuilder.group({
+    this.editForm = this.formBuilder.group({
       title: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       director: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       producer: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
@@ -84,15 +84,15 @@ export class EditFilmComponent implements OnInit, OnDestroy {
 
   /** @inheritdoc */
   public ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /** @inheritdoc */
   public ngOnInit(): void {
     this.currentFilm$
       .pipe(
-        takeUntil(this.destroy),
+        takeUntil(this.destroy$),
       )
       .subscribe(film => {
       this.editForm.patchValue({

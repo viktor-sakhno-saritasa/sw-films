@@ -12,13 +12,18 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { RouterModule } from '@angular/router';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { DeleteDialogOverviewComponent } from './delete-dialog-overview/delete-dialog-overview.component';
 import { HeaderComponent } from './header/header.component';
-import {MatSelectModule} from '@angular/material/select';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 /** Module for shared components and directives. */
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent, DeleteDialogComponent, DeleteDialogOverviewComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -35,6 +40,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatSnackBarModule,
     MatSelectModule,
     MatButtonToggleModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
   ],
   exports: [
     MatToolbarModule,
@@ -49,8 +57,13 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatPaginatorModule,
     MatSnackBarModule,
     HeaderComponent,
+    DeleteDialogComponent,
+    DeleteDialogOverviewComponent,
     MatSelectModule,
     MatButtonToggleModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
   ],
 })
 export class SharedModule { }

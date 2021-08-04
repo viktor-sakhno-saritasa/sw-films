@@ -4,20 +4,59 @@
   <div class="card-wrapper">
     <mat-card class="card">
       <mat-card-header class="card__header">
-        <div mat-card-avatar class="card__id">{{ film.episodeId }}</div>
+        <div mat-card-avatar class="card__id">
+          {{ film.filmPreview.episodeId }}
+        </div>
         <div class="card__info">
-          <mat-card-title>{{ film.title }}</mat-card-title>
+          <mat-card-title>{{ film.filmPreview.title }}</mat-card-title>
           <mat-card-subtitle class="card__subtitle">
-            <span><b>Director</b> {{ film.director }}</span>
-            <span><b>Release Date</b> {{ film.releaseDate | date }}</span>
+            <span><b>Director</b> {{ film.filmPreview.director }}</span>
+            <span
+              ><b>Release Date</b>
+              {{ film.filmPreview.releaseDate | date }}</span
+            >
           </mat-card-subtitle>
         </div>
       </mat-card-header>
       <img mat-card-image src="/assets/yoda.jpg" alt="Photo of Yoda" />
       <mat-card-content>
-        <p>{{ film.description }}</p>
+        <p>{{ film.filmPreview.description }}</p>
       </mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Planets</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let planet of film.planetsList"
+            [value]="planet.pk"
+          >
+            {{ planet.fields.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Characters</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let char of film.charactersList"
+            [value]="char.pk"
+          >
+            {{ char.fields.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-card-actions class="card__actions">
+        <a
+          [routerLink]="['/edit', film.filmPreview.episodeId]"
+          class="card__button"
+          mat-raised-button
+          color="accent"
+        >
+          <mat-icon class="card__icon">edit</mat-icon>
+          <span>Edit film</span>
+        </a>
+        <app-delete-dialog
+          [episode]="film.filmPreview.episodeId"
+        ></app-delete-dialog>
         <button
           type="button"
           class="card__button"

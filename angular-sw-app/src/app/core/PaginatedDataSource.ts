@@ -1,17 +1,20 @@
-import { DataSource } from "@angular/cdk/collections";
-import { BehaviorSubject, Observable, Subject, combineLatest } from "rxjs";
-import { map, share, startWith, switchMap, take, tap } from "rxjs/operators";
-import { indicate } from "./operators";
-import { Page, PaginatedEndpoint, RequestDocuments, Sort } from "./page";
+import { DataSource } from '@angular/cdk/collections';
+import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
+import { map, share, startWith, switchMap, take, tap } from 'rxjs/operators';
+
+import { indicate } from './operators';
+import { Page, PaginatedEndpoint, RequestDocuments, Sort } from './page';
 
 /** Simple interface for Material DataSource. */
 export interface SimpleDataSource<T> extends DataSource<T> {
+
   /**
    * This method will be called once by the Data Table at table bootstrap time.
    * @returns The Data Table expects this method to return an Observable, and the values
    * of that observable contain the data that the Data Table needs to display.
    */
   connect(): Observable<T[]>;
+
   /**
    * This method is called once by the data table at component destruction time.
    * In this method, we are going to complete any observables that we have created
@@ -25,56 +28,58 @@ export interface SimpleDataSource<T> extends DataSource<T> {
 /** Class for paginate data source. */
 export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
 
+  /** Observable loading state. */
+  public readonly loading$: Observable<boolean>;
+
+  /** Observable for page data. */
+  public readonly page$: Observable<Page<T>>;
+
   /** Subject for manage current page number. */
-  private readonly pageNumber = new Subject<number>();
+  private readonly pageNumber$ = new Subject<number>();
 
   /** State for previous page number let know what is direction of pagination. */
   private previousPageNumber = 0;
 
   /** Subject for manage sort options. */
-  private readonly sort: BehaviorSubject<Sort>;
+  private readonly sort$: BehaviorSubject<Sort>;
 
   /** Subject for manage query options. */
-  private readonly query: BehaviorSubject<Q>;
+  private readonly query$: BehaviorSubject<Q>;
 
   /** Subject for manage loading state. */
-  private readonly loading = new Subject<boolean>();
-
-  /** Observable loading state. */
-  public readonly loading$ = this.loading.asObservable();
-
-  /** Observable for page data. */
-  public readonly page$: Observable<Page<T>>;
+  private readonly _loading$ = new Subject<boolean>();
 
   /** Direction of pagination to put in PageRequest. */
   private currentDirection: 'next' | 'prev' | '' = '';
 
-  /** @constructor */
   public constructor(
     private readonly endpoint: PaginatedEndpoint<T, Q>,
+    private readonly items$: Observable<T[]>,
     initialSort: Sort,
     initialQuery: Q,
     private readonly documents: RequestDocuments,
-    public readonly pageSize = 2) {
+    public readonly pageSize = 2,
+  ) {
 
-    this.query = new BehaviorSubject<Q>(initialQuery);
-    this.sort = new BehaviorSubject<Sort>(initialSort);
+    this.loading$ = this._loading$.asObservable();
 
-    const param$ = combineLatest([this.query, this.sort]);
+    this.query$ = new BehaviorSubject<Q>(initialQuery);
+    this.sort$ = new BehaviorSubject<Sort>(initialSort);
+
+    const param$ = combineLatest([this.query$, this.sort$, this.items$]);
 
     this.page$ = param$.pipe(
       tap(() => {
         this.currentDirection = '';
         this.previousPageNumber = 0;
       }),
-      switchMap(([query, sort]) => this.pageNumber.pipe(
+      switchMap(([query, sort]) => this.pageNumber$.pipe(
         startWith(0),
-        switchMap(page => this.endpoint({page, size: this.pageSize, sort, direction: this.currentDirection}, query, this.documents)
+        switchMap(page => this.endpoint({ page, size: this.pageSize, sort, direction: this.currentDirection }, query, this.documents)
           .pipe(
             take(1),
-            indicate(this.loading),
-          ),
-        ),
+            indicate(this._loading$),
+          )),
       )),
       share(),
     );
@@ -85,9 +90,9 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
    * @param sort Data from selection change event.
    */
   public onOrderChangeClick(sort: Partial<Sort>): void {
-    const lastSort = this.sort.getValue();
-    const nextSort = {...lastSort, ...sort};
-    this.sort.next(nextSort);
+    const lastSort = this.sort$.getValue();
+    const nextSort = { ...lastSort, ...sort };
+    this.sort$.next(nextSort);
   }
 
   /**
@@ -95,9 +100,9 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
    * @param query Data from search input.
    */
   public onQueryInput(query: Partial<Q>): void {
-    const lastQuery = this.query.getValue();
-    const nextQuery = {...lastQuery, ...query};
-    this.query.next(nextQuery);
+    const lastQuery = this.query$.getValue();
+    const nextQuery = { ...lastQuery, ...query };
+    this.query$.next(nextQuery);
   }
 
   /**
@@ -107,7 +112,7 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
   public fetch(page: number): void {
     this.currentDirection = this.defineDirection(this.previousPageNumber, page);
     this.previousPageNumber = page;
-    this.pageNumber.next(page);
+    this.pageNumber$.next(page);
   }
 
   /** @inheritdoc */
@@ -116,7 +121,12 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
   }
 
   /** @inheritdoc */
-  public disconnect(): void {}
+  public disconnect(): void {
+    this.pageNumber$.complete();
+    this.query$.complete();
+    this.sort$.complete();
+    this._loading$.complete();
+  }
 
   /**
    * Define user go prev or next page.
@@ -126,6 +136,11 @@ export class PaginatedDataSource<T, Q> implements SimpleDataSource<T> {
    * @returns Direction of the pagination.
    */
   private defineDirection(last: number, next: number): 'next' | 'prev' | '' {
-    return next > last ? 'next' : last > next ? 'prev' : '';
+    if (next > last) {
+      return 'next';
+    } else if (last > next) {
+      return 'prev';
+    }
+    return '';
   }
 }

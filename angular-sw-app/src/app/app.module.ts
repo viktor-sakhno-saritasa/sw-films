@@ -16,10 +16,12 @@ import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './login/login.module';
 import { ClientModule } from './client/client.module';
 import { DetailsModule } from './details/details.module';
+import { AddFilmModule } from './add-film/add-film.module';
+import { EditFilmComponent } from './edit-film/edit-film.component';
 
 /** Root module for an application. */
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EditFilmComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,6 +33,7 @@ import { DetailsModule } from './details/details.module';
     BrowserAnimationsModule,
     ClientModule,
     DetailsModule,
+    AddFilmModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { UserService } from '../core/services/user.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { UserService } from '../core/services/user.service';
 
 /** For login logic. */
 @Component({
@@ -14,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class LoginComponent implements OnDestroy {
 
-  private readonly destroy = new Subject();
+  private readonly destroy$ = new Subject();
 
   public constructor(
     private readonly route: Router,
@@ -31,7 +32,7 @@ export class LoginComponent implements OnDestroy {
   public onLoginClick(): void {
     this.userService.login()
       .pipe(
-        takeUntil(this.destroy),
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.route.navigate(['']);
@@ -40,7 +41,7 @@ export class LoginComponent implements OnDestroy {
 
   /** @inheritdoc */
   public ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

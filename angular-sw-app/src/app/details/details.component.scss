@@ -38,12 +38,13 @@
   align-items: center;
 }
 
-.card__button {
+.card__button,
+app-delete-dialog {
   width: 100%;
 }
 
-.card__button:last-child {
-  margin-top: 10px;
+button.card__button {
+  margin-bottom: 10px;
 }
 
 .card__icon {
@@ -60,4 +61,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+a.card__button {
+  display: block;
+  margin-bottom: 10px;
 }

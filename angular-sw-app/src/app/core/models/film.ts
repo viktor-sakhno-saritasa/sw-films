@@ -1,3 +1,5 @@
+import { RelatedData } from './film-form-data';
+
 /** Class for work with films. */
 export class Film {
 
@@ -21,6 +23,12 @@ export class Film {
 
   /** Release date. */
   public readonly releaseDate: Date;
+
+  /** Created date. */
+  public readonly created?: Date;
+
+  /** Edited date. */
+  public readonly edited?: Date;
 
   /** Species in number format. */
   public readonly species: readonly number[];
@@ -54,14 +62,53 @@ export class Film {
     this.starships = film.starships;
     this.title = film.title;
     this.vehicles = film.vehicles;
+    this.created = film.created;
+    this.edited = film.edited;
   }
 }
 
+/** Detailed version of film for details page. */
+export class DetailedFilm {
+
+  /** Film preview version. Composition. */
+  public readonly filmPreview: Film;
+
+  /** List of planets names. */
+  public readonly planetsList: readonly RelatedData[];
+
+  /** List of characters names. */
+  public readonly charactersList: readonly RelatedData[];
+
+  /** List of species names. */
+  public readonly speciesList: readonly RelatedData[];
+
+  /** List of starships primary keys. */
+  public readonly starshipsList: readonly RelatedData[];
+
+  /** List of vehicles primary keys. */
+  public readonly vehiclesList: readonly RelatedData[];
+
+  public constructor(
+    filmPreview: Film,
+    planetsList: RelatedData[],
+    charactersList: RelatedData[],
+    speciesList: RelatedData[],
+    starshipsList: RelatedData[],
+    vehiclesList: RelatedData[],
+  ) {
+    this.filmPreview = filmPreview;
+    this.planetsList = planetsList;
+    this.charactersList = charactersList;
+    this.speciesList = speciesList;
+    this.starshipsList = starshipsList;
+    this.vehiclesList = vehiclesList;
+  }
+}
 
 /**
  * Interface for film args ctor.
  */
- export interface FilmArgs {
+export interface FilmArgs {
 
   /** Characters in number format. */
   readonly characters: readonly number[];

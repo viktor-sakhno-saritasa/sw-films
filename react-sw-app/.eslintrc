@@ -1,0 +1,35 @@
+{
+  "extends": ["react-app", "airbnb", "airbnb/hooks"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "rules": {
+    "no-shadow": "off",
+    "no-param-reassign": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-unused-vars": [ 2, { "args": "none" } ],
+    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
+    "react/jsx-no-duplicate-props": ["error", { "ignoreCase": false }],
+    "react/jsx-props-no-spreading": "off",
+    "max-len": ["error", { "code": 120 }],
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "ts": "never",
+      "tsx": "never"
+    }],
+    "import/prefer-default-export": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts?(x)"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
+}

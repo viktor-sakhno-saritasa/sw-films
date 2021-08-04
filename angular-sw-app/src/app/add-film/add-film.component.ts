@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { Collections } from '../core/collections';
 import { RelatedData } from '../core/models/film-form-data';
-
+import { indicate } from '../core/operators';
 import { FilmsService } from '../core/services/films.service';
 
 /** Add form component. */
@@ -52,11 +53,11 @@ export class AddFilmComponent implements OnDestroy {
     this._loading$ = new BehaviorSubject<boolean>(false);
     this.loading$ = this._loading$.asObservable();
 
-    this.characters$ = filmsService.getRelated([], 'people', true);
-    this.planets$ = filmsService.getRelated([], 'planets', true);
-    this.species$ = filmsService.getRelated([], 'species', true);
-    this.starships$ = filmsService.getRelated([], 'starships', true);
-    this.vehicles$ = filmsService.getRelated([], 'vehicles', true);
+    this.characters$ = filmsService.getRelatedEntities(Collections.Characters);
+    this.planets$ = filmsService.getRelatedEntities(Collections.Planets);
+    this.species$ = filmsService.getRelatedEntities(Collections.Species);
+    this.starships$ = filmsService.getRelatedEntities(Collections.Starships);
+    this.vehicles$ = filmsService.getRelatedEntities(Collections.Vehicles);
 
     this.addForm = formBuilder.group({
       title: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
@@ -84,14 +85,12 @@ export class AddFilmComponent implements OnDestroy {
       return;
     }
 
-    this._loading$.next(true);
-
     this.filmsService.addFilm((this.addForm.value))
       .pipe(
         takeUntil(this.destroy),
+        indicate(this._loading$),
       )
       .subscribe(() => {
-        this._loading$.next(false);
         this.route.navigate(['/']);
       });
   }

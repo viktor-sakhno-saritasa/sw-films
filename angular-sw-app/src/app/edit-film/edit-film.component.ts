@@ -4,9 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { Collections } from '../core/collections';
 import { Film } from '../core/models/film';
 import { RelatedData } from '../core/models/film-form-data';
+import { indicate } from '../core/operators';
 import { FilmsService } from '../core/services/films.service';
+import { transformDate } from '../core/utils';
 
 /** Edit form page component. */
 @Component({
@@ -59,11 +62,11 @@ export class EditFilmComponent implements OnInit, OnDestroy {
 
     this.currentFilm$ = filmsService.getFilm(Number(this.route.snapshot.paramMap.get('id')));
 
-    this.characters$ = filmsService.getRelated([], 'people', true);
-    this.planets$ = filmsService.getRelated([], 'planets', true);
-    this.species$ = filmsService.getRelated([], 'species', true);
-    this.starships$ = filmsService.getRelated([], 'starships', true);
-    this.vehicles$ = filmsService.getRelated([], 'vehicles', true);
+    this.characters$ = filmsService.getRelatedEntities(Collections.Characters);
+    this.planets$ = filmsService.getRelatedEntities(Collections.Planets);
+    this.species$ = filmsService.getRelatedEntities(Collections.Species);
+    this.starships$ = filmsService.getRelatedEntities(Collections.Starships);
+    this.vehicles$ = filmsService.getRelatedEntities(Collections.Vehicles);
 
     this.editForm = formBuilder.group({
       title: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
@@ -94,7 +97,7 @@ export class EditFilmComponent implements OnInit, OnDestroy {
       .subscribe(film => {
       this.editForm.patchValue({
         ...film,
-        releaseDate: `${film?.releaseDate.toISOString().split('T')[0]}`,
+        releaseDate: transformDate(film?.releaseDate),
       });
     });
   }
@@ -105,11 +108,11 @@ export class EditFilmComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._loading$.next(true);
-
     this.filmsService.update(Number(this.route.snapshot.paramMap.get('id')), this.editForm.value)
+      .pipe(
+        indicate(this._loading$),
+      )
       .subscribe(() => {
-        this._loading$.next(false);
         this.router.navigate(['/']);
       });
   }

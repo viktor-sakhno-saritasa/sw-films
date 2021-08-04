@@ -45,7 +45,7 @@
         </mat-select>
       </mat-form-field>
       <mat-card-actions class="card__actions">
-        <button
+        <a
           [routerLink]="['/edit', film.filmPreview.episodeId]"
           class="card__button"
           mat-raised-button
@@ -53,7 +53,7 @@
         >
           <mat-icon class="card__icon">edit</mat-icon>
           <span>Edit film</span>
-        </button>
+        </a>
         <app-delete-dialog
           [episode]="film.filmPreview.episodeId"
         ></app-delete-dialog>

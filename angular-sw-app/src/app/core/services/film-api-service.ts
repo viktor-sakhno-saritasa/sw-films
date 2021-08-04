@@ -24,8 +24,8 @@ export interface FilmApiService {
   /** Get film by episode id with related entities from the store. */
   getFullByEpisodeId(id: number): Observable<DetailedFilm>;
 
-  /** Get related data of the film from the store. */
-  getRelatedEntities(ids: readonly number[], collection: string, all: boolean): Observable<RelatedData[]>;
+  /** Get related data of the film by ids from the store. */
+  getRelatedEntities(collection: string, ids?: readonly number[]): Observable<RelatedData[]>;
 
   /** Get full collection as observable. */
   getFilmCollection(): Observable<Film[]>;

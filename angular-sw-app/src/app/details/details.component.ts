@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-
 import { Observable, Subject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
 
 import { DetailedFilm } from '../core/models/film';
@@ -16,7 +14,7 @@ import { FilmsService } from '../core/services/films.service';
   styleUrls: ['./details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailsComponent implements OnDestroy {
+export class DetailsComponent implements OnInit, OnDestroy {
 
   /** Current film. */
   public readonly film$: Observable<DetailedFilm>;
@@ -32,12 +30,15 @@ export class DetailsComponent implements OnDestroy {
   ) {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.film$ = this.filmsService.getFilmWithRelated(id);
+  }
 
+  /** @inheritdoc */
+  public ngOnInit(): void {
     this.film$.pipe(takeUntil(this.destroy$)).subscribe(film => {
       if (film) {
         return;
       }
-      router.navigate(['/']);
+      this.router.navigate(['/']);
     });
   }
 

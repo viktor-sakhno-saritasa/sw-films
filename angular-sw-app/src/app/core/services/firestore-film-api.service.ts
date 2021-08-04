@@ -7,7 +7,6 @@ import { FilmFormMapper } from '../film-form-mapper';
 import { FilmsMapper } from '../films-mapper';
 import { DetailedFilm, Film } from '../models/film';
 import { FilmDto } from '../models/film-dto';
-
 import { FilmFormData, RelatedData } from '../models/film-form-data';
 import { Page, PageRequest, RequestDocuments } from '../page';
 
@@ -22,6 +21,7 @@ const COLLECTION_KEY = 'films';
 /** Property for name filter. */
 const NAME_FILTER = 'fields.title';
 
+/** Property for id filter. */
 const EPISODE_FILTER = 'fields.episode_id';
 
 /** Firestore api service for films management. */
@@ -107,12 +107,11 @@ export class FirestoreFilmApiService implements FilmApiService {
    * Get related data.
    * @param ids Ids of collection entities.
    * @param collection Collection's name.
-   * @param all If true, it is mean get all entities.
    * @returns Observable with entities.
    */
-  public getRelatedEntities(ids: readonly number[], collection: string, all: boolean): Observable<RelatedData[]> {
+  public getRelatedEntities(collection: string, ids?: readonly number[]): Observable<RelatedData[]> {
 
-    if (all) {
+    if (!ids) {
       return this.afs.collection<RelatedData>(collection)
         .valueChanges()
         .pipe(
@@ -146,11 +145,11 @@ export class FirestoreFilmApiService implements FilmApiService {
               const filmModel = this.filmMapper.dtoToFilmModelMapper(item);
               return combineLatest([
                 of(filmModel),
-                this.getRelatedEntities(filmModel.planets, 'planets', false),
-                this.getRelatedEntities(filmModel.characters, 'people', false),
-                this.getRelatedEntities(filmModel.species, 'species', false),
-                this.getRelatedEntities(filmModel.starships, 'starships', false),
-                this.getRelatedEntities(filmModel.vehicles, 'vehicles', false),
+                this.getRelatedEntities('planets', filmModel.planets),
+                this.getRelatedEntities('people', filmModel.characters),
+                this.getRelatedEntities('species', filmModel.species),
+                this.getRelatedEntities('starships', filmModel.starships),
+                this.getRelatedEntities('vehicles', filmModel.vehicles),
               ]).pipe(
                 map(([film, planets, characters, species, starships, vehicles]) => {
                   const detailedFilm = new DetailedFilm(film, planets, characters, species, starships, vehicles);
@@ -191,33 +190,20 @@ export class FirestoreFilmApiService implements FilmApiService {
      */
     const queryFn = (ref: CollectionReference): Query => this.createQuery(ref, request, query, documents);
 
-    /** Get observable. */
     return this.afs.collection(COLLECTION_KEY, queryFn)
       .snapshotChanges()
       .pipe(
-
-        /** Get raw docs for save in entries variables for cursor paginate. */
         map(actions => actions.map(action => action.payload.doc)),
-
-        /** Save docs. */
         tap(docs => {
           documents.firstEntryInResponse = this.getOneFromList(docs, true);
           documents.latestEntryInResponse = this.getOneFromList(docs, false);
         }),
-
-        /** Map documents to domain model. */
         map(docs => docs.map(doc => this.filmMapper.dtoToFilmModelMapper(doc.data() as FilmDto))),
-
-        /** Complete previous observable and get new for know size of docs. */
         switchMap(films => this.afs.collection(COLLECTION_KEY, ref =>
-
-          /** If search field is not empty apply filter option. */
           this.applyFilterOption(ref, query.search.trim())).get()
           .pipe(
             distinctUntilChanged(),
             map(snap => snap.size),
-
-            /** Return Observable<Page<Film>> object to continue. */
             map(size => ({
                 content: films,
                 number: request.page,
@@ -261,7 +247,7 @@ export class FirestoreFilmApiService implements FilmApiService {
    * @param getFirst Take first or last element. False - last.
    * @returns Item from the list.
    */
-  private getOneFromList<T>(list: T[] | T | T, getFirst: boolean): T {
+  private getOneFromList<T>(list: T[] | T, getFirst: boolean): T {
     if (list && Array.isArray(list)) {
       return getFirst ? list[0] : list[list.length - 1];
     }

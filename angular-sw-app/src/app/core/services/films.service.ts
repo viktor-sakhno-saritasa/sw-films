@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { DetailedFilm, Film } from '../models/film';
 import { Page, PageRequest, RequestDocuments } from '../page';
 import { FilmFormData, RelatedData } from '../models/film-form-data';
+import { Collections } from '../collections';
 
 import { FirestoreFilmApiService } from './firestore-film-api.service';
 
@@ -95,10 +96,9 @@ export class FilmsService {
    * Get related data.
    * @param ids Ids of collection entities.
    * @param collection Collection's name.
-   * @param all If true, it is mean get all entities.
    * @returns Observable with entities.
    */
-  public getRelated(ids: readonly number[], collection: string, all: boolean): Observable<RelatedData[]> {
-    return this.apiService.getRelatedEntities(ids, collection, all);
+  public getRelatedEntities(collection: Collections, ids?: readonly number[]): Observable<RelatedData[]> {
+    return this.apiService.getRelatedEntities(collection, ids);
   }
 }

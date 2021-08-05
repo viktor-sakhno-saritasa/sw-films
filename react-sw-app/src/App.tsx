@@ -1,8 +1,14 @@
 import React from 'react';
+import { useRoutes } from 'react-router-dom';
+import { router } from './routes/RootRouter';
 
 function App() {
+  const routes = useRoutes(router);
+
   return (
-    <h1>Init App.</h1>
+    <div className="App">
+      {routes}
+    </div>
   );
 }
 

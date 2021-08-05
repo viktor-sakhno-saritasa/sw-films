@@ -1,0 +1,17 @@
+.container {
+  height: 99vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.paper {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+
+.link {
+  text-decoration: none;
+  color: #fff;
+}

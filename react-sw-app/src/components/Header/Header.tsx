@@ -3,16 +3,24 @@ import {
 } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import User from '../../models/User';
 import { RootState } from '../../store/rootReducer';
 import { loginUser, logoutUser } from '../../store/User/dispatchers';
+import { userSelect } from '../../store/User/User.selectors';
 
 import styles from './Header.module.css';
 
+/** Props for Header. */
+export interface HeaderProps {
+  readonly user: User | undefined,
+}
+
 /** Main header of the app. */
-const Header = () => {
+const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { user } = props;
 
   /**
    * Open Menu.
@@ -28,7 +36,8 @@ const Header = () => {
   };
 
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  // const { user } = useSelector((state: RootState) => state.user);
+  // const { user } = userSelect((state: RootState) => state);
 
   /** Logout user handler. */
   const onLogoutClick = () => {
@@ -102,4 +111,8 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state: RootState) => ({
+  user: userSelect(state),
+});
+
+export default connect(mapStateToProps)(Header);

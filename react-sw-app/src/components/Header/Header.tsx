@@ -36,8 +36,6 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   };
 
   const dispatch = useDispatch();
-  // const { user } = useSelector((state: RootState) => state.user);
-  // const { user } = userSelect((state: RootState) => state);
 
   /** Logout user handler. */
   const onLogoutClick = () => {

@@ -5,9 +5,8 @@ import Header from '../../components/Header/Header';
 const FilmsPage = () => (
   <div>
     <Header />
-    <h1>Films Page</h1>
+    <h1>FilmsPage</h1>
   </div>
-
 );
 
 export default FilmsPage;

@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import store from './store';
+import store, { persistor } from './store';
 
 import './theme/index.css';
 
@@ -12,7 +13,9 @@ ReactDOM.render(
   <>
     <Provider store={store}>
       <Router>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Router>
     </Provider>
   </>,

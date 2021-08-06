@@ -1,4 +1,4 @@
-/** Dto for user in the app. */
+/** DTO for user. */
 interface UserDto {
   /** Email of the user. */
   readonly email: string;

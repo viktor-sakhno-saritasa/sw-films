@@ -1,25 +1,30 @@
 import { login, logout } from '../../api/services/User';
 import { AppThunk } from '../index';
 import {
-  getUserFailed, getUserStart, getUserSuccess, logoutUserSuccess,
+  loginUserFailed,
+  loginUserStart,
+  loginUserSuccess,
+  logoutUserFailed,
+  logoutUserStart,
+  logoutUserSuccess,
 } from './userSlice';
 
 export const loginUser = (): AppThunk => async (dispatch) => {
   try {
-    dispatch(getUserStart());
+    dispatch(loginUserStart());
     const user = await login();
-    dispatch(getUserSuccess(user));
+    dispatch(loginUserSuccess(user));
   } catch (error) {
-    dispatch(getUserFailed(error as Error));
+    dispatch(loginUserFailed(error as Error));
   }
 };
 
 export const logoutUser = (): AppThunk => async (dispatch) => {
   try {
-    dispatch(getUserStart());
+    dispatch(logoutUserStart());
     await logout();
     dispatch(logoutUserSuccess());
   } catch (error) {
-    dispatch(getUserFailed(error as Error));
+    dispatch(logoutUserFailed(error as Error));
   }
 };

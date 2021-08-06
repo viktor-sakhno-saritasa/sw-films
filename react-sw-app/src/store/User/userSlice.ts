@@ -7,31 +7,38 @@ const userSlice = createSlice({
   name: 'auth',
   initialState: state,
   reducers: {
-    getUserStart(state) {
+    loginUserStart(state) {
       state.loading = true;
       state.error = null;
     },
-    getUserSuccess(state, { payload }: PayloadAction<User | undefined>) {
+    loginUserSuccess(state, { payload }: PayloadAction<User | undefined>) {
       state.user = payload;
       state.loading = false;
-      state.logged = true;
     },
-    getUserFailed(state, { payload }: PayloadAction<Error>) {
+    loginUserFailed(state, { payload }: PayloadAction<Error>) {
+      state.error = payload.message;
+    },
+    logoutUserStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    logoutUserFailed(state, { payload }: PayloadAction<Error>) {
       state.error = payload.message;
     },
     logoutUserSuccess(state) {
       state.user = undefined;
-      state.logged = false;
       state.loading = true;
     },
   },
 });
 
 export const {
-  getUserStart,
-  getUserSuccess,
-  getUserFailed,
+  loginUserStart,
+  loginUserSuccess,
+  loginUserFailed,
+  logoutUserStart,
   logoutUserSuccess,
+  logoutUserFailed,
 } = userSlice.actions;
 
 export const user = userSlice.reducer;

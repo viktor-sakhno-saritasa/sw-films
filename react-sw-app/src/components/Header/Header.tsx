@@ -4,10 +4,8 @@ import {
 import { AccountCircle } from '@material-ui/icons';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-// import User from '../../models/User';
 import { RootState } from '../../store/rootReducer';
-import { logoutUser } from '../../store/User/dispatchers';
+import { loginUser, logoutUser } from '../../store/User/dispatchers';
 
 import styles from './Header.module.css';
 
@@ -16,10 +14,15 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  /**
+   * Open Menu.
+   * @param event User's mouse event.
+   */
   const onMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
+  /** Close menu handler. */
   const onCloseClick = () => {
     setAnchorEl(null);
   };
@@ -27,15 +30,21 @@ const Header = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
+  /** Logout user handler. */
   const onLogoutClick = () => {
     dispatch(logoutUser());
   };
 
+  /** Login user handler. */
+  const onLoginClick = () => {
+    dispatch(loginUser());
+  };
+
   return (
     <div className={styles.header}>
-      <AppBar position="static">
+      <AppBar position="static" className={styles.appBar}>
         <Toolbar>
-          <Typography variant="h6" className={styles.title}>
+          <Typography variant="h5" className={styles.title}>
             SW Films
           </Typography>
           {user && (
@@ -81,10 +90,8 @@ const Header = () => {
           )}
           {!user && (
             <div>
-              <Button color="inherit" type="button">
-                <Link color="inherit" to="/auth" className={styles.link}>
-                  Login
-                </Link>
+              <Button color="inherit" type="button" onClick={onLoginClick}>
+                Login
               </Button>
             </div>
           )}

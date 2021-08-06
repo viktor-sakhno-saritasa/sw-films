@@ -1,10 +1,10 @@
 const config = {
-  apiKey: 'AIzaSyAdR7-yH8fqF99cdKPRMVGJlT_xsdRM9xc',
-  authDomain: 'sw-app-b0cf1.firebaseapp.com',
-  projectId: 'sw-app-b0cf1',
-  storageBucket: 'sw-app-b0cf1.appspot.com',
-  messagingSenderId: '1045485475856',
-  appId: '1:1045485475856:web:315f18bfca09d688ad1295',
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 export default config;
